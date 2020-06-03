@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rubybooru", "Rubybooru\Ruby
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rubybooru.Core", "Rubybooru.Core\Rubybooru.Core.csproj", "{0AB7C6BB-5E08-4DAA-907B-70CC2A3A9FE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rubybooru.Data", "Rubybooru.Data\Rubybooru.Data.csproj", "{B78646DA-B265-402E-8207-7EC10D68093B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0AB7C6BB-5E08-4DAA-907B-70CC2A3A9FE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AB7C6BB-5E08-4DAA-907B-70CC2A3A9FE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AB7C6BB-5E08-4DAA-907B-70CC2A3A9FE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B78646DA-B265-402E-8207-7EC10D68093B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B78646DA-B265-402E-8207-7EC10D68093B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B78646DA-B265-402E-8207-7EC10D68093B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B78646DA-B265-402E-8207-7EC10D68093B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
