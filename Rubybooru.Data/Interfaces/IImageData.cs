@@ -8,8 +8,8 @@ namespace Rubybooru.Data.Interfaces
         IEnumerable<Image> GetAll(
             int limit,
             int offset,
-            int[] withTags,
-            ISizeCondition[] sizeConditions
+            int[] withTags = null,
+            ISizeCondition[] sizeConditions = null
         );
 
         IEnumerable<Image> GetWithoutTagType(
@@ -20,9 +20,9 @@ namespace Rubybooru.Data.Interfaces
 
         Image GetById(int id);
 
-        Image Add(Image tag);
+        Image Add(Image image);
 
-        Image Update(Image tag);
+        Image Update(Image image);
 
         Image Delete(int id);
 
