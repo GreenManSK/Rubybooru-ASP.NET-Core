@@ -38,6 +38,7 @@ namespace Rubybooru
             });
 
             services.AddScoped<IImageData, SqlImageData>();
+            services.AddScoped<ITagData, SqlTagData>();
             
             services.AddControllers();
         }
