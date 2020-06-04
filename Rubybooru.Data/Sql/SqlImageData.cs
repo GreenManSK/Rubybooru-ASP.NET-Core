@@ -33,7 +33,17 @@ namespace Rubybooru.Data.Sql
                 }
             }
 
+            query = LoadTags(query);
+            
             return query.OrderByDescending(i => i.AddedDateTime).Skip(offset).Take(limit);
+        }
+
+        private static IQueryable<Image> LoadTags(IQueryable<Image> query)
+        {
+            query = query
+                .Include(i => i.Tags)
+                .ThenInclude(t => t.Tag);
+            return query;
         }
 
         public IEnumerable<Image> GetWithoutTagType(int limit, int offset, TagType tagType)

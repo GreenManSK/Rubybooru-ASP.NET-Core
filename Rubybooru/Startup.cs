@@ -34,7 +34,9 @@ namespace Rubybooru
                     options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
                 }
 
-                options.UseMySQL(_configuration.GetConnectionString("RubybooruDb"));
+                options
+                    .UseLazyLoadingProxies()
+                    .UseMySQL(_configuration.GetConnectionString("RubybooruDb"));
             });
 
             services.AddScoped<IImageData, SqlImageData>();
