@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -81,6 +82,15 @@ namespace Rubybooru.Data.Sql
         public int Commit()
         {
             return _db.SaveChanges();
+        }
+
+        public IEnumerable<Tag> GetTagsByNames(string[] names)
+        {
+            var lowerNames = names.Select(n => n.ToLowerInvariant());
+            var query = from t in _db.Tags
+                where lowerNames.Contains(t.Name.ToLower())
+                select t;
+            return query;
         }
     }
 }

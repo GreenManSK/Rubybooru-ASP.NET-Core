@@ -22,5 +22,7 @@ namespace Rubybooru.Data.Interfaces
         Tag Delete(int id);
 
         int Commit();
+
+        IEnumerable<Tag> GetTagsByNames(string[] names);
     }
 }

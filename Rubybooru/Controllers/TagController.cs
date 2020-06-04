@@ -25,18 +25,28 @@ namespace Rubybooru.Controllers
         }
 
         [HttpGet]
-        public TagDto[] GetAll(
+        public ActionResult<TagDto[]> GetAll(
             int limit,
             int offset,
             TagSortOrder sortOrder = TagSortOrder.Name,
             TagType? tagType = null
         )
         {
-            var result = _tagData.GetAll(limit, offset, sortOrder, tagType);
-            return _mapper.Map<TagDto[]>(result);
+            try
+            {
+                var result = _tagData.GetAll(limit, offset, sortOrder, tagType);
+                return _mapper.Map<TagDto[]>(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    "Error while getting tags with query limit={limit}, offset={offset}, sortOrder={sortOrder}, tagType={tagType}",
+                    limit, offset, sortOrder, tagType);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
-        
-        
+
+
         [HttpGet("{id}")]
         public ActionResult<TagDto> Get(int id)
         {
@@ -47,6 +57,7 @@ namespace Rubybooru.Controllers
                 {
                     return NotFound();
                 }
+
                 return _mapper.Map<TagDto>(tag);
             }
             catch (Exception e)
@@ -117,6 +128,21 @@ namespace Rubybooru.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Error while deleting tag with id {id}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        [HttpGet("name")]
+        public ActionResult<TagDto[]> GetByName([FromQuery] string[] names)
+        {
+            try
+            {
+                var result = _tagData.GetTagsByNames(names);
+                return _mapper.Map<TagDto[]>(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting tags by names {names}", names);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
