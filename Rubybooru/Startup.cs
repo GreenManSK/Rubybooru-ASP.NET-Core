@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +44,8 @@ namespace Rubybooru
             services.AddScoped<ITagData, SqlTagData>();
             services.AddScoped<IImageTagData, SqlImageTagData>();
 
+            services.AddAutoMapper(typeof(Startup));
+            
             services.AddControllers();
         }
 

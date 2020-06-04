@@ -33,17 +33,7 @@ namespace Rubybooru.Data.Sql
                 }
             }
 
-            query = LoadTags(query);
-            
             return query.OrderByDescending(i => i.AddedDateTime).Skip(offset).Take(limit);
-        }
-
-        private static IQueryable<Image> LoadTags(IQueryable<Image> query)
-        {
-            query = query
-                .Include(i => i.Tags)
-                .ThenInclude(t => t.Tag);
-            return query;
         }
 
         public IEnumerable<Image> GetWithoutTagType(int limit, int offset, TagType tagType)
@@ -88,6 +78,18 @@ namespace Rubybooru.Data.Sql
         public int Commit()
         {
             return _db.SaveChanges();
+        }
+
+        public Dictionary<int, ImageTag[]> GetTags(IEnumerable<int> imageIds)
+        {
+            var query = from it in _db.ImageTag
+                where imageIds.Contains(it.ImageId)
+                select it;
+            query = query.Include(it => it.Tag);
+            var imageTagPairs = query.ToList();
+            return imageTagPairs
+                .GroupBy(it => it.ImageId)
+                .ToDictionary(g => g.Key, g => g.ToArray());
         }
     }
 }

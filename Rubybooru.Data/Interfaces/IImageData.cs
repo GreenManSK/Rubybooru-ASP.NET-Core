@@ -18,6 +18,8 @@ namespace Rubybooru.Data.Interfaces
             TagType tagType
         );
 
+        Dictionary<int, ImageTag[]> GetTags(IEnumerable<int> imageIds);
+
         Image GetById(int id);
 
         Image Add(Image image);

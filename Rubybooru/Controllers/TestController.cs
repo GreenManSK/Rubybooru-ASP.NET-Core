@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Rubybooru.Core;
 using Rubybooru.Data.Interfaces;
+using Rubybooru.DTO;
 
 namespace Rubybooru.Controllers
 {
@@ -11,38 +14,26 @@ namespace Rubybooru.Controllers
     public class TestController : ControllerBase
     {
         private readonly IImageData _imageData;
+        private readonly ITagData _tagData;
+        private readonly IImageTagData _imageTagData;
+        private readonly IMapper _mapper;
 
-        public TestController(IImageData imageData)
+        public TestController(IImageData imageData, ITagData tagData, IImageTagData imageTagData, IMapper mapper)
         {
             _imageData = imageData;
+            _tagData = tagData;
+            _imageTagData = imageTagData;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IEnumerable<Image> Get()
+        public Dictionary<string, TagDto[]> Get()
         {
-            return _imageData.GetAll(15, 10, new[]
-            {
-                5, 8, 12
-            }, new ISizeCondition[]
-            {
-                new TestSize(), new TestSize2(), 
-            });
-        }
-    }
-
-    public class TestSize : ISizeCondition
-    {
-        public IQueryable<Image> Apply(IQueryable<Image> images)
-        {
-            return images.Where(i => i.Width > i.Height);
-        }
-    }
-
-    public class TestSize2 : ISizeCondition
-    {
-        public IQueryable<Image> Apply(IQueryable<Image> images)
-        {
-            return images.Where(i => i.Width > 150);
+            var result = _imageData.GetTags(new[] {64, 128, 555, 688});
+            return result.ToDictionary(
+                v => v.Key.ToString(),
+                v => v.Value.Select(it =>  _mapper.Map<TagDto>(it.Tag)).ToArray()
+            );
         }
     }
 }
