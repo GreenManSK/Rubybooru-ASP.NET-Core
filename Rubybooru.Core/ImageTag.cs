@@ -1,6 +1,6 @@
 namespace Rubybooru.Core
 {
-    public class ImageTag
+    public class ImageTag : HasTagProperty
     {
         public int ImageId { get; set; }
         public  virtual Image Image { get; set; }

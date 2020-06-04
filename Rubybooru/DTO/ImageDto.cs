@@ -11,5 +11,10 @@ namespace Rubybooru.DTO
         public DateTime AddedDateTime { get; set; }
         [Required] public int Width { get; set; }
         [Required] public int Height { get; set; }
+
+        public override string ToString()
+        {
+            return $"{nameof(Id)}: {Id}, {nameof(Name)}: {Name}, {nameof(Path)}: {Path}, {nameof(AddedDateTime)}: {AddedDateTime}, {nameof(Width)}: {Width}, {nameof(Height)}: {Height}";
+        }
     }
 }
