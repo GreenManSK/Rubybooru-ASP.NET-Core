@@ -15,17 +15,22 @@ namespace Rubybooru.Data.Sql
             _db = db;
         }
 
-        public IEnumerable<Tag> GetAll(
+        public IEnumerable<TagWithCount> GetAll(
             int limit,
             int offset,
             TagSortOrder sortOrder = TagSortOrder.Name,
-            TagType? tagType = null
+            TagType? tagType = null,
+            bool includeCount = false
         )
         {
-            var query = from t in _db.Tags select t;
+            var query = from t in _db.Tags select new TagWithCount
+            {
+                Tag = t,
+                Count = sortOrder == TagSortOrder.ImageCount || includeCount ? t.Images.Count : -1
+            };
             if (tagType.HasValue)
             {
-                query = query.Where(t => t.Type == tagType);
+                query = query.Where(t => t.Tag.Type == tagType);
             }
 
             query = OrderTags(query, sortOrder);
@@ -33,12 +38,12 @@ namespace Rubybooru.Data.Sql
             return query.Skip(offset).Take(limit);
         }
 
-        private static IQueryable<Tag> OrderTags(IQueryable<Tag> query, TagSortOrder sortOrder)
+        private static IQueryable<TagWithCount> OrderTags(IQueryable<TagWithCount> query, TagSortOrder sortOrder)
         {
             return sortOrder switch
             {
-                TagSortOrder.Name => query.OrderBy(t => t.Name),
-                TagSortOrder.ImageCount => query.OrderByDescending(t => t.Images.Count),
+                TagSortOrder.Name => query.OrderBy(t => t.Tag.Name),
+                TagSortOrder.ImageCount => query.OrderByDescending(t => t.Count),
                 _ => query
             };
         }

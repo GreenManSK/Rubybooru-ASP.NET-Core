@@ -5,11 +5,12 @@ namespace Rubybooru.Data.Interfaces
 {
     public interface ITagData
     {
-        IEnumerable<Tag> GetAll(
+        IEnumerable<TagWithCount> GetAll(
             int limit,
             int offset,
             TagSortOrder sortOrder = TagSortOrder.Name,
-            TagType? tagType = null
+            TagType? tagType = null,
+            bool includeCount = false
         );
 
         Tag GetById(int id);
