@@ -20,7 +20,7 @@ namespace Rubybooru.Data.Sql
         {
             var query = from i in _db.Images select i;
 
-            if (withTags != null)
+            if (withTags != null && withTags.Length > 0)
             {
                 query = query.Where(i => i.Tags.Any(t => withTags.Contains(t.TagId)));
             }

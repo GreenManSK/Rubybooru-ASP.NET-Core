@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Rubybooru.Core;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.DTO;
-using ILogger = Castle.Core.Logging.ILogger;
 
 namespace Rubybooru.Controllers
 {
@@ -35,6 +34,26 @@ namespace Rubybooru.Controllers
         {
             var result = _tagData.GetAll(limit, offset, sortOrder, tagType);
             return _mapper.Map<TagDto[]>(result);
+        }
+        
+        
+        [HttpGet("{id}")]
+        public ActionResult<TagDto> Get(int id)
+        {
+            try
+            {
+                var tag = _tagData.GetById(id);
+                if (tag == null)
+                {
+                    return NotFound();
+                }
+                return _mapper.Map<TagDto>(tag);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting tag with id {id}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
 
         [HttpPost]
