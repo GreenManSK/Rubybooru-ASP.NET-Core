@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,8 @@ namespace Rubybooru.Controllers
     [Route("[controller]")]
     public class ImageController : ControllerBase
     {
+        public const string StaticImagesPath = "/static/images";
+        
         private readonly ILogger<ImageController> _logger;
         private readonly IImageData _imageData;
         private readonly IMapper _mapper;
@@ -78,6 +81,25 @@ namespace Rubybooru.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Error while getting tags for images with ids {ids}", ids);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        [HttpGet("{id}/file")]
+        public ActionResult GetImage(int id)
+        {
+            try
+            {
+                var image = _imageData.GetById(id);
+                if (image == null)
+                {
+                    return NotFound();
+                }
+                return RedirectPermanent(Path.Combine(StaticImagesPath, image.Path, image.Name));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting image with id {id}", id);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }

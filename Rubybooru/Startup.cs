@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Rubybooru.Controllers;
 using Rubybooru.Data;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.Data.Sql;
@@ -57,6 +59,12 @@ namespace Rubybooru
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(@"C:\Users\lukas\OneDrive\Desktop\RubyTest"),
+                RequestPath = ImageController.StaticImagesPath
+            });
+            
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
