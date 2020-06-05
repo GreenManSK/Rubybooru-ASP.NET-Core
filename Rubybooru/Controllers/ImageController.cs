@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.DTO;
+using Rubybooru.Helpers;
 
 namespace Rubybooru.Controllers
 {
@@ -20,17 +21,15 @@ namespace Rubybooru.Controllers
         private readonly ILogger<ImageController> _logger;
         private readonly IImageData _imageData;
         private readonly IMapper _mapper;
+        private readonly PreviewGenerator _previewGenerator;
 
-        public ImageController(ILogger<ImageController> logger, IImageData imageData, IMapper mapper)
+        public ImageController(ILogger<ImageController> logger, IImageData imageData, IMapper mapper, PreviewGenerator previewGenerator)
         {
             _logger = logger;
             _imageData = imageData;
             _mapper = mapper;
+            _previewGenerator = previewGenerator;
         }
-
-        // TODO: GetAll
-        // TODO: preview
-        // TODO: file
 
         [HttpGet]
         public ActionResult<ImageDto[]> Get(int limit = 10, int offset = 0, [FromQuery] int[] withTags = null)
@@ -99,7 +98,28 @@ namespace Rubybooru.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error while getting image with id {id}", id);
+                _logger.LogError(e, "Error while getting file for image with id {id}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        [HttpGet("{id}/preview")]
+        public ActionResult GetPreview(int id, int width, int height, bool keepAspectRatio = true)
+        {
+            try
+            {
+                var image = _imageData.GetById(id);
+                if (image == null)
+                {
+                    return NotFound();
+                }
+
+                var previewPath = _previewGenerator.CreatePreview(image, width, height, keepAspectRatio);
+                return RedirectPermanent(previewPath);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting preview for image with id {id}", id);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }

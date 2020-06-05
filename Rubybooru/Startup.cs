@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,8 @@ using Rubybooru.Controllers;
 using Rubybooru.Data;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.Data.Sql;
+using Rubybooru.Helpers;
+using Rubybooru.Images;
 
 namespace Rubybooru
 {
@@ -46,6 +49,10 @@ namespace Rubybooru
             services.AddScoped<ITagData, SqlTagData>();
             services.AddScoped<IImageTagData, SqlImageTagData>();
 
+            services.AddSingleton<HashAlgorithm, SHA256CryptoServiceProvider>();
+            services.AddSingleton<IPreviewMaker, PreviewMaker>();
+            services.AddSingleton<PreviewGenerator, PreviewGenerator>();
+            
             services.AddAutoMapper(typeof(Startup));
             
             services.AddControllers();
@@ -61,8 +68,14 @@ namespace Rubybooru
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(@"C:\Users\lukas\OneDrive\Desktop\RubyTest"),
+                FileProvider = new PhysicalFileProvider(_configuration.GetValue<string>("ImagesPath")),
                 RequestPath = ImageController.StaticImagesPath
+            });
+            
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(_configuration.GetValue<string>("PreviewsPath")),
+                RequestPath = PreviewGenerator.StaticPreviewsPath
             });
             
             app.UseRouting();

@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Rubybooru.Data\Rubybooru.Data.csproj" />
+    <ProjectReference Include="..\Rubybooru.Images\Rubybooru.Images.csproj" />
   </ItemGroup>
 
 </Project>
