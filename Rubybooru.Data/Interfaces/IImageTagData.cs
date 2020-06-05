@@ -4,6 +4,8 @@ namespace Rubybooru.Data.Interfaces
 {
     public interface IImageTagData
     {
+        ImageTag Get(int imageId, int tagId);
+
         ImageTag Add(ImageTag tag);
 
         ImageTag Update(ImageTag tag);

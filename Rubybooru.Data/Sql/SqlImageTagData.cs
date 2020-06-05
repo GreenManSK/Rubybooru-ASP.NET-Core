@@ -13,6 +13,11 @@ namespace Rubybooru.Data.Sql
             _db = db;
         }
 
+        public ImageTag Get(int imageId, int tagId)
+        {
+            return _db.ImageTag.Find(imageId, tagId);
+        }
+        
         public ImageTag Add(ImageTag tag)
         {
             _db.Add(tag);

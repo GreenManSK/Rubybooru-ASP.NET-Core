@@ -5,7 +5,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Rubybooru.Core;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.DTO;
 
@@ -60,26 +59,6 @@ namespace Rubybooru.Controllers
                 }
 
                 return _mapper.Map<ImageDto>(image);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error while getting image with id {id}", id);
-                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
-            }
-        }
-
-        [HttpGet("{id}/tag")]
-        public ActionResult<TagDto[]> GetTags(int id)
-        {
-            try
-            {
-                var image = _imageData.GetById(id);
-                if (image == null)
-                {
-                    return NotFound();
-                }
-
-                return _mapper.Map<TagDto[]>(image.Tags);
             }
             catch (Exception e)
             {
