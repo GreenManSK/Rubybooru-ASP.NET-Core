@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   restUrl: 'https://localhost:44397/api/',
+
+  imagesPerPage: 24
 };
 
 /*

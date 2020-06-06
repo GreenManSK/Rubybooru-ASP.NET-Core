@@ -48,14 +48,14 @@ export class TagApiService extends RestApiService {
   }
 
   public update( tag: Tag ): Observable<Tag> {
-    return this.http.put<Tag>(this.getTagUrl(tag.Id), tag)
+    return this.http.put<Tag>(this.getTagUrl(tag.id), tag)
       .pipe(
         catchError(this.handleError('update', null))
       );
   }
 
   public delete( tag: Tag ): Observable<Tag> {
-    return this.http.delete<Tag>(this.getTagUrl(tag.Id))
+    return this.http.delete<Tag>(this.getTagUrl(tag.id))
       .pipe(
         catchError(this.handleError('delete', null))
       );

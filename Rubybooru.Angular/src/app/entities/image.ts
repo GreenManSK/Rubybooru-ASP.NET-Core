@@ -1,8 +1,8 @@
 export class Image {
-  Id: number;
-  Name: string;
-  Path: string;
-  AddedDateTime: Date;
+  id: number;
+  name: string;
+  path: string;
+  addedDateTime: Date;
   width: number;
   height: number;
 }

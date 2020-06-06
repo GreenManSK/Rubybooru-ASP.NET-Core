@@ -1,5 +1,5 @@
 export class ImageTag {
-  ImageId: number;
-  TagId: number;
-  UserCreated: number;
+  imageId: number;
+  tagId: number;
+  userCreated: number;
 }

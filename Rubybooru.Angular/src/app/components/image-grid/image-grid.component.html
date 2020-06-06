@@ -1,0 +1,14 @@
+<div class="row">
+  <div
+    *ngFor="let img of images"
+    class="col-xl-2 col-lg-3 col-md-3 col-sm-4 img-container"
+  >
+    <div class="img">
+      <a class="img-link" [routerLink]="['/image', img.id]">
+        <img [alt]="img.name" [src]="imageApi.getImagePreviewUrl(img.id, TMP_WIDTH, TMP_HEIGHT)" />
+      </a>
+      <a class="download-link" [href]="imageApi.getImageFileUrl(img.id)" target="_blank">
+        {{img.width ? img.width : '__'}}x{{img.height ? img.height : '__'}}</a>
+    </div>
+  </div>
+</div>
