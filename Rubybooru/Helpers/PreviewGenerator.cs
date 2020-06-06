@@ -27,12 +27,17 @@ namespace Rubybooru.Helpers
         public string CreatePreview(Image image, int width, int height, bool keepAspectRatio)
         {
             var imagePath = Path.Combine(image.Path, image.Name);
-            var fileName = GenerateFileName(imagePath, width, height, keepAspectRatio);
+            var imageFullPath = Path.Combine(_configuration.GetValue<string>("ImagesPath"), imagePath);
 
+            if (!File.Exists(imageFullPath))
+            {
+                return Path.Combine(StaticPreviewsPath, _configuration.GetValue<string>("DefaultPlaceholder"));
+            }
+            
+            var fileName = GenerateFileName(imagePath, width, height, keepAspectRatio);
             var previewFilePath = Path.Combine(_configuration.GetValue<string>("PreviewsPath"), fileName);
             if (!File.Exists(previewFilePath))
             {
-                var imageFullPath = Path.Combine(_configuration.GetValue<string>("ImagesPath"), imagePath);
                 _previewMaker.CreatePreview(imageFullPath, previewFilePath, width, height, keepAspectRatio, Quality);
             }
 
