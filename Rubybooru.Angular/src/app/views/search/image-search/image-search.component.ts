@@ -20,6 +20,15 @@ export class ImageSearchComponent implements OnInit {
     this.imageApi.getImages(environment.imagesPerPage).subscribe(images => {
       this.images = images;
     });
+    this.imageApi.getCount().subscribe(count1 => {
+      console.log(count1);
+      this.imageApi.getCount().subscribe(count2 => {
+        console.log(count2);
+        this.imageApi.getCount().subscribe(count3 => {
+          console.log(count3);
+        });
+      });
+    });
   }
 
 }

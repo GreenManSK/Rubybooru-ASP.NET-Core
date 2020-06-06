@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Observable, of } from 'rxjs';
+import { HttpClientService } from '../http-client/http-client.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class RestApiService {
 
   protected url: string;
 
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClientService) {
     this.url = environment.restUrl;
   }
 
