@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ImageApiService } from './services/image-api/image-api.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'rubybooru';
+
+  constructor(imageApi: ImageApiService) {
+
+  }
 }
