@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ImageApiService } from './services/image-api/image-api.service';
+import { TagApiService } from './services/tag-api/tag-api.service';
+import { Tag } from './entities/tag';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,12 @@ import { ImageApiService } from './services/image-api/image-api.service';
 export class AppComponent {
   title = 'rubybooru';
 
-  constructor(imageApi: ImageApiService) {
-
+  constructor( tagApiService: TagApiService ) {
+    const tag = new Tag();
+    tag.Id = 10003;
+    tag.Name = 'Hallioooo';
+    tagApiService.delete(tag).subscribe(tags => {
+      console.log(tags);
+    });
   }
 }
