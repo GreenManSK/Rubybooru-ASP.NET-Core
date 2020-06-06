@@ -69,6 +69,18 @@ export class ImageApiService extends RestApiService {
     return this.getImageUrl(id) + '/preview?width=' + width + '&height=' + height + '&keepAspectRatio=' + keepAspectRatio;
   }
 
+  public addTag( imageId: number, tagId: number ): Observable<Tag[]> {
+    return this.http.put<Tag[]>(this.getImageTagUrl(imageId, tagId), {}).pipe(
+      catchError(this.handleError<Tag[]>('addTag(' + imageId + ', ' + tagId + ')', []))
+    );
+  }
+
+  public removeTag( imageId: number, tagId: number ): Observable<Tag[]> {
+    return this.http.delete<Tag[]>(this.getImageTagUrl(imageId, tagId), {}).pipe(
+      catchError(this.handleError<Tag[]>('addTag(' + imageId + ', ' + tagId + ')', []))
+    );
+  }
+
   private getImageUrl( id: number = null ): string {
     return this.url + this.IMAGE_GET + (id !== null ? '/' + id : '');
   }
@@ -81,5 +93,9 @@ export class ImageApiService extends RestApiService {
     let query = '';
     ids.forEach(t => query += 'ids=' + t + '&');
     return this.getImageUrl() + '/tags?' + query;
+  }
+
+  private getImageTagUrl( imageId: number, tagId: number ): string {
+    return this.getImageTagsUrl(imageId) + '/' + tagId;
   }
 }
