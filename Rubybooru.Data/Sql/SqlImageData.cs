@@ -22,7 +22,10 @@ namespace Rubybooru.Data.Sql
 
             if (withTags != null && withTags.Length > 0)
             {
-                query = query.Where(i => i.Tags.Any(t => withTags.Contains(t.TagId)));
+                foreach (var tagId in withTags)
+                {
+                    query = query.Where(i => i.Tags.Any(t => t.TagId == tagId));
+                }
             }
 
             if (sizeConditions != null)
