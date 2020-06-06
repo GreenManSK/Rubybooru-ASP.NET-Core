@@ -10,7 +10,7 @@ using Rubybooru.DTO;
 namespace Rubybooru.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class TagController : ControllerBase
     {
         private readonly ILogger<TagController> _logger;

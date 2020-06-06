@@ -13,7 +13,7 @@ using Rubybooru.Helpers;
 namespace Rubybooru.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ImageController : ControllerBase
     {
         public const string StaticImagesPath = "/static/images";

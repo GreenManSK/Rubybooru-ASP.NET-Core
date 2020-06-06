@@ -11,7 +11,7 @@ using Rubybooru.DTO;
 namespace Rubybooru.Controllers
 {
     [ApiController]
-    [Route("image/{id}/tag")]
+    [Route("api/image/{id}/tag")]
     public class ImageTagController : ControllerBase
     {
         private readonly ILogger<ImageTagController> _logger;
