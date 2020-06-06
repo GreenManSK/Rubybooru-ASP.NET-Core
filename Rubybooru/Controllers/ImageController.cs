@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using AutoMapper;
@@ -17,13 +18,14 @@ namespace Rubybooru.Controllers
     public class ImageController : ControllerBase
     {
         public const string StaticImagesPath = "/static/images";
-        
+
         private readonly ILogger<ImageController> _logger;
         private readonly IImageData _imageData;
         private readonly IMapper _mapper;
         private readonly PreviewGenerator _previewGenerator;
 
-        public ImageController(ILogger<ImageController> logger, IImageData imageData, IMapper mapper, PreviewGenerator previewGenerator)
+        public ImageController(ILogger<ImageController> logger, IImageData imageData, IMapper mapper,
+            PreviewGenerator previewGenerator)
         {
             _logger = logger;
             _imageData = imageData;
@@ -32,7 +34,8 @@ namespace Rubybooru.Controllers
         }
 
         [HttpGet]
-        public ActionResult<ImageDto[]> Get(int limit = 10, int offset = 0, [FromQuery] int[] withTags = null)
+        public ActionResult<ImageDto[]> Get([Range(1, 100)] int limit = 10, int offset = 0,
+            [FromQuery] int[] withTags = null)
         {
             // TODO: Add size conditions
             try
@@ -94,6 +97,7 @@ namespace Rubybooru.Controllers
                 {
                     return NotFound();
                 }
+
                 return RedirectPermanent(Path.Combine(StaticImagesPath, image.Path, image.Name));
             }
             catch (Exception e)
