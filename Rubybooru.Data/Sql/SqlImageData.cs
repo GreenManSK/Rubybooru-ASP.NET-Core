@@ -18,6 +18,19 @@ namespace Rubybooru.Data.Sql
         public IEnumerable<Image> GetAll(int limit, int offset, int[] withTags = null,
             ISizeCondition[] sizeConditions = null)
         {
+            var query = Filter(withTags, sizeConditions);
+
+            return query.OrderByDescending(i => i.AddedDateTime).Skip(offset).Take(limit);
+        }
+
+        public int CountImages(int[] withTags = null, ISizeCondition[] sizeConditions = null)
+        {
+            var query = Filter(withTags, sizeConditions);
+            return query.Count();
+        }
+
+        private IQueryable<Image> Filter(int[] withTags, ISizeCondition[] sizeConditions)
+        {
             var query = from i in _db.Images select i;
 
             if (withTags != null && withTags.Length > 0)
@@ -36,7 +49,7 @@ namespace Rubybooru.Data.Sql
                 }
             }
 
-            return query.OrderByDescending(i => i.AddedDateTime).Skip(offset).Take(limit);
+            return query;
         }
 
         public IEnumerable<Image> GetWithoutTagType(int limit, int offset, TagType tagType)

@@ -12,6 +12,11 @@ namespace Rubybooru.Data.Interfaces
             ISizeCondition[] sizeConditions = null
         );
 
+        int CountImages(
+            int[] withTags = null,
+            ISizeCondition[] sizeConditions = null
+        );
+
         IEnumerable<Image> GetWithoutTagType(
             int limit,
             int offset,

@@ -52,6 +52,22 @@ namespace Rubybooru.Controllers
             }
         }
 
+        [HttpGet("count")]
+        public ActionResult<int> Count([FromQuery] int[] withTags = null)
+        {
+            // TODO: Add size conditions
+            try
+            {
+                return _imageData.CountImages(withTags);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    "Error while getting images count with withTags={withTags}", withTags);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
         [HttpGet("{id}")]
         public ActionResult<ImageDto> Get(int id)
         {
