@@ -121,9 +121,9 @@ namespace Rubybooru.Controllers
         {
             try
             {
-                _tagData.Delete(id);
+                var tag = _tagData.Delete(id);
                 _tagData.Commit();
-                return Ok();
+                return _mapper.Map<TagDto>(tag);
             }
             catch (Exception e)
             {
