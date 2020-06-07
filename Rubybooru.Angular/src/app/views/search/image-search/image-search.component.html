@@ -1,1 +1,3 @@
 <app-image-grid [images]="images"></app-image-grid>
+
+<app-page-selector [actualPage]="page" [maxPage]="maxPage" (pageChange)="pageChange($event)"></app-page-selector>

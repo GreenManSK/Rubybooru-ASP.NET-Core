@@ -3,5 +3,6 @@ export const environment = {
   restUrl: 'http://localhost/',
 
   imagesPerPage: 24,
+  defaultPaginationSize: 7,
   cacheTimeInMins: 60
 };

@@ -7,18 +7,22 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { ImageSearchComponent } from './views/search/image-search/image-search.component';
 import { ImageGridComponent } from './components/image-grid/image-grid.component';
+import { PageSelectorComponent } from './components/page-selector/page-selector.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
     AppComponent,
     ImageSearchComponent,
-    ImageGridComponent
+    ImageGridComponent,
+    PageSelectorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

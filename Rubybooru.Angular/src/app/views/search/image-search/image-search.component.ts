@@ -15,7 +15,7 @@ export class ImageSearchComponent implements OnInit {
   public images: Image[];
   public tags: number[];
   public page: number;
-  public imageCount: number;
+  public maxPage: number;
 
   private urlParser: UrlParserService;
 
@@ -37,7 +37,7 @@ export class ImageSearchComponent implements OnInit {
     if (this.filterChanged()) {
       sameTags = false;
       this.imageApi.getCount(this.tags).subscribe(count => {
-        this.imageCount = count;
+        this.maxPage = Math.ceil(count / environment.imagesPerPage);
       });
     }
 
@@ -45,7 +45,7 @@ export class ImageSearchComponent implements OnInit {
     this.page = this.urlParser.getPage();
     this.tags = this.urlParser.getTags();
 
-    if (!sameTags && this.page !== oldPage) {
+    if (!sameTags || this.page !== oldPage) {
       this.imageApi.getImages(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1), this.tags).subscribe(images => {
         this.images = images;
       });

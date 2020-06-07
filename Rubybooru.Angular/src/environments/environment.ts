@@ -7,6 +7,7 @@ export const environment = {
   restUrl: 'https://localhost:44397/api/',
 
   imagesPerPage: 24,
+  defaultPaginationSize: 7,
   cacheTimeInMins: 1
 };
 
