@@ -21,7 +21,8 @@ export class ImageApiService extends RestApiService {
   public getImages( limit: number, offset: number = 0, tags: number[] = null ): Observable<Image[]> {
     const query = this.buildImageFilterQuery(limit, offset, tags);
     return this.http.get<Image[]>({
-      url: this.getImageUrl() + query
+      url: this.getImageUrl() + query,
+      cacheMins: environment.cacheTimeInMins
     })
       .pipe(
         catchError(this.handleError('getImages', []))

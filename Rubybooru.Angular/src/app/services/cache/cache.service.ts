@@ -4,10 +4,24 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CacheService {
+  private static cleanedOld = false;
+
   constructor() {
+    if (!CacheService.cleanedOld) {
+      this.cleanOldKeys();
+    }
   }
 
-  save( options: LocalStorageSaveOptions ) {
+  private cleanOldKeys() {
+    for (const [key, value] of Object.entries(localStorage)) {
+      if (this.load(key) == null) {
+        this.remove(key);
+      }
+    }
+    CacheService.cleanedOld = true;
+  }
+
+  public save( options: LocalStorageSaveOptions ) {
     // Set default values for optionals
     options.expirationMins = options.expirationMins || 0;
 
@@ -22,7 +36,7 @@ export class CacheService {
     localStorage.setItem(options.key, JSON.stringify(record));
   }
 
-  load( key: string ) {
+  public load( key: string ) {
     // Get cached data from localstorage
     const item = localStorage.getItem(key);
     if (item !== null) {
@@ -38,11 +52,11 @@ export class CacheService {
     return null;
   }
 
-  remove( key: string ) {
+  public remove( key: string ) {
     localStorage.removeItem(key);
   }
 
-  cleanLocalStorage() {
+  public cleanLocalStorage() {
     localStorage.clear();
   }
 }
