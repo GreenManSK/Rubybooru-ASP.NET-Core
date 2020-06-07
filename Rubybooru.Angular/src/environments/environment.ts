@@ -2,13 +2,23 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { TagType } from '../app/entities/tag-type.enum';
+
 export const environment = {
   production: false,
   restUrl: 'https://localhost:44397/api/',
 
   imagesPerPage: 24,
   defaultPaginationSize: 7,
-  cacheTimeInMins: 1
+  displayTagCount: 20,
+  cacheTimeInMins: 1,
+
+  tagTypeOrder: [
+    TagType.Copyright,
+    TagType.Character,
+    TagType.General,
+    TagType.System
+  ]
 };
 
 /*

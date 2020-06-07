@@ -9,13 +9,17 @@ import { ImageSearchComponent } from './views/search/image-search/image-search.c
 import { ImageGridComponent } from './components/image-grid/image-grid.component';
 import { PageSelectorComponent } from './components/page-selector/page-selector.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ImageSearchTagsComponent } from './views/search/image-search-tags/image-search-tags.component';
+import { TagListComponent } from './components/tag-list/tag-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ImageSearchComponent,
     ImageGridComponent,
-    PageSelectorComponent
+    PageSelectorComponent,
+    ImageSearchTagsComponent,
+    TagListComponent
   ],
   imports: [
     BrowserModule,

@@ -1,19 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ImageSearchComponent } from './views/search/image-search/image-search.component';
+import { ImageSearchTagsComponent } from './views/search/image-search-tags/image-search-tags.component';
 
 
 const routes: Routes = [
   {
     path: '',
     children: [
-      {path: '', component: ImageSearchComponent}
+      {path: '', component: ImageSearchComponent},
+      {path: '', component: ImageSearchTagsComponent, outlet: 'sidebar'}
     ]
   },
   {
     path: ':page',
     children: [
-      {path: '', component: ImageSearchComponent}
+      {path: '', component: ImageSearchComponent},
+      {path: '', component: ImageSearchTagsComponent, outlet: 'sidebar'}
     ]
   },
 ];

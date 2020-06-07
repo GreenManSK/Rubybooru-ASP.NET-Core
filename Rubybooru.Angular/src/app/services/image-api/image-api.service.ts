@@ -73,11 +73,11 @@ export class ImageApiService extends RestApiService {
     );
   }
 
-  public getTags( ids: number[] ): Observable<Map<number, Tag[]>> {
-    return this.http.get<Map<number, Tag[]>>({
+  public getTags( ids: number[] ): Observable<{[key: string]: Tag[]}> {
+    return this.http.get<{[key: string]: Tag[]}>({
       url: this.getTagsUrl(ids)
     }).pipe(
-      catchError(this.handleError<Map<number, Tag[]>>('getTags(' + ids + ')', null))
+      catchError(this.handleError<{[key: string]: Tag[]}>('getTags(' + ids + ')', {}))
     );
   }
 

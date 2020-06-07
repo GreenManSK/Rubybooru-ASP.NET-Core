@@ -4,6 +4,7 @@ import { ImageApiService } from '../../../services/image-api/image-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParserService } from '../../../services/url-parser/url-parser.service';
 import { environment } from '../../../../environments/environment';
+import { SidePanelDataService } from '../../../services/side-panel-data/side-panel-data.service';
 
 @Component({
   selector: 'app-image-search',
@@ -22,7 +23,8 @@ export class ImageSearchComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private imageApi: ImageApiService
+    private imageApi: ImageApiService,
+    private sidePanelData: SidePanelDataService
   ) {
     this.urlParser = new UrlParserService(this.router, this.route);
     this.route.params.subscribe(params => this.onParamChange(params));
@@ -32,7 +34,7 @@ export class ImageSearchComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  private onParamChange(params: object) {
+  private onParamChange( params: object ) {
     let sameTags = true;
     if (this.filterChanged()) {
       sameTags = false;
@@ -48,6 +50,7 @@ export class ImageSearchComponent implements OnInit {
     if (!sameTags || this.page !== oldPage) {
       this.imageApi.getImages(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1), this.tags).subscribe(images => {
         this.images = images;
+        this.sidePanelData.send(this.images);
       });
     }
   }

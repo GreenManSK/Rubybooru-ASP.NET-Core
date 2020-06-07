@@ -16,8 +16,6 @@ export class PageSelectorComponent implements OnInit {
 
   public leftIcon = faAngleLeft;
   public rightIcon = faAngleRight;
-  public firstIcon = faAngleDoubleLeft;
-  public lastIcon = faAngleDoubleRight;
 
   constructor() {
   }

@@ -1,0 +1,8 @@
+<ul>
+  <li *ngFor="let tag of sortedTags">
+    <a [routerLink]="['/1']" [queryParams]="{tags: tag.id + '_' + tag.name}" [class]="getTagClass(tag.type)">
+      <fa-icon [icon]="faSquare"></fa-icon>
+      {{tag.name}} <span>({{tag.count}})</span>
+    </a>
+  </li>
+</ul>
