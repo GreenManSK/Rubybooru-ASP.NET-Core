@@ -7,7 +7,10 @@ export const environment = {
   imagesPerPage: 24,
   defaultPaginationSize: 7,
   displayTagCount: 20,
-  cacheTimeInMins: 60,
+  cacheTimeInMins: 24 * 60,
+
+  whispererTagLimit: 10,
+  whispererUsedTags: [TagType.Copyright, TagType.Character, TagType.General],
 
   tagTypeOrder: [
     TagType.Copyright,

@@ -13,6 +13,9 @@ import { ImageSearchTagsComponent } from './views/search/image-search-tags/image
 import { TagListComponent } from './components/tag-list/tag-list.component';
 import { ImageComponent } from './views/image/image/image.component';
 import { ImagePanelComponent } from './views/image/image-panel/image-panel.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { FormsModule } from '@angular/forms';
+import { InputWhispererComponent } from './components/input-whisperer/input-whisperer.component';
 
 @NgModule({
   declarations: [
@@ -23,14 +26,17 @@ import { ImagePanelComponent } from './views/image/image-panel/image-panel.compo
     ImageSearchTagsComponent,
     TagListComponent,
     ImageComponent,
-    ImagePanelComponent
+    ImagePanelComponent,
+    SearchBarComponent,
+    InputWhispererComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

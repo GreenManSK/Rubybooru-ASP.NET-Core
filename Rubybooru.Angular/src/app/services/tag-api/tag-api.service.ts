@@ -6,6 +6,7 @@ import { TagType } from '../../entities/tag-type.enum';
 import { Tag } from '../../entities/tag';
 import { SortType } from './sort-type';
 import { HttpClientService } from '../http-client/http-client.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +20,11 @@ export class TagApiService extends RestApiService {
     super(http);
   }
 
-  public getTags( limit: number, offset: number = 0, sort: SortType = SortType.Name, type: TagType = null ): Observable<Tag[]> {
+  public getTags( limit: number = 0, offset: number = 0, sort: SortType = SortType.Name, type: TagType = null ): Observable<Tag[]> {
     const query = this.buildTagFilterQuery(limit, offset, sort, type);
     return this.http.get<Tag[]>({
-      url: this.getTagUrl() + query
+      url: this.getTagUrl() + query,
+      cacheMins: environment.cacheTimeInMins
     })
       .pipe(
         catchError(this.handleError('getTags', []))

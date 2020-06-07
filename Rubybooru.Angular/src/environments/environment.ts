@@ -13,6 +13,9 @@ export const environment = {
   displayTagCount: 20,
   cacheTimeInMins: 1,
 
+  whispererTagLimit: 10,
+  whispererUsedTags: [TagType.Copyright, TagType.Character, TagType.General],
+
   tagTypeOrder: [
     TagType.Copyright,
     TagType.Character,

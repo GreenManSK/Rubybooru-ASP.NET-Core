@@ -1,0 +1,11 @@
+<div class="search">
+  <form #searchForm="ngForm" (ngSubmit)="onSubmit()">
+    <label for="searchInput">Search</label>
+    <app-input-whisperer
+      id="searchInput"
+      placeholder="kurosawa_ruby"
+      [items]="tags"
+      [defaultValue]="defaultValue"
+    ></app-input-whisperer>
+  </form>
+</div>

@@ -1,6 +1,6 @@
 <ul>
   <li *ngFor="let tag of sortedTags">
-    <a [routerLink]="['/1']" [queryParams]="{tags: tag.id + '_' + tag.name}" [class]="getTagClass(tag.type)">
+    <a [routerLink]="['/1']" [queryParams]="{tags: tag.id + '_' + tag.name}" [class]="TagService.getTagClass(tag.type)" class="tag-color">
       <fa-icon [icon]="faSquare"></fa-icon>
       {{tag.name}} <span *ngIf="tag.count > 0">({{tag.count}})</span>
     </a>

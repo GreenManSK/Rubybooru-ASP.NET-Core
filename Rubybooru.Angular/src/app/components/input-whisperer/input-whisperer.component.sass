@@ -1,0 +1,36 @@
+@import '../../../styles/variables'
+
+div
+  width: 100%
+  position: relative
+
+input
+  border: 1px solid $dark-pink
+  background: lighten($light-pink, 20%)
+  color: $dark-pink
+  font-size: 1.2rem
+  outline-width: 0
+  border-radius: $border-radius
+  padding: 0 5px
+  width: 100%
+
+ul
+  text-align: left
+  position: absolute
+  top: 20px
+  left: 0
+  right: 0
+  padding: 0
+  margin: 0
+  li
+    text-align: left
+    list-style: none
+    background: $dark-bg
+    border: 1px solid $dark-bg
+    font-size: 1.1em
+    padding: 0.1em .5em
+    cursor: pointer
+    color: $light-pink
+    &:hover, &:focus, &:active, &.active
+      background: $background-color
+      color: #fff
