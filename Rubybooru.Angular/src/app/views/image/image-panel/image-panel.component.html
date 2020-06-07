@@ -1,0 +1,12 @@
+<ng-container *ngIf="image">
+  <div class="info">
+    <div class="line">
+      <strong>Date:</strong> {{image.addedDateTime | date:'dd. MM. yyyy, HH:mm'}}
+    </div>
+    <div class="line">
+      <strong>Size:</strong>&nbsp;
+      <a [href]="imageApi.getImageFileUrl(image.id)" title="Download image">{{image.width ? image.width : '__'}}x{{image.height ? image.height : '__'}}</a>
+    </div>
+  </div>
+  <app-tag-list [tags]="tags"></app-tag-list>
+</ng-container>

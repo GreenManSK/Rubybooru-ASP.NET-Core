@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ImageApiService } from '../../../services/image-api/image-api.service';
 import { Image } from '../../../entities/image';
+import { SidePanelDataService } from '../../../services/side-panel-data/side-panel-data.service';
 
 @Component({
   selector: 'app-image',
@@ -15,7 +16,8 @@ export class ImageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    public imageApi: ImageApiService
+    public imageApi: ImageApiService,
+    private sidePanelData: SidePanelDataService
   ) {
   }
 
@@ -29,6 +31,9 @@ export class ImageComponent implements OnInit {
 
   private getImage(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.imageApi.getImage(id).subscribe(image => this.image = image);
+    this.imageApi.getImage(id).subscribe(image => {
+      this.image = image;
+      this.sidePanelData.send(this.image);
+    });
   }
 }

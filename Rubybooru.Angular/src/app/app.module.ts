@@ -12,6 +12,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ImageSearchTagsComponent } from './views/search/image-search-tags/image-search-tags.component';
 import { TagListComponent } from './components/tag-list/tag-list.component';
 import { ImageComponent } from './views/image/image/image.component';
+import { ImagePanelComponent } from './views/image/image-panel/image-panel.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ImageComponent } from './views/image/image/image.component';
     PageSelectorComponent,
     ImageSearchTagsComponent,
     TagListComponent,
-    ImageComponent
+    ImageComponent,
+    ImagePanelComponent
   ],
   imports: [
     BrowserModule,
