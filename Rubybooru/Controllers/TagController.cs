@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,8 +27,8 @@ namespace Rubybooru.Controllers
 
         [HttpGet]
         public ActionResult<TagDto[]> GetAll(
-            int limit,
-            int offset,
+            [Range(0, 100)] int limit = 0,
+            int offset = 0,
             TagSortOrder sortOrder = TagSortOrder.Name,
             TagType? tagType = null
         )

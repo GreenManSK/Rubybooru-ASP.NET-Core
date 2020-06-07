@@ -35,8 +35,12 @@ namespace Rubybooru.Data.Sql
             }
 
             query = OrderTags(query, sortOrder);
+            if (limit != 0)
+            {
+                query = query.Skip(offset).Take(limit);
+            }
 
-            return query.Skip(offset).Take(limit);
+            return query;
         }
 
         private static IQueryable<TagWithCount> OrderTags(IQueryable<TagWithCount> query, TagSortOrder sortOrder)
