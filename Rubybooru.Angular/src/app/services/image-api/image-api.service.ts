@@ -21,22 +21,21 @@ export class ImageApiService extends RestApiService {
   public getImages( limit: number, offset: number = 0, tags: number[] = null ): Observable<Image[]> {
     const query = this.buildImageFilterQuery(limit, offset, tags);
     return this.http.get<Image[]>({
-      url: this.getImageUrl() + query,
-      cacheMins: environment.cacheTimeInMins
+      url: this.getImageUrl() + query
     })
       .pipe(
         catchError(this.handleError('getImages', []))
       );
   }
 
-  public getCount( tags: number[] = null ): Observable<Image[]> {
+  public getCount( tags: number[] = null ): Observable<number> {
     const query = this.buildImageFilterQuery(null, null, tags);
-    return this.http.get<Image[]>({
+    return this.http.get<number>({
       url: this.getCountUrl() + query,
       cacheMins: environment.cacheTimeInMins
     })
       .pipe(
-        catchError(this.handleError('getCount', []))
+        catchError(this.handleError('getCount', 0))
       );
   }
 
