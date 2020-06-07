@@ -1,0 +1,8 @@
+<div>
+  <img *ngIf="image"
+       [alt]="image.name"
+       [src]="imageApi.getImageFileUrl(image.id)"
+       [class.mini]="isMini"
+       (click)="toggleMini()"
+  />
+</div>

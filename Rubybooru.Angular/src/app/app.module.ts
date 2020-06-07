@@ -11,6 +11,7 @@ import { PageSelectorComponent } from './components/page-selector/page-selector.
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ImageSearchTagsComponent } from './views/search/image-search-tags/image-search-tags.component';
 import { TagListComponent } from './components/tag-list/tag-list.component';
+import { ImageComponent } from './views/image/image/image.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { TagListComponent } from './components/tag-list/tag-list.component';
     ImageGridComponent,
     PageSelectorComponent,
     ImageSearchTagsComponent,
-    TagListComponent
+    TagListComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,
