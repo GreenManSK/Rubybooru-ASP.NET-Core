@@ -21,27 +21,73 @@ export class TagService {
     return this.tagApi.getTags();
   }
 
-  public deleteTag( tag: Tag ): Observable<Tag> {
-    return this.tagApi.delete(tag).pipe(
+  public add( tag: Tag ): Observable<Tag> {
+    return this.tagApi.add(tag).pipe(
       tap(result => {
         if (result != null) {
-          this.deleteFromCache(tag);
-          // TODO: Delete from cache
+          this.addToCache(tag);
         }
       })
     );
   }
 
-  private deleteFromCache( tag: Tag ) {
-    const query = this.tagApi.buildTagFilterQuery();
-    const url = this.tagApi.getTagUrl() + query;
-    let tags = this.cache.load(url);
+  public edit( tag: Tag ): Observable<Tag> {
+    return this.tagApi.update(tag).pipe(
+      tap(result => {
+        if (result != null) {
+          this.updateInCache(tag);
+        }
+      })
+    );
+  }
+
+  public delete( tag: Tag ): Observable<Tag> {
+    return this.tagApi.delete(tag).pipe(
+      tap(result => {
+        if (result != null) {
+          this.deleteFromCache(tag);
+        }
+      })
+    );
+  }
+
+  private addToCache( tag: Tag ): void {
+    const tags = this.getCacheTags();
+    tags.push(tag);
+    this.saveCache(tags);
+  }
+
+  private updateInCache( tag: Tag ): void {
+    const tags = this.getCacheTags();
+    for (const i in tags) {
+      if (tags[i].id === tag.id) {
+        tags[i] = tag;
+      }
+    }
+    this.saveCache(tags);
+  }
+
+  private deleteFromCache( tag: Tag ): void {
+    let tags = this.getCacheTags();
     tags = tags.filter(t => t.id !== tag.id);
+    this.saveCache(tags);
+  }
+
+  private saveCache( tags: any ): void {
     this.cache.save({
-      key: url,
+      key: this.getCacheKey(),
       data: tags,
       expirationMins: environment.cacheTimeInMins
     });
+  }
+
+  private getCacheTags(): Tag[] {
+    return this.cache.load(this.getCacheKey());
+  }
+
+  private getCacheKey(): string {
+    const query = this.tagApi.buildTagFilterQuery();
+    return this.tagApi.getTagUrl() + query;
   }
 
   public static sortTags( tags: Tag[] ): Tag[] {

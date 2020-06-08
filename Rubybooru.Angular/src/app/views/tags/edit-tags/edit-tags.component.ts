@@ -24,6 +24,11 @@ export class EditTagsComponent implements OnInit {
     private sidePanelData: SidePanelDataService
   ) {
     this.trieSearch = new TrieSearch('name');
+    this.sidePanelData.subscribe(d => {
+      if (d === null) {
+        this.createTrie();
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -41,7 +46,7 @@ export class EditTagsComponent implements OnInit {
   }
 
   public deleteTag( tag: Tag ): boolean {
-    this.tagService.deleteTag(tag).subscribe(result => {
+    this.tagService.delete(tag).subscribe(result => {
       if (result != null) {
         this.createTrie(true);
       }
@@ -49,7 +54,7 @@ export class EditTagsComponent implements OnInit {
     return false;
   }
 
-  private createTrie(refresh = false): void {
+  private createTrie( refresh = false ): void {
     this.tagService.getTags().subscribe(tags => {
       this.trieSearch = new TrieSearch('name');
       this.trieSearch.addAll(tags);

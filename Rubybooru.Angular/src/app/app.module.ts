@@ -20,6 +20,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { UntaggedImagesComponent } from './views/untagged/untagged-images/untagged-images.component';
 import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-panel/untagged-images-panel.component';
 import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
+import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
     MenuComponent,
     UntaggedImagesComponent,
     UntaggedImagesPanelComponent,
-    EditTagsComponent
+    EditTagsComponent,
+    TagFormComponent
   ],
   imports: [
     BrowserModule,

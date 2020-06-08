@@ -7,6 +7,7 @@ import { ImagePanelComponent } from './views/image/image-panel/image-panel.compo
 import { UntaggedImagesComponent } from './views/untagged/untagged-images/untagged-images.component';
 import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-panel/untagged-images-panel.component';
 import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
+import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
 
 
 const routes: Routes = [
@@ -28,7 +29,7 @@ const routes: Routes = [
     path: 'tags',
     children: [
       {path: '', component: EditTagsComponent},
-      // {path: '', component: UntaggedImagesPanelComponent, outlet: 'sidebar'}
+      {path: '', component: TagFormComponent, outlet: 'sidebar'}
     ]
   },
   {
