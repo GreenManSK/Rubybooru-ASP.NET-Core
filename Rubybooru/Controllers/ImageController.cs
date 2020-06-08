@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Rubybooru.Core;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.DTO;
 using Rubybooru.Helpers;
@@ -64,6 +65,37 @@ namespace Rubybooru.Controllers
             {
                 _logger.LogError(e,
                     "Error while getting images count with withTags={withTags}", withTags);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        [HttpGet("without-tag")]
+        public ActionResult<ImageDto[]> GetWithoutTagType([Range(1, 100)] int limit = 10, int offset = 0, TagType tagType = TagType.Copyright)
+        {
+            try
+            {
+                var images = _imageData.GetWithoutTagType(limit, offset, tagType);
+                return _mapper.Map<ImageDto[]>(images);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    "Error while getting images without tagType={tagType} with limit={limit}, offset={offset}", tagType, limit, offset);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        [HttpGet("without-tag/count")]
+        public ActionResult<int> CountWithoutTagType(TagType tagType = TagType.Copyright)
+        {
+            try
+            {
+                return _imageData.CountWithoutTagType(tagType);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    "Error while getting count of images without tagType={tagType}", tagType);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }

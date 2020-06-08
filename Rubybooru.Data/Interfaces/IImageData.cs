@@ -23,6 +23,8 @@ namespace Rubybooru.Data.Interfaces
             TagType tagType
         );
 
+        int CountWithoutTagType(TagType tagType);
+
         Dictionary<int, ImageTag[]> GetTags(IEnumerable<int> imageIds);
 
         Image GetById(int id);

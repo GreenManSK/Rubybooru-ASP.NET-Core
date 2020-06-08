@@ -54,11 +54,22 @@ namespace Rubybooru.Data.Sql
 
         public IEnumerable<Image> GetWithoutTagType(int limit, int offset, TagType tagType)
         {
+            var query = QueryWithoutTagType(tagType);
+            return query.OrderByDescending(i => i.AddedDateTime).Skip(offset).Take(limit);
+        }
+
+        public int CountWithoutTagType(TagType tagType)
+        {
+            var query = QueryWithoutTagType(tagType);
+            return query.Count();
+        }
+
+        private IQueryable<Image> QueryWithoutTagType(TagType tagType)
+        {
             var query = from i in _db.Images
                 where i.Tags.All(t => t.Tag.Type != tagType)
-                orderby i.AddedDateTime descending
                 select i;
-            return query.Skip(offset).Take(limit);
+            return query;
         }
 
         public Image GetById(int id)
