@@ -78,7 +78,7 @@ export class TagApiService extends RestApiService {
       );
   }
 
-  private buildTagFilterQuery( limit: number, offset: number, sort: SortType, type: TagType ): string {
+  public buildTagFilterQuery( limit: number = 0, offset: number = 0, sort: SortType = SortType.Name, type: TagType = null ): string {
     let query = '?';
 
     if (limit !== null) {
@@ -100,7 +100,7 @@ export class TagApiService extends RestApiService {
     return query;
   }
 
-  private getTagUrl( id: number = null ): string {
+  public getTagUrl( id: number = null ): string {
     return this.url + this.TAG_GET + (id !== null ? '/' + id : '');
   }
 

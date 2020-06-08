@@ -19,6 +19,7 @@ import { InputWhispererComponent } from './components/input-whisperer/input-whis
 import { MenuComponent } from './components/menu/menu.component';
 import { UntaggedImagesComponent } from './views/untagged/untagged-images/untagged-images.component';
 import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-panel/untagged-images-panel.component';
+import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-p
     InputWhispererComponent,
     MenuComponent,
     UntaggedImagesComponent,
-    UntaggedImagesPanelComponent
+    UntaggedImagesPanelComponent,
+    EditTagsComponent
   ],
   imports: [
     BrowserModule,

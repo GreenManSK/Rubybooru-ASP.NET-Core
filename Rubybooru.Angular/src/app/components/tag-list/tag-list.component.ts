@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { Tag } from '../../entities/tag';
-import { TagType } from '../../entities/tag-type.enum';
 import { TagService } from '../../services/tag-service/tag.service';
 
 @Component({
