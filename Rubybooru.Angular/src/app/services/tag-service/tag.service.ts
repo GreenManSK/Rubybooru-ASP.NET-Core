@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Tag } from '../../entities/tag';
 import { TagType } from '../../entities/tag-type.enum';
+import { TagApiService } from '../tag-api/tag-api.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,11 @@ export class TagService {
 
   private static TYPES_SORT = environment.tagTypeOrder;
 
-  constructor() {
+  constructor( private tagApi: TagApiService ) {
+  }
+
+  public getTags(): Observable<Tag[]> {
+    return this.tagApi.getTags();
   }
 
   public static sortTags( tags: Tag[] ): Tag[] {

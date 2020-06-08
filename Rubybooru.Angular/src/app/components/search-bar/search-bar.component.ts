@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TagApiService } from '../../services/tag-api/tag-api.service';
 import { Tag } from '../../entities/tag';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParserService } from '../../services/url-parser/url-parser.service';
 import { InputWhispererComponent } from '../input-whisperer/input-whisperer.component';
 import { InputParser } from './input.parser';
+import { TagService } from '../../services/tag-service/tag.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -26,7 +26,7 @@ export class SearchBarComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private tagApi: TagApiService
+    private tagService: TagService
   ) {
     this.urlParser = new UrlParserService(router, route);
     this.route.params.subscribe(() => this.onParamChange());
@@ -34,7 +34,7 @@ export class SearchBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.tagApi.getTags().subscribe(tags => {
+    this.tagService.getTags().subscribe(tags => {
       this.updateTags(tags);
     });
   }
