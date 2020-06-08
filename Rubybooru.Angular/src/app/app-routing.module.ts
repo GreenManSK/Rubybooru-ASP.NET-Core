@@ -4,6 +4,8 @@ import { ImageSearchComponent } from './views/search/image-search/image-search.c
 import { ImageSearchTagsComponent } from './views/search/image-search-tags/image-search-tags.component';
 import { ImageComponent } from './views/image/image/image.component';
 import { ImagePanelComponent } from './views/image/image-panel/image-panel.component';
+import { UntaggedImagesComponent } from './views/untagged/untagged-images/untagged-images.component';
+import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-panel/untagged-images-panel.component';
 
 
 const routes: Routes = [
@@ -19,6 +21,13 @@ const routes: Routes = [
     children: [
       {path: '', component: ImageSearchComponent},
       {path: '', component: ImageSearchTagsComponent, outlet: 'sidebar'}
+    ]
+  },
+  {
+    path: 'untagged/:page',
+    children: [
+      {path: '', component: UntaggedImagesComponent},
+      {path: '', component: UntaggedImagesPanelComponent, outlet: 'sidebar'}
     ]
   },
   {

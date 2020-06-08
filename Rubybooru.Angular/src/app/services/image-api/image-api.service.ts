@@ -6,6 +6,7 @@ import { Image } from '../../entities/image';
 import { Tag } from '../../entities/tag';
 import { HttpClientService } from '../http-client/http-client.service';
 import { environment } from '../../../environments/environment';
+import { TagType } from '../../entities/tag-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,44 @@ export class ImageApiService extends RestApiService {
     return query;
   }
 
+  public getWithoutTagType( limit: number, offset: number, tagType: TagType ): Observable<Image[]> {
+    const query = this.buildWithoutTagFilterQuery(limit, offset, tagType);
+    return this.http.get<Image[]>({
+      url: this.getWithoutTagTypeUrl() + query
+    })
+      .pipe(
+        catchError(this.handleError('getWithoutTagType', []))
+      );
+  }
+
+  public getWithoutTagTypeCount( tagType: TagType ): Observable<number> {
+    const query = this.buildWithoutTagFilterQuery(null, null, tagType);
+    return this.http.get<number>({
+      url: this.getWithoutTagTypeCountUrl() + query
+    })
+      .pipe(
+        catchError(this.handleError('getWithoutTagType', 0))
+      );
+  }
+
+  private buildWithoutTagFilterQuery( limit: number, offset: number, tagType: TagType ): string {
+    let query = '?';
+
+    if (limit !== null) {
+      query += 'limit=' + limit + '&';
+    }
+
+    if (offset !== null) {
+      query += 'offset=' + offset + '&';
+    }
+
+    if (tagType != null) {
+      query += 'tagType=' + tagType;
+    }
+
+    return query;
+  }
+
   public getImage( id: number ): Observable<Image> {
     return this.http.get<Image>({
       url: this.getImageUrl(id)
@@ -73,11 +112,11 @@ export class ImageApiService extends RestApiService {
     );
   }
 
-  public getTags( ids: number[] ): Observable<{[key: string]: Tag[]}> {
-    return this.http.get<{[key: string]: Tag[]}>({
+  public getTags( ids: number[] ): Observable<{ [key: string]: Tag[] }> {
+    return this.http.get<{ [key: string]: Tag[] }>({
       url: this.getTagsUrl(ids)
     }).pipe(
-      catchError(this.handleError<{[key: string]: Tag[]}>('getTags(' + ids + ')', {}))
+      catchError(this.handleError<{ [key: string]: Tag[] }>('getTags(' + ids + ')', {}))
     );
   }
 
@@ -125,5 +164,13 @@ export class ImageApiService extends RestApiService {
 
   private getCountUrl(): string {
     return this.getImageUrl() + '/count';
+  }
+
+  private getWithoutTagTypeUrl(): string {
+    return this.getImageUrl() + '/without-tag';
+  }
+
+  private getWithoutTagTypeCountUrl(): string {
+    return this.getWithoutTagTypeUrl() + '/count';
   }
 }

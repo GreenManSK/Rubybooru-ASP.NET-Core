@@ -40,7 +40,7 @@ export class UrlParserService {
     });
   }
 
-  navigatePage( page: number ): void {
-    this.router.navigate(['/' + page], {queryParams: this.route.snapshot.queryParams});
+  navigatePage( page: number, prefix: string = '/' ): void {
+    this.router.navigate([prefix + page], {queryParams: this.route.snapshot.queryParams});
   }
 }

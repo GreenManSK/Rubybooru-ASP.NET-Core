@@ -11,7 +11,7 @@ import { SidePanelDataService } from '../../../services/side-panel-data/side-pan
   templateUrl: './image-search.component.html',
   styleUrls: ['./image-search.component.sass']
 })
-export class ImageSearchComponent implements OnInit {
+export class ImageSearchComponent {
 
   public images: Image[];
   public tags: number[];
@@ -29,9 +29,6 @@ export class ImageSearchComponent implements OnInit {
     this.urlParser = new UrlParserService(this.router, this.route);
     this.route.params.subscribe(params => this.onParamChange(params));
     this.route.queryParams.subscribe(params => this.onParamChange(params));
-  }
-
-  ngOnInit(): void {
   }
 
   private onParamChange( params: object ) {

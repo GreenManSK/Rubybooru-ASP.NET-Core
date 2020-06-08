@@ -1,0 +1,3 @@
+<app-image-grid [images]="images"></app-image-grid>
+
+<app-page-selector *ngIf="maxPage > 0" [actualPage]="page" [maxPage]="maxPage" (pageChange)="pageChange($event)"></app-page-selector>

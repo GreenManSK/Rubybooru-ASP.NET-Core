@@ -21,11 +21,11 @@ export class InputWhispererComponent {
   @Input() whisperLimit = environment.whispererTagLimit;
 
   public TagService = TagService;
+  public whisperer = [];
+  public activeIndex = -1;
 
   private tags: WhispererTag[] = [];
-  private whisperer = [];
   private focusTimer = 0;
-  private activeIndex = -1;
 
   constructor() {
   }
@@ -37,7 +37,9 @@ export class InputWhispererComponent {
 
   @Input()
   set defaultValue( value: string ) {
-    this.inputElement.nativeElement.value = value;
+    if (this.inputElement != null) {
+      this.inputElement.nativeElement.value = value;
+    }
   }
 
   public getValues(): string[] {
@@ -85,7 +87,7 @@ export class InputWhispererComponent {
     return false;
   }
 
-  private addValue( item: string ): void {
+  public addValue( item: string ): void {
     const usedItems = this.splitValues(this.inputElement.nativeElement.value);
     usedItems.pop();
     usedItems.push(item);

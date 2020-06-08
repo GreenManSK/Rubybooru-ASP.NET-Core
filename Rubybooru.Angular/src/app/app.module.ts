@@ -16,6 +16,9 @@ import { ImagePanelComponent } from './views/image/image-panel/image-panel.compo
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { FormsModule } from '@angular/forms';
 import { InputWhispererComponent } from './components/input-whisperer/input-whisperer.component';
+import { MenuComponent } from './components/menu/menu.component';
+import { UntaggedImagesComponent } from './views/untagged/untagged-images/untagged-images.component';
+import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-panel/untagged-images-panel.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { InputWhispererComponent } from './components/input-whisperer/input-whis
     ImageComponent,
     ImagePanelComponent,
     SearchBarComponent,
-    InputWhispererComponent
+    InputWhispererComponent,
+    MenuComponent,
+    UntaggedImagesComponent,
+    UntaggedImagesPanelComponent
   ],
   imports: [
     BrowserModule,
