@@ -33,7 +33,9 @@ export class ImageSearchComponent {
 
   private onParamChange( params: object ) {
     let sameTags = true;
-    if (this.filterChanged()) {
+    const filterChanged = this.filterChanged();
+    this.tags = this.urlParser.getTags();
+    if (filterChanged) {
       sameTags = false;
       this.imageApi.getCount(this.tags).subscribe(count => {
         this.maxPage = Math.ceil(count / environment.imagesPerPage);
@@ -42,7 +44,6 @@ export class ImageSearchComponent {
 
     const oldPage = this.page;
     this.page = this.urlParser.getPage();
-    this.tags = this.urlParser.getTags();
 
     if (!sameTags || this.page !== oldPage) {
       this.imageApi.getImages(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1), this.tags).subscribe(images => {
