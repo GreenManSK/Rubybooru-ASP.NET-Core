@@ -1,3 +1,4 @@
+using System.IO;
 using System.Security.Cryptography;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +21,8 @@ namespace Rubybooru
 {
     public class Startup
     {
+        private const string ClientUrl = "";
+
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
 
@@ -42,7 +45,7 @@ namespace Rubybooru
                         .AllowAnyHeader();
                 }));
             }
-            
+
             services.AddDbContextPool<RubybooruDbContext>(options =>
             {
                 if (_env.IsDevelopment() && _configuration.GetValue<bool>("LogQueries"))
@@ -62,9 +65,9 @@ namespace Rubybooru
             services.AddSingleton<HashAlgorithm, SHA256CryptoServiceProvider>();
             services.AddSingleton<IPreviewMaker, PreviewMaker>();
             services.AddSingleton<PreviewGenerator, PreviewGenerator>();
-            
+
             services.AddAutoMapper(typeof(Startup));
-            
+
             services.AddControllers();
         }
 
@@ -82,24 +85,45 @@ namespace Rubybooru
                 FileProvider = new PhysicalFileProvider(_configuration.GetValue<string>("ImagesPath")),
                 RequestPath = ImageController.StaticImagesPath
             });
-            
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(_configuration.GetValue<string>("PreviewsPath")),
                 RequestPath = PreviewGenerator.StaticPreviewsPath
             });
-            
+
+            app.UseDefaultFiles(GetDefaultFileOptions());
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(_configuration.GetValue<string>("ClientBuildPath")),
+                RequestPath = ClientUrl
+            });
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
+                endpoints.MapGet("/api", async context =>
                 {
                     context.Response.ContentType = "text/*; charset=utf-8";
                     await context.Response.WriteAsync("がんばルビィ");
                 });
                 endpoints.MapControllers();
             });
+        }
+
+        private DefaultFilesOptions GetDefaultFileOptions()
+        {
+            var path = _configuration.GetValue<string>("ClientBuildPath");
+            var fileProvider = new PhysicalFileProvider(path);
+
+            var options = new DefaultFilesOptions
+            {
+                FileProvider = fileProvider,
+                RequestPath = ClientUrl
+            };
+            options.DefaultFileNames.Add("index.html");
+            return options;
         }
     }
 }
