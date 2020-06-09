@@ -129,7 +129,7 @@ export class ImageApiService extends RestApiService {
   }
 
   public addTag( imageId: number, tagId: number ): Observable<Tag[]> {
-    return this.http.put<Tag[]>({
+    return this.http.post<Tag[]>({
       url: this.getImageTagUrl(imageId, tagId)
     }).pipe(
       catchError(this.handleError<Tag[]>('addTag(' + imageId + ', ' + tagId + ')', null))

@@ -21,6 +21,7 @@ import { UntaggedImagesComponent } from './views/untagged/untagged-images/untagg
 import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-panel/untagged-images-panel.component';
 import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
 import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
+import { TagSelectorComponent } from './components/tag-selector/tag-selector.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
     UntaggedImagesComponent,
     UntaggedImagesPanelComponent,
     EditTagsComponent,
-    TagFormComponent
+    TagFormComponent,
+    TagSelectorComponent
   ],
   imports: [
     BrowserModule,

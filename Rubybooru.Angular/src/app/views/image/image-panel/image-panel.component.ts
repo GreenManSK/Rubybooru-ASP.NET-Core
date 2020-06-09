@@ -4,6 +4,7 @@ import { SidePanelDataService } from '../../../services/side-panel-data/side-pan
 import { Image } from '../../../entities/image';
 import { Tag } from '../../../entities/tag';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { TagService } from '../../../services/tag-service/tag.service';
 
 @Component({
   selector: 'app-image-panel',
@@ -16,16 +17,20 @@ export class ImagePanelComponent implements OnInit {
   public tags: Tag[] = [];
   public editMode = false;
 
+  public allTags: Tag[] = [];
+
   public faTrash = faTrash;
 
   constructor(
     public imageApi: ImageApiService,
+    private tagService: TagService,
     private sidePanelData: SidePanelDataService
   ) {
     sidePanelData.subscribe(data => this.onImage(data));
   }
 
   ngOnInit(): void {
+    this.tagService.getTags().subscribe(tags => this.allTags = tags);
   }
 
   public toggleEditMode(): boolean {

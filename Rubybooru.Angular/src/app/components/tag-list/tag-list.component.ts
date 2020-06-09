@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { faQuestion, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Tag } from '../../entities/tag';
 import { TagService } from '../../services/tag-service/tag.service';
@@ -8,7 +8,7 @@ import { TagService } from '../../services/tag-service/tag.service';
   templateUrl: './tag-list.component.html',
   styleUrls: ['./tag-list.component.sass']
 })
-export class TagListComponent implements OnInit {
+export class TagListComponent {
 
   public sortedTags: Tag[] = [];
   public faSquare = faQuestion;
@@ -21,9 +21,6 @@ export class TagListComponent implements OnInit {
   public tagIconCallback: EventEmitter<Tag> = new EventEmitter();
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
   @Input()

@@ -12,32 +12,22 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 })
 export class EditTagsComponent implements OnInit {
 
-  public TagService = TagService;
   public tags: Tag[] = [];
   public faTrash = faTrash;
-
-  private trieSearch: TrieSearch;
-  private lastSearch = '';
 
   constructor(
     private tagService: TagService,
     private sidePanelData: SidePanelDataService
   ) {
-    this.trieSearch = new TrieSearch('name');
     this.sidePanelData.subscribe(d => {
       if (d === null) {
-        this.createTrie();
+        this.refreshTags();
       }
     });
   }
 
   ngOnInit(): void {
-    this.createTrie();
-  }
-
-  public valueChange( value: string ): void {
-    this.lastSearch = value;
-    this.tags = this.trieSearch.get(value);
+    this.refreshTags();
   }
 
   public selectTag( tag: Tag ): boolean {
@@ -48,19 +38,15 @@ export class EditTagsComponent implements OnInit {
   public deleteTag( tag: Tag ): boolean {
     this.tagService.delete(tag).subscribe(result => {
       if (result != null) {
-        this.createTrie(true);
+        this.refreshTags();
       }
     });
     return false;
   }
 
-  private createTrie( refresh = false ): void {
+  private refreshTags() {
     this.tagService.getTags().subscribe(tags => {
-      this.trieSearch = new TrieSearch('name');
-      this.trieSearch.addAll(tags);
-      if (refresh && this.lastSearch !== '') {
-        this.valueChange(this.lastSearch);
-      }
+      this.tags = tags;
     });
   }
 }

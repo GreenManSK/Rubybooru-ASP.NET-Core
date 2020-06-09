@@ -1,20 +1,7 @@
-<label for="tagNameInput">Search for tag:</label>
-<input #input
-       name="tagName"
-       id="tagNameInput"
-       type="text"
-       placeholder="Search for tag"
-       (keyup)="valueChange(input.value)"
-       (change)="valueChange(input.value)"
->
+<app-tag-selector [tagIcon]="faTrash"
+                  (tagCallback)="selectTag($event)"
+                  (tagIconCallback)="deleteTag($event)"
+                  [tags]="tags"
+                  tagClasses="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-3">
 
-<div class="tags row">
-  <div
-    *ngFor="let tag of tags"
-    class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-3 img-container"
-  >
-    <a href="#" (click)="selectTag(tag)" [class]="TagService.getTagClass(tag.type)" class="tag-color" [title]="tag.name">{{tag.name}}</a>
-    &nbsp;
-    <a href="#" title="Delete tag" (click)="deleteTag(tag)"><fa-icon [icon]="faTrash"></fa-icon></a>
-  </div>
-</div>
+</app-tag-selector>
