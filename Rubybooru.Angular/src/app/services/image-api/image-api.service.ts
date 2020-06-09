@@ -132,7 +132,7 @@ export class ImageApiService extends RestApiService {
     return this.http.put<Tag[]>({
       url: this.getImageTagUrl(imageId, tagId)
     }).pipe(
-      catchError(this.handleError<Tag[]>('addTag(' + imageId + ', ' + tagId + ')', []))
+      catchError(this.handleError<Tag[]>('addTag(' + imageId + ', ' + tagId + ')', null))
     );
   }
 
@@ -140,7 +140,7 @@ export class ImageApiService extends RestApiService {
     return this.http.delete<Tag[]>({
       url: this.getImageTagUrl(imageId, tagId)
     }).pipe(
-      catchError(this.handleError<Tag[]>('addTag(' + imageId + ', ' + tagId + ')', []))
+      catchError(this.handleError<Tag[]>('addTag(' + imageId + ', ' + tagId + ')', null))
     );
   }
 

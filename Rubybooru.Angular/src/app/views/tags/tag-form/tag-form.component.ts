@@ -43,7 +43,7 @@ export class TagFormComponent {
     });
   }
 
-  private setTag( tag: Tag ): void {
+  public setTag( tag: Tag ): void {
     this.error = false;
     if (tag == null) {
       this.tag = new Tag(0, '');

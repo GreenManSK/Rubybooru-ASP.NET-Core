@@ -8,5 +8,11 @@
       <a [href]="imageApi.getImageFileUrl(image.id)" title="Download image">{{image.width ? image.width : '__'}}x{{image.height ? image.height : '__'}}</a>
     </div>
   </div>
-  <app-tag-list [tags]="tags"></app-tag-list>
+  <app-tag-list *ngIf="!editMode" [tags]="tags"></app-tag-list>
+  <app-tag-list *ngIf="editMode" [tags]="tags" (tagIconCallback)="removeTag($event)" [tagIcon]="faTrash"></app-tag-list>
+  <div class="info">
+    <div class="line">
+      <a href="#" (click)="toggleEditMode()" title="Toggle edit mode">Toggle edit mode</a>
+    </div>
+  </div>
 </ng-container>
