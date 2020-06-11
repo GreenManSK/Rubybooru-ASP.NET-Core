@@ -14,7 +14,7 @@ export const environment = {
   cacheTimeInMins: 1,
 
   whispererTagLimit: 10,
-  whispererUsedTags: [TagType.Copyright, TagType.Character, TagType.General],
+  whispererUsedTags: [TagType.Copyright, TagType.Character, TagType.General, TagType.System],
 
   tagTypeOrder: [
     TagType.Copyright,
