@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using CommandLine;
 using Microsoft.EntityFrameworkCore;
 using Rubybooru.Console.Options;
@@ -8,6 +9,7 @@ using Rubybooru.Console.Runners;
 using Rubybooru.Data;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.Data.Sql;
+using Rubybooru.Helpers;
 using Rubybooru.Images;
 
 namespace Rubybooru.Console
@@ -23,12 +25,19 @@ namespace Rubybooru.Console
 
         public int Run()
         {
-            return Parser.Default.ParseArguments<ImportOptions, ImportTagsOptions>(Args)
+            return Parser.Default.ParseArguments<ImportOptions, ImportTagsOptions, GeneratePreviewOptions>(Args)
                 .MapResult(
                     (ImportOptions o) => RunImport(o),
                     (ImportTagsOptions o) => RunImportTags(o),
+                    (GeneratePreviewOptions o) => RunGeneratePreview(o),
                     HandleParseError
                 );
+        }
+
+        private int RunGeneratePreview(GeneratePreviewOptions options)
+        {
+            var serviceProvider = BuildServiceProvider(options);
+            return serviceProvider.GetService<GeneratePreview>().Run(options);
         }
 
         private int RunImportTags(ImportTagsOptions options)
@@ -56,6 +65,9 @@ namespace Rubybooru.Console
                     .UseMySQL(configuration.GetConnectionString("RubybooruDb"));
             });
 
+            serviceCollection.AddSingleton<HashAlgorithm, SHA256CryptoServiceProvider>();
+            serviceCollection.AddSingleton<IPreviewMaker, PreviewMaker>();
+            serviceCollection.AddSingleton<PreviewGenerator, PreviewGenerator>();
             serviceCollection.AddSingleton<IImageInfo, ImageInfo>();
             
             serviceCollection.AddScoped<ITagData, SqlTagData>();
@@ -64,6 +76,7 @@ namespace Rubybooru.Console
 
             serviceCollection.AddScoped<TagImport>();
             serviceCollection.AddScoped<Import>();
+            serviceCollection.AddScoped<GeneratePreview>();
 
             return serviceCollection.BuildServiceProvider();
         }
