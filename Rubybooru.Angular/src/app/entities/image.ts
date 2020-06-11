@@ -5,4 +5,5 @@ export class Image {
   addedDateTime: Date;
   width: number;
   height: number;
+  size: number;
 }

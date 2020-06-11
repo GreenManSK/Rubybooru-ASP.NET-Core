@@ -6,7 +6,7 @@
     <div class="line">
       <strong>Size:</strong>&nbsp;
       <a [href]="imageApi.getImageFileUrl(image.id)" title="Download image">
-        {{image.width ? image.width : '__'}}x{{image.height ? image.height : '__'}}
+        {{image.width ? image.width : '__'}}x{{image.height ? image.height : '__'}} [{{image.size | filesize}}]
       </a>
     </div>
   </div>

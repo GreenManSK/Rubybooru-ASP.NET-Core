@@ -22,6 +22,7 @@ import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-p
 import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
 import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
 import { TagSelectorComponent } from './components/tag-selector/tag-selector.component';
+import { NgxFilesizeModule } from 'ngx-filesize';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { TagSelectorComponent } from './components/tag-selector/tag-selector.com
     NgbModule,
     HttpClientModule,
     FontAwesomeModule,
-    FormsModule
+    FormsModule,
+    NgxFilesizeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
