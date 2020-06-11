@@ -93,7 +93,8 @@ namespace Rubybooru.Console.Runners
                 Path = path,
                 AddedDateTime = File.GetCreationTime(fullPath),
                 Width = width,
-                Height = height
+                Height = height,
+                Size = new FileInfo(fullPath).Length
             };
 
             for (var line = file.ReadLine(); !string.IsNullOrWhiteSpace(line); line = file.ReadLine())

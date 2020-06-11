@@ -11,7 +11,7 @@ namespace Rubybooru.DTO
         public DateTime AddedDateTime { get; set; }
         [Required] public int Width { get; set; }
         [Required] public int Height { get; set; }
-        [Required] public int Size { get; set; }
+        [Required] public long Size { get; set; }
 
         public override string ToString()
         {
