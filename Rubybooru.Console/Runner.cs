@@ -8,6 +8,7 @@ using Rubybooru.Console.Runners;
 using Rubybooru.Data;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.Data.Sql;
+using Rubybooru.Images;
 
 namespace Rubybooru.Console
 {
@@ -39,9 +40,7 @@ namespace Rubybooru.Console
         private int RunImport(ImportOptions options)
         {
             var serviceProvider = BuildServiceProvider(options);
-            // TODO: do stuff
-            System.Console.WriteLine("Hello World!");
-            return 0;
+            return serviceProvider.GetService<Import>().Run(options);
         }
 
         private ServiceProvider BuildServiceProvider(DefaultOptions options)
@@ -57,9 +56,14 @@ namespace Rubybooru.Console
                     .UseMySQL(configuration.GetConnectionString("RubybooruDb"));
             });
 
+            serviceCollection.AddSingleton<IImageInfo, ImageInfo>();
+            
             serviceCollection.AddScoped<ITagData, SqlTagData>();
+            serviceCollection.AddScoped<IImageData, SqlImageData>();
+            serviceCollection.AddScoped<IImageTagData, SqlImageTagData>();
 
             serviceCollection.AddScoped<TagImport>();
+            serviceCollection.AddScoped<Import>();
 
             return serviceCollection.BuildServiceProvider();
         }

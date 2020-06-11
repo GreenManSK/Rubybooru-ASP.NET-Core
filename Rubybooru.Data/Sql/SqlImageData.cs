@@ -77,6 +77,14 @@ namespace Rubybooru.Data.Sql
             return _db.Images.Find(id);
         }
 
+        public Image GetByFullPath(string path, string name)
+        {
+            var query = from i in _db.Images
+                where i.Name.Equals(name) && i.Path.Equals(path)
+                select i;
+            return query.FirstOrDefault();
+        }
+
         public Image Add(Image image)
         {
             _db.Add(image);

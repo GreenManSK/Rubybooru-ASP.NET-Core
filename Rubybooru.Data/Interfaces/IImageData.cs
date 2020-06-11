@@ -29,6 +29,8 @@ namespace Rubybooru.Data.Interfaces
 
         Image GetById(int id);
 
+        Image GetByFullPath(string path, string name);
+
         Image Add(Image image);
 
         Image Update(Image image);
