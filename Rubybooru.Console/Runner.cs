@@ -4,7 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Rubybooru.Console.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Rubybooru.Console.Runners;
 using Rubybooru.Data;
+using Rubybooru.Data.Interfaces;
+using Rubybooru.Data.Sql;
 
 namespace Rubybooru.Console
 {
@@ -19,11 +22,18 @@ namespace Rubybooru.Console
 
         public int Run()
         {
-            return Parser.Default.ParseArguments<ImportOptions>(Args)
+            return Parser.Default.ParseArguments<ImportOptions, ImportTagsOptions>(Args)
                 .MapResult(
-                    RunImport,
+                    (ImportOptions o) => RunImport(o),
+                    (ImportTagsOptions o) => RunImportTags(o),
                     HandleParseError
                 );
+        }
+
+        private int RunImportTags(ImportTagsOptions options)
+        {
+            var serviceProvider = BuildServiceProvider(options);
+            return serviceProvider.GetService<TagImport>().Run(options);
         }
 
         private int RunImport(ImportOptions options)
@@ -38,7 +48,7 @@ namespace Rubybooru.Console
         {
             var serviceCollection = new ServiceCollection();
             var configuration = BuildConfiguration(options);
-            
+
             serviceCollection.AddSingleton<IConfiguration>(configuration);
             serviceCollection.AddDbContextPool<RubybooruDbContext>(opts =>
             {
@@ -46,10 +56,14 @@ namespace Rubybooru.Console
                     .UseLazyLoadingProxies()
                     .UseMySQL(configuration.GetConnectionString("RubybooruDb"));
             });
-            
+
+            serviceCollection.AddScoped<ITagData, SqlTagData>();
+
+            serviceCollection.AddScoped<TagImport>();
+
             return serviceCollection.BuildServiceProvider();
         }
-        
+
         private IConfiguration BuildConfiguration(DefaultOptions options)
         {
             return new ConfigurationBuilder()
