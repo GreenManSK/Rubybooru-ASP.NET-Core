@@ -21,7 +21,7 @@ namespace Rubybooru.Console.Runners
         private readonly IImageInfo _imageInfo;
 
         private int _parsedImages = 0;
-        
+
         public Import(IConfiguration configuration, ITagData tagData, IImageData imageData, IImageInfo imageInfo)
         {
             _configuration = configuration;
@@ -51,7 +51,6 @@ namespace Rubybooru.Console.Runners
                 System.Console.Error.WriteLine($"Error while parsing result file {ex}");
                 return -1;
             }
-
             
             System.Console.WriteLine("Commiting images");
             _imageData.Commit();
@@ -68,7 +67,7 @@ namespace Rubybooru.Console.Runners
                 if (line.StartsWith(ImageLineStart))
                 {
                     var fullPath = GetFullPath(line);
-                    var (filePath, fileName) = GetFileNameAndPath(fullPath, root);
+                    var (filePath, fileName) = GetPathAndFileName(fullPath, root);
                     AddImage(fullPath, filePath, fileName, file, tags);
                     _parsedImages++;
                     if (_parsedImages % 100 == 0)
@@ -86,6 +85,7 @@ namespace Rubybooru.Console.Runners
             {
                 return;
             }
+
             var (width, height) = _imageInfo.GetImageResolution(fullPath);
             var image = new Image()
             {
@@ -121,12 +121,12 @@ namespace Rubybooru.Console.Runners
             return _tagData.GetAll(0, 0).ToDictionary(t => t.Tag.Name, t => t.Tag.Id);
         }
 
-        private static Tuple<string, string> GetFileNameAndPath(string fullPath, string root)
+        private static Tuple<string, string> GetPathAndFileName(string fullPath, string root)
         {
             var path = fullPath.Replace(root, "");
             return new Tuple<string, string>(
-                Path.GetFileName(path),
-                Path.GetDirectoryName(path)
+                Path.GetDirectoryName(path).TrimStart('/', '\\'),
+                Path.GetFileName(path)
             );
         }
 
