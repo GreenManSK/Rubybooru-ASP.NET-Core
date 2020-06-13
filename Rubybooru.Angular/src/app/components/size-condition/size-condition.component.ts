@@ -10,13 +10,13 @@ import { SizeConditionOperation } from '../../data/size-condition-operation';
 })
 export class SizeConditionComponent {
 
-  @Input
+  @Input()
   public addIcon = true;
 
   @Output()
   public buttonClick = new EventEmitter<SizeCondition>();
 
-  @Input
+  @Input()
   public condition: SizeCondition = new SizeCondition();
 
   public SizeConditionType = SizeConditionType;
@@ -25,7 +25,7 @@ export class SizeConditionComponent {
   constructor() {
   }
 
-  public onClick(): void {
+  public onClick(): boolean {
     this.buttonClick.emit(this.condition);
     this.condition = new SizeCondition();
     return false;

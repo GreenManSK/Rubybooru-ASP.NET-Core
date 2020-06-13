@@ -23,11 +23,11 @@ export class SearchBarComponent implements OnInit {
   public defaultValue = '';
 
   public showConditions = false;
+  public sizeConditions: SizeCondition[] = [];
 
   private idToName: { [key: number]: string } = {};
   private nameToId: { [key: string]: number } = {};
   private urlParser: UrlParserService;
-  private sizeConditions: SizeCondition[] = [];
 
   constructor(
     private router: Router,
