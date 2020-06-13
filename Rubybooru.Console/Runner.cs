@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Rubybooru.Console.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Rubybooru.Console.Runners;
 using Rubybooru.Data;
 using Rubybooru.Data.Interfaces;
@@ -25,13 +26,20 @@ namespace Rubybooru.Console
 
         public int Run()
         {
-            return Parser.Default.ParseArguments<ImportOptions, ImportTagsOptions, GeneratePreviewOptions>(Args)
+            return Parser.Default.ParseArguments<ImportOptions, ImportTagsOptions, GeneratePreviewOptions, CopyrightAdderOptions>(Args)
                 .MapResult(
                     (ImportOptions o) => RunImport(o),
                     (ImportTagsOptions o) => RunImportTags(o),
                     (GeneratePreviewOptions o) => RunGeneratePreview(o),
+                    (CopyrightAdderOptions o) => RunCopyrightAdder(o),
                     HandleParseError
                 );
+        }
+
+        private int RunCopyrightAdder(CopyrightAdderOptions options)
+        {
+            var serviceProvider = BuildServiceProvider(options);
+            return serviceProvider.GetService<Runners.CopyrightAdder>().Run(options);
         }
 
         private int RunGeneratePreview(GeneratePreviewOptions options)
@@ -77,6 +85,7 @@ namespace Rubybooru.Console
             serviceCollection.AddScoped<TagImport>();
             serviceCollection.AddScoped<Import>();
             serviceCollection.AddScoped<GeneratePreview>();
+            serviceCollection.AddScoped<Runners.CopyrightAdder>();
 
             return serviceCollection.BuildServiceProvider();
         }
