@@ -99,6 +99,11 @@ namespace Rubybooru.Console.Runners
 
             for (var line = file.ReadLine(); !string.IsNullOrWhiteSpace(line); line = file.ReadLine())
             {
+                if (line.Trim().Equals("ERROR"))
+                {
+                    System.Console.Error.WriteLine($"Error while parsing image {fullPath}");
+                    return;
+                }
                 var tagName = GetTagName(line);
                 if (tags.ContainsKey(tagName))
                 {
