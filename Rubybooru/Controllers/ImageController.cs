@@ -7,6 +7,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Rubybooru.Conditions;
 using Rubybooru.Core;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.DTO;
@@ -36,12 +38,16 @@ namespace Rubybooru.Controllers
 
         [HttpGet]
         public ActionResult<ImageDto[]> Get([Range(1, 100)] int limit = 10, int offset = 0,
-            [FromQuery] int[] withTags = null)
+            [FromQuery] int[] withTags = null, [FromQuery] string[] sizeConditions = null)
         {
-            // TODO: Add size conditions
+            var parsedSizeConditions = ParseSizeConditions(sizeConditions);
+            if (parsedSizeConditions == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "Error while parsing size conditions");
+            }
             try
             {
-                var images = _imageData.GetAll(limit, offset, withTags);
+                var images = _imageData.GetAll(limit, offset, withTags, parsedSizeConditions);
                 return _mapper.Map<ImageDto[]>(images);
             }
             catch (Exception e)
@@ -54,12 +60,16 @@ namespace Rubybooru.Controllers
         }
 
         [HttpGet("count")]
-        public ActionResult<int> Count([FromQuery] int[] withTags = null)
+        public ActionResult<int> Count([FromQuery] int[] withTags = null, [FromQuery] string[] sizeConditions = null)
         {
-            // TODO: Add size conditions
+            var parsedSizeConditions = ParseSizeConditions(sizeConditions);
+            if (parsedSizeConditions == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "Error while parsing size conditions");
+            }
             try
             {
-                return _imageData.CountImages(withTags);
+                return _imageData.CountImages(withTags, parsedSizeConditions);
             }
             catch (Exception e)
             {
@@ -69,6 +79,24 @@ namespace Rubybooru.Controllers
             }
         }
 
+        private ISizeCondition[] ParseSizeConditions(string[] conditions)
+        {
+            var parsedConditions = new List<ISizeCondition>();
+            try
+            {
+                foreach (var condition in conditions)
+                {
+                    parsedConditions.Add(JsonConvert.DeserializeObject<BasicSizeCondition>(condition));
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while parsing size conditions {conditions}", conditions);
+                return null;
+            }
+            return parsedConditions.ToArray();
+        }
+        
         [HttpGet("without-tag")]
         public ActionResult<ImageDto[]> GetWithoutTagType([Range(1, 100)] int limit = 10, int offset = 0, TagType tagType = TagType.Copyright)
         {
