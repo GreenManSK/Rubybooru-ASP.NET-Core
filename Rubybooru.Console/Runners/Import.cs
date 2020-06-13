@@ -94,6 +94,7 @@ namespace Rubybooru.Console.Runners
                 AddedDateTime = File.GetCreationTime(fullPath),
                 Width = width,
                 Height = height,
+                SideRatio = (double) width / height,
                 Size = new FileInfo(fullPath).Length
             };
 

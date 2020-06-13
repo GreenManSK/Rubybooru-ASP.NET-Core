@@ -11,6 +11,7 @@ namespace Rubybooru.Core
         public DateTime AddedDateTime { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public double SideRatio { get; set; }
         public long Size { get; set; }
 
         public virtual List<ImageTag> Tags { get; set; } = new List<ImageTag>();
