@@ -6,6 +6,7 @@ import { UrlParserService } from '../../services/url-parser/url-parser.service';
 import { InputWhispererComponent } from '../input-whisperer/input-whisperer.component';
 import { InputParser } from './input.parser';
 import { TagService } from '../../services/tag-service/tag.service';
+import { SizeCondition } from '../../data/size-condition';
 
 @Component({
   selector: 'app-search-bar',
@@ -19,9 +20,12 @@ export class SearchBarComponent implements OnInit {
   public tags: Tag[] = [];
   public defaultValue = '';
 
+  public showConditions = true;
+
   private idToName: { [key: number]: string } = {};
   private nameToId: { [key: string]: number } = {};
   private urlParser: UrlParserService;
+  private sizeConditions: SizeCondition[] = [];
 
   constructor(
     private router: Router,
@@ -39,6 +43,22 @@ export class SearchBarComponent implements OnInit {
     });
   }
 
+  public onSubmit() {
+    const parser = new InputParser(this.inputWhisperer.getValues(), this.nameToId);
+    this.urlParser.navigate(1, parser.getTags(), this.sizeConditions);
+  }
+
+  public addCondition( condition: SizeCondition ) {
+    this.sizeConditions.push(condition);
+  }
+
+  public removeCondition( condition: SizeCondition ) {
+    const index = this.sizeConditions.indexOf(condition, 0);
+    if (index > -1) {
+      this.sizeConditions.splice(index, 1);
+    }
+  }
+
   private onParamChange() {
     const tagIds = this.urlParser.getTags();
 
@@ -50,11 +70,9 @@ export class SearchBarComponent implements OnInit {
     }
 
     this.defaultValue = value;
-  }
 
-  public onSubmit() {
-    const parser = new InputParser(this.inputWhisperer.getValues(), this.nameToId);
-    this.urlParser.navigate(1, parser.getTags());
+    const conditions = this.urlParser.getSizeConditions();
+    this.sizeConditions = conditions != null ? conditions : [];
   }
 
   private updateTags( tags: Tag[] ) {

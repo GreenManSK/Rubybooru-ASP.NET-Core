@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tag } from '../../entities/tag';
+import { SizeCondition } from '../../data/size-condition';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ export class UrlParserService {
 
   private static PAGE = 'page';
   private static TAGS = 'tags';
+  private static SIZE_CONDITIONS = 'sizeConditions';
 
   constructor( private router: Router, private route: ActivatedRoute ) {
   }
@@ -32,10 +34,19 @@ export class UrlParserService {
     return tags.map(tag => parseInt(tag.replace(/^(\d+)_.*/, '$1'), 10));
   }
 
-  navigate( page: number, tags: Tag[] = null): void {
+  getSizeConditions(): SizeCondition[] {
+    const conditions = this.route.snapshot.queryParams[UrlParserService.SIZE_CONDITIONS];
+    if (!conditions) {
+      return null;
+    }
+    return JSON.parse(conditions);
+  }
+
+  navigate( page: number, tags: Tag[] = null, sizeConditions: SizeCondition[] = null): void {
     this.router.navigate(['/' + page], {
       queryParams: {
-        tags: tags.map(tag => tag.id + '_' + tag.name)
+        tags: tags.map(tag => tag.id + '_' + tag.name),
+        sizeConditions: sizeConditions != null && sizeConditions.length !== 0 ? JSON.stringify(sizeConditions) : null
       }
     });
   }

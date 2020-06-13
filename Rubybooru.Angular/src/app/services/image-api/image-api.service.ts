@@ -7,6 +7,7 @@ import { Tag } from '../../entities/tag';
 import { HttpClientService } from '../http-client/http-client.service';
 import { environment } from '../../../environments/environment';
 import { TagType } from '../../entities/tag-type.enum';
+import { SizeCondition } from '../../data/size-condition';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,8 @@ export class ImageApiService extends RestApiService {
     super(http);
   }
 
-  public getImages( limit: number, offset: number = 0, tags: number[] = null ): Observable<Image[]> {
-    const query = this.buildImageFilterQuery(limit, offset, tags);
+  public getImages( limit: number, offset: number = 0, tags: number[] = null, sizeConditions: SizeCondition[] = null ): Observable<Image[]> {
+    const query = this.buildImageFilterQuery(limit, offset, tags, sizeConditions);
     return this.http.get<Image[]>({
       url: this.getImageUrl() + query
     })
@@ -29,8 +30,8 @@ export class ImageApiService extends RestApiService {
       );
   }
 
-  public getCount( tags: number[] = null ): Observable<number> {
-    const query = this.buildImageFilterQuery(null, null, tags);
+  public getCount( tags: number[] = null, sizeConditions: SizeCondition[] = null ): Observable<number> {
+    const query = this.buildImageFilterQuery(null, null, tags, sizeConditions);
     return this.http.get<number>({
       url: this.getCountUrl() + query,
       cacheMins: environment.cacheTimeInMins
@@ -40,7 +41,7 @@ export class ImageApiService extends RestApiService {
       );
   }
 
-  private buildImageFilterQuery( limit: number, offset: number, tags: number[] ) {
+  private buildImageFilterQuery( limit: number, offset: number, tags: number[], sizeConditions: SizeCondition[] = null ) {
     let query = '?';
 
     if (limit !== null) {
@@ -53,6 +54,10 @@ export class ImageApiService extends RestApiService {
 
     if (tags) {
       tags.forEach(t => query += 'withTags=' + t + '&');
+    }
+
+    if (sizeConditions != null) {
+      sizeConditions.forEach(c => query += 'sizeConditions=' + JSON.stringify(c) + '&');
     }
 
     return query;

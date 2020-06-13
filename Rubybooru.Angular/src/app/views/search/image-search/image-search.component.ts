@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Image } from '../../../entities/image';
 import { ImageApiService } from '../../../services/image-api/image-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UrlParserService } from '../../../services/url-parser/url-parser.service';
 import { environment } from '../../../../environments/environment';
 import { SidePanelDataService } from '../../../services/side-panel-data/side-panel-data.service';
+import { SizeCondition } from '../../../data/size-condition';
 
 @Component({
   selector: 'app-image-search',
@@ -15,6 +16,7 @@ export class ImageSearchComponent {
 
   public images: Image[];
   public tags: number[];
+  public sizeConditions: SizeCondition[];
   public page: number;
   public maxPage: number;
 
@@ -35,9 +37,10 @@ export class ImageSearchComponent {
     let sameTags = true;
     const filterChanged = this.filterChanged();
     this.tags = this.urlParser.getTags();
+    this.sizeConditions = this.urlParser.getSizeConditions();
     if (filterChanged) {
       sameTags = false;
-      this.imageApi.getCount(this.tags).subscribe(count => {
+      this.imageApi.getCount(this.tags, this.sizeConditions).subscribe(count => {
         this.maxPage = Math.ceil(count / environment.imagesPerPage);
       });
     }
@@ -46,18 +49,23 @@ export class ImageSearchComponent {
     this.page = this.urlParser.getPage();
 
     if (!sameTags || this.page !== oldPage) {
-      this.imageApi.getImages(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1), this.tags).subscribe(images => {
-        this.images = images;
-        this.sidePanelData.send(this.images);
-      });
+      this.imageApi.getImages(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1), this.tags, this.sizeConditions)
+        .subscribe(images => {
+          this.images = images;
+          this.sidePanelData.send(this.images);
+        });
     }
   }
 
-  pageChange( page: number ) {
+  public pageChange( page: number ) {
     this.urlParser.navigatePage(page);
   }
 
-  filterChanged(): boolean {
-    return JSON.stringify(this.urlParser.getTags()) !== JSON.stringify(this.tags);
+  private filterChanged(): boolean {
+    return this.serialize(this.urlParser.getTags(), this.urlParser.getSizeConditions()) !== this.serialize(this.tags, this.sizeConditions);
+  }
+
+  private serialize( tags: number[], conditions: SizeCondition[] ) {
+    return JSON.stringify(tags) + JSON.stringify(conditions);
   }
 }

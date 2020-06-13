@@ -25,6 +25,9 @@ export class ImageSearchTagsComponent implements OnInit {
   }
 
   private onImages( images: Image[] ): void {
+    if (!images || images.map === undefined) {
+      return;
+    }
     const ids = images.map(image => image.id);
     this.imageApi.getTags(ids).subscribe(tagMap => {
       this.tags = this.computeTagList(tagMap);

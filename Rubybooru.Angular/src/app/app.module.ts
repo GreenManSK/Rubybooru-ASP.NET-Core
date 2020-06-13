@@ -23,6 +23,7 @@ import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
 import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
 import { TagSelectorComponent } from './components/tag-selector/tag-selector.component';
 import { NgxFilesizeModule } from 'ngx-filesize';
+import { SizeConditionComponent } from './components/size-condition/size-condition.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { NgxFilesizeModule } from 'ngx-filesize';
     UntaggedImagesPanelComponent,
     EditTagsComponent,
     TagFormComponent,
-    TagSelectorComponent
+    TagSelectorComponent,
+    SizeConditionComponent
   ],
   imports: [
     BrowserModule,

@@ -56,6 +56,9 @@ export class ImagePanelComponent implements OnInit {
 
   private onImage( image: Image ) {
     this.image = image;
+    if (!image || !image.id) {
+      return;
+    }
     this.imageApi.getImageTags(image.id).subscribe(tags => {
       this.tags = tags;
     });
