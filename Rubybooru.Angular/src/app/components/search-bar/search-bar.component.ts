@@ -7,6 +7,8 @@ import { InputWhispererComponent } from '../input-whisperer/input-whisperer.comp
 import { InputParser } from './input.parser';
 import { TagService } from '../../services/tag-service/tag.service';
 import { SizeCondition } from '../../data/size-condition';
+import { GlobalEventService } from '../../services/global-event/global-event.service';
+import { GlobalEventType } from '../../services/global-event/global-event-type';
 
 @Component({
   selector: 'app-search-bar',
@@ -20,7 +22,7 @@ export class SearchBarComponent implements OnInit {
   public tags: Tag[] = [];
   public defaultValue = '';
 
-  public showConditions = true;
+  public showConditions = false;
 
   private idToName: { [key: number]: string } = {};
   private nameToId: { [key: string]: number } = {};
@@ -30,11 +32,17 @@ export class SearchBarComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private tagService: TagService
+    private tagService: TagService,
+    private globalEventService: GlobalEventService
   ) {
     this.urlParser = new UrlParserService(router, route);
     this.route.params.subscribe(() => this.onParamChange());
     this.route.queryParams.subscribe(() => this.onParamChange());
+    this.globalEventService.subscribe((eventType: GlobalEventType) => {
+      if (eventType === GlobalEventType.ToggleAdvancedSearch) {
+        this.showConditions = !this.showConditions;
+      }
+    });
   }
 
   ngOnInit(): void {

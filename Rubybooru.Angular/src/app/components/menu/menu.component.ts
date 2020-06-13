@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { GlobalEventService } from '../../services/global-event/global-event.service';
+import { GlobalEventType } from '../../services/global-event/global-event-type';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.sass']
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent {
 
-  constructor() { }
+  constructor( private globalEventService: GlobalEventService ) {
+  }
 
-  ngOnInit(): void {
+  public toggleAdvancedSearch(): boolean {
+    this.globalEventService.send(GlobalEventType.ToggleAdvancedSearch);
+    return false;
   }
 
 }
