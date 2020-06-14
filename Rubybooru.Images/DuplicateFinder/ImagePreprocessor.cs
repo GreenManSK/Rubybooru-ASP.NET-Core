@@ -43,6 +43,8 @@ namespace Rubybooru.Images.DuplicateFinder
 
         public void Save(string path)
         {
+            LoadImage();
+
             using var outStream = File.Create(path);
             _imageFactory.Format(Format)
                 .Save(outStream);
@@ -50,6 +52,7 @@ namespace Rubybooru.Images.DuplicateFinder
 
         public void SaveRotated(string path)
         {
+            LoadImage();
             using var outStream = File.Create(path);
             _imageFactory.Rotate(180)
                 .Format(Format)
