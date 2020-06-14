@@ -39,6 +39,12 @@ namespace Rubybooru.Images.DuplicateFinder
             _imageFactory.Load(inStream)
                 .Resize(resizeLayer)
                 .Filter(MatrixFilters.GreyScale);
+
+            var image = _imageFactory.Image;
+            if (image.Height > image.Width)
+            {
+                _imageFactory.Rotate(-90);
+            }
         }
 
         public void Save(string path)

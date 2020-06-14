@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using CommandLine;
+using ImageProcessor.Imaging.Quantizers;
+using ImageProcessor.Imaging.Quantizers.WuQuantizer;
 using Microsoft.EntityFrameworkCore;
 using Rubybooru.Console.Options;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +14,7 @@ using Rubybooru.Data.Interfaces;
 using Rubybooru.Data.Sql;
 using Rubybooru.Helpers;
 using Rubybooru.Images;
+using Rubybooru.Images.DuplicateFinder;
 
 namespace Rubybooru.Console
 {
@@ -26,14 +29,21 @@ namespace Rubybooru.Console
 
         public int Run()
         {
-            return Parser.Default.ParseArguments<ImportOptions, ImportTagsOptions, GeneratePreviewOptions, CopyrightAdderOptions>(Args)
+            return Parser.Default.ParseArguments<ImportOptions, ImportTagsOptions, GeneratePreviewOptions, CopyrightAdderOptions, DuplicateCheckOptions>(Args)
                 .MapResult(
                     (ImportOptions o) => RunImport(o),
                     (ImportTagsOptions o) => RunImportTags(o),
                     (GeneratePreviewOptions o) => RunGeneratePreview(o),
                     (CopyrightAdderOptions o) => RunCopyrightAdder(o),
+                    (DuplicateCheckOptions o) => RunDuplicateCheck(o),
                     HandleParseError
                 );
+        }
+
+        private int RunDuplicateCheck(DuplicateCheckOptions options)
+        {
+            var serviceProvider = BuildServiceProvider(options);
+            return serviceProvider.GetService<DuplicateCheck>().Run(options);
         }
 
         private int RunCopyrightAdder(CopyrightAdderOptions options)
@@ -77,14 +87,20 @@ namespace Rubybooru.Console
             serviceCollection.AddSingleton<IPreviewMaker, PreviewMaker>();
             serviceCollection.AddSingleton<PreviewGenerator, PreviewGenerator>();
             serviceCollection.AddSingleton<IImageInfo, ImageInfo>();
+
+            serviceCollection.AddSingleton<ImagePreprocessorUtils>();
+            serviceCollection.AddSingleton<IImagePreprocessorFactory, ImagePreprocessorFactory>();
+            serviceCollection.AddSingleton<IQuantizer, WuQuantizer>();
             
             serviceCollection.AddScoped<ITagData, SqlTagData>();
             serviceCollection.AddScoped<IImageData, SqlImageData>();
             serviceCollection.AddScoped<IImageTagData, SqlImageTagData>();
+            serviceCollection.AddScoped<IDuplicateRecordData, SqlDuplicateRecordData>();
 
             serviceCollection.AddScoped<TagImport>();
             serviceCollection.AddScoped<Import>();
             serviceCollection.AddScoped<GeneratePreview>();
+            serviceCollection.AddScoped<DuplicateCheck>();
             serviceCollection.AddScoped<Runners.CopyrightAdder>();
 
             return serviceCollection.BuildServiceProvider();
