@@ -72,6 +72,23 @@ namespace Rubybooru.Data.Sql
             return query;
         }
 
+        public IEnumerable<Image> GetWithoutDuplicateCheck(int limit, int offset)
+        {
+            var query = from i in _db.Images
+                where !i.DuplicateCheck
+                orderby i.Id
+                select i;
+            return query.Skip(offset).Take(limit);
+        }
+
+        public int CountWithoutDuplicateCheck()
+        {
+            var query = from i in _db.Images
+                where !i.DuplicateCheck
+                select i;
+            return query.Count();
+        }
+
         public Image GetById(int id)
         {
             return _db.Images.Find(id);

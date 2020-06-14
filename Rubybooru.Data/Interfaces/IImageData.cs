@@ -25,6 +25,10 @@ namespace Rubybooru.Data.Interfaces
 
         int CountWithoutTagType(TagType tagType);
 
+        IEnumerable<Image> GetWithoutDuplicateCheck(int limit, int offset);
+
+        int CountWithoutDuplicateCheck();
+        
         Dictionary<int, ImageTag[]> GetTags(IEnumerable<int> imageIds);
 
         Image GetById(int id);
