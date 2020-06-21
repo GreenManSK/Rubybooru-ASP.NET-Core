@@ -14,6 +14,7 @@ namespace Rubybooru.DTO
             CreateMap<Image, ImageDto>();
             CreateMapTagDto<TagWithCount>();
             CreateMapTagDto<ImageTag>();
+            CreateMap<DuplicateRecord, DuplicateRecordDto>();
             
             // From DTO
             CreateMap<TagDto, Tag>().ForMember(x => x.Id, o => o.Ignore());

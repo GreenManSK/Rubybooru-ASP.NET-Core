@@ -132,6 +132,22 @@ namespace Rubybooru.Data.Sql
             return _db.SaveChanges();
         }
 
+        public void MergeTags(Image target, Image source)
+        {
+            var targetTags = target.Tags.Select(t => t.TagId).ToHashSet();
+            foreach (var tag in source.Tags)
+            {
+                if (!targetTags.Contains(tag.TagId))
+                {
+                    target.Tags.Add(new ImageTag()
+                    {
+                        ImageId = target.Id,
+                        TagId = tag.TagId
+                    });
+                }
+            }
+        }
+
         public Dictionary<int, ImageTag[]> GetTags(IEnumerable<int> imageIds)
         {
             var query = from it in _db.ImageTag

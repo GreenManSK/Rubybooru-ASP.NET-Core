@@ -35,6 +35,8 @@ namespace Rubybooru.Data.Interfaces
 
         Image GetByFullPath(string path, string name);
 
+        void MergeTags(Image target, Image source);
+        
         Image Add(Image image);
 
         Image Update(Image image);
