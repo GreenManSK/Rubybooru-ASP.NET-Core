@@ -1,10 +1,13 @@
 <nav>
   <ul>
     <li>
-      <a title="Advanced search" href="#" (click)="toggleAdvancedSearch()">Advanced search</a>
+      <a title="Toggle advanced search" href="#" (click)="toggleAdvancedSearch()">Search</a>
     </li>
     <li>
-      <a title="Utagged images" [routerLink]="['/untagged/1']">Untagged images</a>
+      <a title="Untagged images" [routerLink]="['/untagged/1']">Untagged</a>
+    </li>
+    <li>
+      <a title="Duplicate images" [routerLink]="['/duplicates/1']">Duplicates</a>
     </li>
     <li>
       <a title="Edit tags" [routerLink]="['/tags']">Tags</a>

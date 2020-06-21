@@ -24,6 +24,8 @@ import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
 import { TagSelectorComponent } from './components/tag-selector/tag-selector.component';
 import { NgxFilesizeModule } from 'ngx-filesize';
 import { SizeConditionComponent } from './components/size-condition/size-condition.component';
+import { DuplicatesImagesComponent } from './views/duplicates/duplicates-images/duplicates-images.component';
+import { DuplicatesPanelComponent } from './views/duplicates/duplicates-panel/duplicates-panel.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { SizeConditionComponent } from './components/size-condition/size-conditi
     EditTagsComponent,
     TagFormComponent,
     TagSelectorComponent,
-    SizeConditionComponent
+    SizeConditionComponent,
+    DuplicatesImagesComponent,
+    DuplicatesPanelComponent
   ],
   imports: [
     BrowserModule,
