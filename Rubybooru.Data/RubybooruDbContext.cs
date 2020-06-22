@@ -13,6 +13,7 @@ namespace Rubybooru.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<ImageTag> ImageTag { get; set; }
         public DbSet<DuplicateRecord> DuplicateRecord { get; set; }
+        public DbSet<TagDuplicate> TagDuplicate { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
