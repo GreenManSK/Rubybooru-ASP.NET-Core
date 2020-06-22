@@ -7,10 +7,11 @@ import { ImagePanelComponent } from './views/image/image-panel/image-panel.compo
 import { UntaggedImagesComponent } from './views/untagged/untagged-images/untagged-images.component';
 import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-panel/untagged-images-panel.component';
 import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
-import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
+import { TagFormComponent } from './components/tag-form/tag-form.component';
 import { DuplicatesImagesComponent } from './views/duplicates/duplicates-images/duplicates-images.component';
 import { DuplicateRecordComponent } from './views/duplicate-record/duplicate-record.component';
 import { DuplicateRecordPanelComponent } from './views/duplicate-record-panel/duplicate-record-panel.component';
+import { TagsPanelComponent } from './views/tags/tags-panel/tags-panel.component';
 
 
 const routes: Routes = [
@@ -39,7 +40,7 @@ const routes: Routes = [
     path: 'tags',
     children: [
       {path: '', component: EditTagsComponent},
-      {path: '', component: TagFormComponent, outlet: 'sidebar'}
+      {path: '', component: TagsPanelComponent, outlet: 'sidebar'}
     ]
   },
   {

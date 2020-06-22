@@ -1,0 +1,7 @@
+<div *ngIf="tag">
+  <div class="title">
+    Join duplicate with
+  </div>
+
+  <app-tag-selector (tagCallback)="join($event)" [tags]="tags" tagClasses="col-12"></app-tag-selector>
+</div>

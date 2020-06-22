@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Tag } from '../../../entities/tag';
-import { SidePanelDataService } from '../../../services/side-panel-data/side-panel-data.service';
-import { TagService } from '../../../services/tag-service/tag.service';
+import { Tag } from '../../entities/tag';
+import { SidePanelDataService } from '../../services/side-panel-data/side-panel-data.service';
+import { TagService } from '../../services/tag-service/tag.service';
 import { Observable } from 'rxjs';
-import { TagType } from '../../../entities/tag-type.enum';
+import { TagType } from '../../entities/tag-type.enum';
 
 @Component({
   selector: 'app-tag-form',

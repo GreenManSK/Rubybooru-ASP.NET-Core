@@ -20,7 +20,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { UntaggedImagesComponent } from './views/untagged/untagged-images/untagged-images.component';
 import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-panel/untagged-images-panel.component';
 import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
-import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
+import { TagFormComponent } from './components/tag-form/tag-form.component';
 import { TagSelectorComponent } from './components/tag-selector/tag-selector.component';
 import { NgxFilesizeModule } from 'ngx-filesize';
 import { SizeConditionComponent } from './components/size-condition/size-condition.component';
@@ -29,6 +29,8 @@ import { AlertsComponent } from './components/alerts/alerts.component';
 import { DuplicateRecordGridComponent } from './components/duplicate-record-grid/duplicate-record-grid.component';
 import { DuplicateRecordComponent } from './views/duplicate-record/duplicate-record.component';
 import { DuplicateRecordPanelComponent } from './views/duplicate-record-panel/duplicate-record-panel.component';
+import { TagsPanelComponent } from './views/tags/tags-panel/tags-panel.component';
+import { DuplicateTagFormComponent } from './components/duplicate-tag-form/duplicate-tag-form.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { DuplicateRecordPanelComponent } from './views/duplicate-record-panel/du
     AlertsComponent,
     DuplicateRecordGridComponent,
     DuplicateRecordComponent,
-    DuplicateRecordPanelComponent
+    DuplicateRecordPanelComponent,
+    TagsPanelComponent,
+    DuplicateTagFormComponent
   ],
   imports: [
     BrowserModule,
