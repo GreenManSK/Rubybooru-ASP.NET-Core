@@ -41,6 +41,11 @@ namespace Rubybooru.Controllers
                     return NotFound("Duplicate tag not found");
                 }
 
+                if (original.Id == duplicate.Id)
+                {
+                    return BadRequest("Original and duplicate can't be the same tag");
+                }
+
                 foreach (var imageTag in duplicate.Images)
                 {
                     var image = imageTag.Image;
