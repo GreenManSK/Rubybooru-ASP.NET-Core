@@ -27,6 +27,8 @@ import { SizeConditionComponent } from './components/size-condition/size-conditi
 import { DuplicatesImagesComponent } from './views/duplicates/duplicates-images/duplicates-images.component';
 import { AlertsComponent } from './components/alerts/alerts.component';
 import { DuplicateRecordGridComponent } from './components/duplicate-record-grid/duplicate-record-grid.component';
+import { DuplicateRecordComponent } from './views/duplicate-record/duplicate-record.component';
+import { DuplicateRecordPanelComponent } from './views/duplicate-record-panel/duplicate-record-panel.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import { DuplicateRecordGridComponent } from './components/duplicate-record-grid
     SizeConditionComponent,
     DuplicatesImagesComponent,
     AlertsComponent,
-    DuplicateRecordGridComponent
+    DuplicateRecordGridComponent,
+    DuplicateRecordComponent,
+    DuplicateRecordPanelComponent
   ],
   imports: [
     BrowserModule,

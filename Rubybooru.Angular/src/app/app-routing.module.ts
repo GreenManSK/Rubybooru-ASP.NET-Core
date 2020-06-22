@@ -9,6 +9,8 @@ import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-p
 import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
 import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
 import { DuplicatesImagesComponent } from './views/duplicates/duplicates-images/duplicates-images.component';
+import { DuplicateRecordComponent } from './views/duplicate-record/duplicate-record.component';
+import { DuplicateRecordPanelComponent } from './views/duplicate-record-panel/duplicate-record-panel.component';
 
 
 const routes: Routes = [
@@ -45,6 +47,13 @@ const routes: Routes = [
     children: [
       {path: '', component: ImageComponent},
       {path: '', component: ImagePanelComponent, outlet: 'sidebar'}
+    ]
+  },
+  {
+    path: 'duplicate-record/:id',
+    children: [
+      {path: '', component: DuplicateRecordComponent},
+      {path: '', component: DuplicateRecordPanelComponent, outlet: 'sidebar'}
     ]
   },
   {

@@ -1,0 +1,18 @@
+<div *ngIf="record" class="row">
+  <div class="img-container col-lg-6">
+    <a [routerLink]="['/image', record.imageA.id]" target="_blank">
+      <img
+        [alt]="record.imageA.name"
+        [src]="imageApi.getImageFileUrl(record.imageA.id)"
+      />
+    </a>
+  </div>
+  <div class="img-container col-lg-6">
+    <a [routerLink]="['/image', record.imageB.id]" target="_blank">
+      <img
+        [alt]="record.imageB.name"
+        [src]="imageApi.getImageFileUrl(record.imageB.id)"
+      />
+    </a>
+  </div>
+</div>
