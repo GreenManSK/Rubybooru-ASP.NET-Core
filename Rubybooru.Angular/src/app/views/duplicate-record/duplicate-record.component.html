@@ -1,5 +1,9 @@
 <div *ngIf="record" class="row">
   <div class="img-container col-lg-6">
+    <span>
+      {{record.imageA.width ? record.imageA.width : '__'}}x{{record.imageA.height ? record.imageA.height : '__'}}
+      [{{record.imageA.size | filesize}}]
+    </span>
     <a [routerLink]="['/image', record.imageA.id]" target="_blank">
       <img
         [alt]="record.imageA.name"
@@ -8,6 +12,10 @@
     </a>
   </div>
   <div class="img-container col-lg-6">
+    <span>
+      {{record.imageB.width ? record.imageB.width : '__'}}x{{record.imageB.height ? record.imageB.height : '__'}}
+      [{{record.imageB.size | filesize}}]
+    </span>
     <a [routerLink]="['/image', record.imageB.id]" target="_blank">
       <img
         [alt]="record.imageB.name"
