@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rubybooru.Images", "Rubyboo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rubybooru.Console", "Rubybooru.Console\Rubybooru.Console.csproj", "{34995BC5-4C35-49AA-A355-E02874523D1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rubybooru.IqdbApi", "Rubybooru.IqdbApi\Rubybooru.IqdbApi.csproj", "{002FC2C8-736E-4692-A97C-6146D3495C12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{34995BC5-4C35-49AA-A355-E02874523D1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34995BC5-4C35-49AA-A355-E02874523D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34995BC5-4C35-49AA-A355-E02874523D1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{002FC2C8-736E-4692-A97C-6146D3495C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{002FC2C8-736E-4692-A97C-6146D3495C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{002FC2C8-736E-4692-A97C-6146D3495C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{002FC2C8-736E-4692-A97C-6146D3495C12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
