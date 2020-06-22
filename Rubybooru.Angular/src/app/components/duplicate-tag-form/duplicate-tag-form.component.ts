@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Tag } from '../../entities/tag';
 import { TagService } from '../../services/tag-service/tag.service';
 import { SidePanelDataService } from '../../services/side-panel-data/side-panel-data.service';
+import { TagDuplicateApiService } from '../../services/tag-duplicate-api/tag-duplicate-api.service';
 
 @Component({
   selector: 'app-duplicate-tag-form',
@@ -15,6 +16,7 @@ export class DuplicateTagFormComponent implements OnInit {
 
   constructor(
     private tagService: TagService,
+    private tagDuplicateApi: TagDuplicateApiService,
     private sidePanelData: SidePanelDataService
   ) {
     sidePanelData.subscribe(tag => {
@@ -30,7 +32,8 @@ export class DuplicateTagFormComponent implements OnInit {
     if (tag.id === this.tag.id) {
       return;
     }
-    // Join duplicate
-    this.sidePanelData.send(null);
+    this.tagDuplicateApi.add(tag.id, this.tag.id).subscribe(() => {
+      this.sidePanelData.send(null);
+    });
   }
 }
