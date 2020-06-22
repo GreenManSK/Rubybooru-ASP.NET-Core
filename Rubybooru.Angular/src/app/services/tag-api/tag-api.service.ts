@@ -7,6 +7,7 @@ import { Tag } from '../../entities/tag';
 import { SortType } from './sort-type';
 import { HttpClientService } from '../http-client/http-client.service';
 import { environment } from '../../../environments/environment';
+import { AlertService } from '../alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,8 @@ export class TagApiService extends RestApiService {
   private readonly TAG_GET = 'tag';
 
 
-  constructor( http: HttpClientService ) {
-    super(http);
+  constructor( http: HttpClientService, alertService: AlertService ) {
+    super(http, alertService);
   }
 
   public getTags( limit: number = 0, offset: number = 0, sort: SortType = SortType.Name, type: TagType = null ): Observable<Tag[]> {
@@ -27,7 +28,7 @@ export class TagApiService extends RestApiService {
       cacheMins: environment.cacheTimeInMins
     })
       .pipe(
-        catchError(this.handleError('getTags', []))
+        catchError(this.handleError(`getTags(${limit},${offset},${sort},${type})`, []))
       );
   }
 
@@ -36,7 +37,7 @@ export class TagApiService extends RestApiService {
       url: this.getTagUrl(id)
     })
       .pipe(
-        catchError(this.handleError('getTag', null))
+        catchError(this.handleError(`getTag(${id})`, null))
       );
   }
 
@@ -45,7 +46,7 @@ export class TagApiService extends RestApiService {
       url: this.getParseTagsUrl(names)
     })
       .pipe(
-        catchError(this.handleError('parseTags', []))
+        catchError(this.handleError(`parseTags(${names})`, []))
       );
   }
 
@@ -55,7 +56,7 @@ export class TagApiService extends RestApiService {
       body: tag
     })
       .pipe(
-        catchError(this.handleError('add', null))
+        catchError(this.handleError(`add(${tag})`, null))
       );
   }
 
@@ -65,7 +66,7 @@ export class TagApiService extends RestApiService {
       body: tag
     })
       .pipe(
-        catchError(this.handleError('update', null))
+        catchError(this.handleError(`update(${tag})`, null))
       );
   }
 
@@ -74,7 +75,7 @@ export class TagApiService extends RestApiService {
       url: this.getTagUrl(tag.id)
     })
       .pipe(
-        catchError(this.handleError('delete', null))
+        catchError(this.handleError(`delete(${tag})`, null))
       );
   }
 

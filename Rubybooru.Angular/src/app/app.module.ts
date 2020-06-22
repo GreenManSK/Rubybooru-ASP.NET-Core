@@ -26,6 +26,7 @@ import { NgxFilesizeModule } from 'ngx-filesize';
 import { SizeConditionComponent } from './components/size-condition/size-condition.component';
 import { DuplicatesImagesComponent } from './views/duplicates/duplicates-images/duplicates-images.component';
 import { DuplicatesPanelComponent } from './views/duplicates/duplicates-panel/duplicates-panel.component';
+import { AlertsComponent } from './components/alerts/alerts.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { DuplicatesPanelComponent } from './views/duplicates/duplicates-panel/du
     TagSelectorComponent,
     SizeConditionComponent,
     DuplicatesImagesComponent,
-    DuplicatesPanelComponent
+    DuplicatesPanelComponent,
+    AlertsComponent
   ],
   imports: [
     BrowserModule,

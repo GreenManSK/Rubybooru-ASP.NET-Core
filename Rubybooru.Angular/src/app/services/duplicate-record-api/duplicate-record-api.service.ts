@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { DuplicateRecord } from '../../entities/duplicate-record';
 import { catchError } from 'rxjs/operators';
 import { DuplicateRecordResolution } from '../../data/duplicate-record-resolution';
+import { AlertService } from '../alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class DuplicateRecordApiService extends RestApiService {
 
   private readonly RECORD_GET = 'duplicaterecord';
 
-  constructor( http: HttpClientService ) {
-    super(http);
+  constructor( http: HttpClientService, alertService: AlertService ) {
+    super(http, alertService);
   }
 
   public getRecords( limit: number = 0, offset: number = 0 ): Observable<DuplicateRecord[]> {
@@ -23,7 +24,7 @@ export class DuplicateRecordApiService extends RestApiService {
       url: this.getRecordUrl() + query
     })
       .pipe(
-        catchError(this.handleError('getRecords', []))
+        catchError(this.handleError(`getRecords(${limit}, ${offset})`, []))
       );
   }
 
@@ -32,7 +33,7 @@ export class DuplicateRecordApiService extends RestApiService {
       url: this.getRecordsCountUrl()
     })
       .pipe(
-        catchError(this.handleError('getRecordsCount', 0))
+        catchError(this.handleError('getRecordsCount()', 0))
       );
   }
 
@@ -41,7 +42,7 @@ export class DuplicateRecordApiService extends RestApiService {
       url: this.getRecordUrl(id)
     })
       .pipe(
-        catchError(this.handleError('getRecord', null))
+        catchError(this.handleError(`getRecord(${id})`, null))
       );
   }
 
@@ -50,7 +51,7 @@ export class DuplicateRecordApiService extends RestApiService {
       url: this.getResolveUrl(id, resolution, mergeTags)
     })
       .pipe(
-        catchError(this.handleError('resolve', null))
+        catchError(this.handleError(`resolve(${id},${resolution},${mergeTags})`, null))
       );
   }
 

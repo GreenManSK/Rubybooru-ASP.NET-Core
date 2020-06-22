@@ -8,6 +8,7 @@ import { HttpClientService } from '../http-client/http-client.service';
 import { environment } from '../../../environments/environment';
 import { TagType } from '../../entities/tag-type.enum';
 import { SizeCondition } from '../../data/size-condition';
+import { AlertService } from '../alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,8 @@ export class ImageApiService extends RestApiService {
 
   private readonly IMAGE_GET = 'image';
 
-  constructor( http: HttpClientService ) {
-    super(http);
+  constructor( http: HttpClientService, alertService: AlertService ) {
+    super(http, alertService);
   }
 
   public getImages( limit: number, offset: number = 0, tags: number[] = null, sizeConditions: SizeCondition[] = null ): Observable<Image[]> {
@@ -26,7 +27,7 @@ export class ImageApiService extends RestApiService {
       url: this.getImageUrl() + query
     })
       .pipe(
-        catchError(this.handleError('getImages', []))
+        catchError(this.handleError(`getImages(${limit},${offset},${tags},${sizeConditions})`, []))
       );
   }
 
@@ -37,7 +38,7 @@ export class ImageApiService extends RestApiService {
       cacheMins: environment.cacheTimeInMins
     })
       .pipe(
-        catchError(this.handleError('getCount', 0))
+        catchError(this.handleError(`getCount(${tags},${sizeConditions})`, 0))
       );
   }
 
@@ -69,7 +70,7 @@ export class ImageApiService extends RestApiService {
       url: this.getWithoutTagTypeUrl() + query
     })
       .pipe(
-        catchError(this.handleError('getWithoutTagType', []))
+        catchError(this.handleError(`getWithoutTagType(${limit},${offset},${tagType})`, []))
       );
   }
 
@@ -79,7 +80,7 @@ export class ImageApiService extends RestApiService {
       url: this.getWithoutTagTypeCountUrl() + query
     })
       .pipe(
-        catchError(this.handleError('getWithoutTagType', 0))
+        catchError(this.handleError(`getWithoutTagType(${tagType})`, 0))
       );
   }
 
