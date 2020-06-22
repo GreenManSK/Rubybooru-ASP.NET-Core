@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rubybooru.Data;
 
 namespace Rubybooru.Data.Migrations
 {
     [DbContext(typeof(RubybooruDbContext))]
-    partial class RubybooruDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200622162727_imageiqdb")]
+    partial class imageiqdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -14,6 +14,7 @@ namespace Rubybooru.Core
         public double SideRatio { get; set; }
         public long Size { get; set; }
         public bool DuplicateCheck { get; set; }
+        public DateTime? IqdbCheckDateTime { get; set; }
 
         public virtual List<ImageTag> Tags { get; set; } = new List<ImageTag>();
     }
