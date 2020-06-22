@@ -96,6 +96,7 @@ namespace Rubybooru.Console
             serviceCollection.AddScoped<IImageData, SqlImageData>();
             serviceCollection.AddScoped<IImageTagData, SqlImageTagData>();
             serviceCollection.AddScoped<IDuplicateRecordData, SqlDuplicateRecordData>();
+            serviceCollection.AddScoped<ITagDuplicateData, SqlTagDuplicateData>();
 
             serviceCollection.AddScoped<TagImport>();
             serviceCollection.AddScoped<Import>();

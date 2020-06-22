@@ -9,11 +9,13 @@ namespace Rubybooru.Console.Runners
     {
         private readonly RubybooruDbContext _db;
         private readonly ITagData _tagData;
+        private readonly ITagDuplicateData _tagDuplicateData;
 
-        public CopyrightAdder(RubybooruDbContext db, ITagData tagData)
+        public CopyrightAdder(RubybooruDbContext db, ITagData tagData, ITagDuplicateData tagDuplicateData)
         {
             _db = db;
             _tagData = tagData;
+            _tagDuplicateData = tagDuplicateData;
         }
         public int Run(CopyrightAdderOptions options)
         {
@@ -23,7 +25,7 @@ namespace Rubybooru.Console.Runners
             }
             else
             {
-                var adder = new Adder(_db, _tagData);
+                var adder = new Adder(_db, _tagData, _tagDuplicateData);
                 return adder.Add(options.CopyrightMapPath, options.StartId, options.EndId);
             }
         }

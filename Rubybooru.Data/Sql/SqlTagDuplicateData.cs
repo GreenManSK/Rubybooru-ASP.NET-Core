@@ -15,9 +15,15 @@ namespace Rubybooru.Data.Sql
             _db = db;
         }
 
-        public IEnumerable<TagDuplicate> GetAll()
+        public IEnumerable<TagDuplicate> GetAll(TagType? tagType = null)
         {
             var query = from t in _db.TagDuplicate select t;
+
+            if (tagType.HasValue)
+            {
+                query = query.Where(t => t.TargetTag.Type == tagType.Value);
+            }
+            
             query.Include(t => t.TargetTag);
             return query;
         }

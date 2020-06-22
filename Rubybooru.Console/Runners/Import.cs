@@ -19,15 +19,17 @@ namespace Rubybooru.Console.Runners
         private readonly ITagData _tagData;
         private readonly IImageData _imageData;
         private readonly IImageInfo _imageInfo;
+        private readonly ITagDuplicateData _tagDuplicateData;
 
         private int _parsedImages = 0;
 
-        public Import(IConfiguration configuration, ITagData tagData, IImageData imageData, IImageInfo imageInfo)
+        public Import(IConfiguration configuration, ITagData tagData, IImageData imageData, IImageInfo imageInfo, ITagDuplicateData tagDuplicateData)
         {
             _configuration = configuration;
             _tagData = tagData;
             _imageData = imageData;
             _imageInfo = imageInfo;
+            _tagDuplicateData = tagDuplicateData;
         }
 
         public int Run(ImportOptions options)
@@ -125,7 +127,9 @@ namespace Rubybooru.Console.Runners
 
         private Dictionary<string, int> GetTagMap()
         {
-            return _tagData.GetAll(0, 0).ToDictionary(t => t.Tag.Name, t => t.Tag.Id);
+            var dbTags = _tagData.GetAll(0, 0).ToDictionary(t => t.Tag.Name, t => t.Tag.Id);
+            var duplicateTags = _tagDuplicateData.GetAll().ToDictionary(t => t.TargetTag.Name, t => t.TargetTag.Id);
+            return duplicateTags.Concat(dbTags).ToDictionary(x => x.Key, x => x.Value);
         }
 
         private static Tuple<string, string> GetPathAndFileName(string fullPath, string root)

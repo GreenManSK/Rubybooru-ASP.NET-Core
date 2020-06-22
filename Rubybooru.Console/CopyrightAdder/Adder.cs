@@ -13,11 +13,13 @@ namespace Rubybooru.Console.CopyrightAdder
     {
         private readonly RubybooruDbContext _db;
         private readonly ITagData _tagData;
+        private readonly ITagDuplicateData _tagDuplicateData;
 
-        public Adder(RubybooruDbContext db, ITagData tagData)
+        public Adder(RubybooruDbContext db, ITagData tagData, ITagDuplicateData tagDuplicateData)
         {
             _db = db;
             _tagData = tagData;
+            _tagDuplicateData = tagDuplicateData;
         }
 
         public int Add(string mapFile, int StartId, int EndId)
@@ -97,8 +99,11 @@ namespace Rubybooru.Console.CopyrightAdder
 
         private Dictionary<string, Tag> GetCopyrightTags()
         {
-            return _tagData.GetAll(0, 0, TagSortOrder.Name, TagType.Copyright)
+            var dbTags = _tagData.GetAll(0, 0, TagSortOrder.Name, TagType.Copyright)
                 .ToDictionary(t => t.Tag.Name, t => t.Tag);
+            var duplicateTags = _tagDuplicateData.GetAll(TagType.Copyright)
+                .ToDictionary(t => t.TargetTag.Name, t => t.TargetTag);
+            return duplicateTags.Concat(dbTags).ToDictionary(x => x.Key, x => x.Value);
         }
 
         private static IEnumerable<string> GetCharacters(Image image)

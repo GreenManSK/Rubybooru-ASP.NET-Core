@@ -5,7 +5,7 @@ namespace Rubybooru.Data.Interfaces
 {
     public interface ITagDuplicateData
     {
-        IEnumerable<TagDuplicate> GetAll();
+        IEnumerable<TagDuplicate> GetAll(TagType? tagType = null);
 
         TagDuplicate Get(string name, TagType? tagType = null);
 

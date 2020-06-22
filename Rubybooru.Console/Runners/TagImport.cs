@@ -15,10 +15,12 @@ namespace Rubybooru.Console.Runners
         private const string AllFile = "tags.txt";
 
         private ITagData _tagData;
+        private readonly ITagDuplicateData _tagDuplicateData;
 
-        public TagImport(ITagData tagData)
+        public TagImport(ITagData tagData, ITagDuplicateData tagDuplicateData)
         {
             _tagData = tagData;
+            _tagDuplicateData = tagDuplicateData;
         }
 
         public int Run(ImportTagsOptions options)
@@ -55,16 +57,23 @@ namespace Rubybooru.Console.Runners
             _tagData.Commit();
         }
 
-        private Dictionary<TagType, IEnumerable<Tag>> GetDbTagLists()
+        private Dictionary<TagType, IEnumerable<string>> GetDbTagLists()
         {
-            var result = new Dictionary<TagType, IEnumerable<Tag>>
+            var result = new Dictionary<TagType, IEnumerable<string>>
             {
-                {TagType.General, _tagData.GetAll(0, 0, tagType: TagType.General).Select(t => t.Tag)},
-                {TagType.System, _tagData.GetAll(0, 0, tagType: TagType.System).Select(t => t.Tag)},
-                {TagType.Character, _tagData.GetAll(0, 0, tagType: TagType.Character).Select(t => t.Tag)}
+                {TagType.General, GetDbTagList(TagType.General)},
+                {TagType.System, GetDbTagList(TagType.System)},
+                {TagType.Character, GetDbTagList(TagType.Character)}
             };
 
             return result;
+        }
+
+        private IEnumerable<string> GetDbTagList(TagType tagType)
+        {
+            var dbTags = _tagData.GetAll(0, 0, tagType: tagType).Select(t => t.Tag.Name);
+            var duplicateTags = _tagDuplicateData.GetAll(tagType).Select(t => t.Name);
+            return duplicateTags.Concat(dbTags);
         }
 
         private static Dictionary<TagType, HashSet<string>> BuildTagLists(string path)
@@ -92,7 +101,7 @@ namespace Rubybooru.Console.Runners
 
         private static void TrimNewTags(
             IReadOnlyDictionary<TagType, HashSet<string>> newTags,
-            Dictionary<TagType, IEnumerable<Tag>> dbTags
+            Dictionary<TagType, IEnumerable<string>> dbTags
         )
         {
             foreach (var (key, value) in dbTags)
@@ -100,7 +109,7 @@ namespace Rubybooru.Console.Runners
                 var newList = newTags[key];
                 foreach (var tag in value)
                 {
-                    newList.Remove(tag.Name);
+                    newList.Remove(tag);
                 }
             }
         }
