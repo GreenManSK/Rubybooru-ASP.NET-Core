@@ -7,7 +7,7 @@ import { DuplicateRecord } from '../../entities/duplicate-record';
   templateUrl: './duplicate-record-grid.component.html',
   styleUrls: ['./duplicate-record-grid.component.sass']
 })
-export class DuplicateRecordGridComponent implements OnInit {
+export class DuplicateRecordGridComponent {
 
   public readonly TMP_WIDTH = 350;
   public readonly TMP_HEIGHT = 180;
