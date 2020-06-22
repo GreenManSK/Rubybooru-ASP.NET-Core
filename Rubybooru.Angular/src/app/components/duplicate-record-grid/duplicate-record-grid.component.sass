@@ -1,0 +1,25 @@
+@import '../../../styles/variables'
+
+.record-container
+  text-align: center
+  justify-content: center
+  flex-direction: column
+  display: flex
+
+  .record
+    display: inline-block
+    margin: 0 1rem 2rem 1rem
+
+    & > div
+      display: inline-block
+
+    .record-link
+      display: inline-block
+
+      img
+        max-width: 100%
+        max-height: 180px
+        border: 3px solid $darken-light-pink
+
+      &:hover
+        border-color: $light-pink

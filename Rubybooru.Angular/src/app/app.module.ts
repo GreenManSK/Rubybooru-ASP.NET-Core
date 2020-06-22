@@ -25,8 +25,8 @@ import { TagSelectorComponent } from './components/tag-selector/tag-selector.com
 import { NgxFilesizeModule } from 'ngx-filesize';
 import { SizeConditionComponent } from './components/size-condition/size-condition.component';
 import { DuplicatesImagesComponent } from './views/duplicates/duplicates-images/duplicates-images.component';
-import { DuplicatesPanelComponent } from './views/duplicates/duplicates-panel/duplicates-panel.component';
 import { AlertsComponent } from './components/alerts/alerts.component';
+import { DuplicateRecordGridComponent } from './components/duplicate-record-grid/duplicate-record-grid.component';
 
 @NgModule({
   declarations: [
@@ -48,8 +48,8 @@ import { AlertsComponent } from './components/alerts/alerts.component';
     TagSelectorComponent,
     SizeConditionComponent,
     DuplicatesImagesComponent,
-    DuplicatesPanelComponent,
-    AlertsComponent
+    AlertsComponent,
+    DuplicateRecordGridComponent
   ],
   imports: [
     BrowserModule,

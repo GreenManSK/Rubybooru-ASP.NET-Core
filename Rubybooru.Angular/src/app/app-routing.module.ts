@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { ImageSearchComponent } from './views/search/image-search/image-search.component';
 import { ImageSearchTagsComponent } from './views/search/image-search-tags/image-search-tags.component';
 import { ImageComponent } from './views/image/image/image.component';
@@ -9,7 +9,6 @@ import { UntaggedImagesPanelComponent } from './views/untagged/untagged-images-p
 import { EditTagsComponent } from './views/tags/edit-tags/edit-tags.component';
 import { TagFormComponent } from './views/tags/tag-form/tag-form.component';
 import { DuplicatesImagesComponent } from './views/duplicates/duplicates-images/duplicates-images.component';
-import { DuplicatesPanelComponent } from './views/duplicates/duplicates-panel/duplicates-panel.component';
 
 
 const routes: Routes = [
@@ -31,7 +30,7 @@ const routes: Routes = [
     path: 'duplicates/:page',
     children: [
       {path: '', component: DuplicatesImagesComponent},
-      {path: '', component: DuplicatesPanelComponent, outlet: 'sidebar'}
+      {path: '', component: UntaggedImagesPanelComponent, outlet: 'sidebar'}
     ]
   },
   {
