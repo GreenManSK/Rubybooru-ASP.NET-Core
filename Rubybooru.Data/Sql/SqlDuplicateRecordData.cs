@@ -20,6 +20,7 @@ namespace Rubybooru.Data.Sql
             var query = from i in _db.DuplicateRecord
                 orderby i.Id
                 select i;
+            query.Include(i => i.ImageA).Include(i => i.ImageB);
             return query.Skip(offset).Take(limit);
         }
 

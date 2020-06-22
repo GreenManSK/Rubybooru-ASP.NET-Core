@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace Rubybooru.Controllers
         {
             try
             {
-                var duplicates = _duplicateRecordData.GetAll(limit, offset);
+                var duplicates = _duplicateRecordData.GetAll(limit, offset).ToList();
                 return _mapper.Map<DuplicateRecordDto[]>(duplicates);
             }
             catch (Exception e)
