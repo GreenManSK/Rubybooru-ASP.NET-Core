@@ -64,7 +64,6 @@ namespace Rubybooru
             services.AddScoped<IDuplicateRecordData, SqlDuplicateRecordData>();
             services.AddScoped<ITagDuplicateData, SqlTagDuplicateData>();
 
-            services.AddSingleton<HashAlgorithm, SHA256CryptoServiceProvider>();
             services.AddSingleton<IPreviewMaker, PreviewMaker>();
             services.AddSingleton<PreviewGenerator, PreviewGenerator>();
 
