@@ -26,7 +26,7 @@ namespace Rubybooru.Console.CopyrightAdder
         {
             var map = GetMap(mapFile);
             var copyrightTags = GetCopyrightTags();
-            var images = GetImages(StartId, EndId);
+            var images = GetImages(StartId, EndId).ToList();
 
             System.Console.WriteLine("Adding tags");
             foreach (var image in images)
@@ -91,8 +91,6 @@ namespace Rubybooru.Console.CopyrightAdder
             {
                 result = result.Where(i => i.Id <= endId);
             }
-
-            result = result.Include(i => i.Tags).ThenInclude(it => it.Tag);
 
             return result;
         }
