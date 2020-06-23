@@ -69,7 +69,6 @@ namespace Rubybooru.Console.Runners
                 if (counter % 100 == 0)
                 {
                     System.Console.WriteLine($"Checked {counter} images");
-                    _duplicateRecordData.Commit();
                 }
             }
 
