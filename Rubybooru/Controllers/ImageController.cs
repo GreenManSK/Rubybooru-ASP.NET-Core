@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -174,7 +175,7 @@ namespace Rubybooru.Controllers
                     return NotFound();
                 }
 
-                return RedirectPermanent(Path.Combine(StaticImagesPath, image.Path, image.Name));
+                return Redirect(Path.Combine(StaticImagesPath, Uri.EscapeUriString(image.Path), Uri.EscapeUriString(image.Name)));
             }
             catch (Exception e)
             {
