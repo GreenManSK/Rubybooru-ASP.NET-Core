@@ -29,13 +29,14 @@ namespace Rubybooru.Console
 
         public int Run()
         {
-            return Parser.Default.ParseArguments<ImportOptions, ImportTagsOptions, GeneratePreviewOptions, CopyrightAdderOptions, DuplicateCheckOptions>(Args)
+            return Parser.Default.ParseArguments<ImportOptions, ImportTagsOptions, GeneratePreviewOptions, CopyrightAdderOptions, DuplicateCheckOptions, IqdbTaggerOptions>(Args)
                 .MapResult(
                     (ImportOptions o) => RunImport(o),
                     (ImportTagsOptions o) => RunImportTags(o),
                     (GeneratePreviewOptions o) => RunGeneratePreview(o),
                     (CopyrightAdderOptions o) => RunCopyrightAdder(o),
                     (DuplicateCheckOptions o) => RunDuplicateCheck(o),
+                    (IqdbTaggerOptions o) => RunIqdbTagger(o),
                     HandleParseError
                 );
         }
@@ -68,6 +69,12 @@ namespace Rubybooru.Console
         {
             var serviceProvider = BuildServiceProvider(options);
             return serviceProvider.GetService<Import>().Run(options);
+        }
+
+        private int RunIqdbTagger(IqdbTaggerOptions options)
+        {
+            var serviceProvider = BuildServiceProvider(options);
+            return serviceProvider.GetService<IqdbTagger.IqdbTagger>().Run(options);
         }
 
         private ServiceProvider BuildServiceProvider(DefaultOptions options)
@@ -103,6 +110,7 @@ namespace Rubybooru.Console
             serviceCollection.AddScoped<GeneratePreview>();
             serviceCollection.AddScoped<DuplicateCheck>();
             serviceCollection.AddScoped<Runners.CopyrightAdder>();
+            serviceCollection.AddScoped<IqdbTagger.IqdbTagger>();
 
             return serviceCollection.BuildServiceProvider();
         }

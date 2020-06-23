@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Rubybooru.IqdbApi\Rubybooru.IqdbApi.csproj" />
       <ProjectReference Include="..\Rubybooru\Rubybooru.csproj" />
     </ItemGroup>
 
