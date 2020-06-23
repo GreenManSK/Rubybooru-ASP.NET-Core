@@ -196,7 +196,7 @@ namespace Rubybooru.Controllers
                 }
 
                 var previewPath = _previewGenerator.CreatePreview(image, width, height, keepAspectRatio);
-                return RedirectPermanent(previewPath);
+                return Redirect(previewPath);
             }
             catch (Exception e)
             {
