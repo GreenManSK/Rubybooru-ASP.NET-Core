@@ -19,6 +19,7 @@ export class ImageSearchComponent {
   public sizeConditions: SizeCondition[];
   public page: number;
   public maxPage: number;
+  public count: number;
 
   private urlParser: UrlParserService;
 
@@ -41,6 +42,7 @@ export class ImageSearchComponent {
     if (filterChanged) {
       sameTags = false;
       this.imageApi.getCount(this.tags, this.sizeConditions).subscribe(count => {
+        this.count = count;
         this.maxPage = Math.ceil(count / environment.imagesPerPage);
       });
     }
