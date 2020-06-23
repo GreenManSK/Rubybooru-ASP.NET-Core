@@ -1,10 +1,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Rubybooru.Core;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.DTO;
 using Rubybooru.Types;
@@ -19,17 +22,20 @@ namespace Rubybooru.Controllers
         private readonly IDuplicateRecordData _duplicateRecordData;
         private readonly IImageData _imageData;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
         public DuplicateRecordController(
             ILogger<ImageController> logger,
             IDuplicateRecordData duplicateRecordData,
             IImageData imageData,
-            IMapper mapper)
+            IMapper mapper,
+            IConfiguration configuration)
         {
             _logger = logger;
             _duplicateRecordData = duplicateRecordData;
             _imageData = imageData;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -98,10 +104,12 @@ namespace Rubybooru.Controllers
                 {
                     case DuplicateRecordResolution.A:
                         _imageData.MergeTags(record.ImageA, record.ImageB);
+                        DeleteFile(record.ImageB);
                         _imageData.Delete(record.ImageBId);
                         break;
                     case DuplicateRecordResolution.B:
                         _imageData.MergeTags(record.ImageB, record.ImageA);
+                        DeleteFile(record.ImageA);
                         _imageData.Delete(record.ImageAId);
                         break;
                     case DuplicateRecordResolution.NotDuplicate:
@@ -120,6 +128,20 @@ namespace Rubybooru.Controllers
                     "Error while resolving duplicate record with id={id}, resolution={resolution}, mergeTags={mergeTags}",
                     id, resolution, mergeTags);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        private void DeleteFile(Image image)
+        {
+            var imagePath = Path.Combine(image.Path, image.Name);
+            var imageFullPath = Path.Combine(_configuration.GetValue<string>("ImagesPath"), imagePath);
+            try
+            {
+                System.IO.File.Delete(imageFullPath);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,$"Error while deleting file {imageFullPath}");
             }
         }
     }
