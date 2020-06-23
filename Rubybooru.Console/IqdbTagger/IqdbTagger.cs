@@ -48,7 +48,8 @@ namespace Rubybooru.Console.IqdbTagger
 
         private Dictionary<TagType, Dictionary<string, Tag>> _tags;
 
-        public IqdbTagger(RubybooruDbContext db, IConfiguration configuration, ITagData tagData, ITagDuplicateData tagDuplicateData)
+        public IqdbTagger(RubybooruDbContext db, IConfiguration configuration, ITagData tagData,
+            ITagDuplicateData tagDuplicateData)
         {
             _db = db;
             _configuration = configuration;
@@ -86,6 +87,7 @@ namespace Rubybooru.Console.IqdbTagger
                     Interlocked.Increment(ref _finishedCount);
                     continue;
                 }
+
                 image.IqdbCheckDateTime = now;
                 await DownloadImage(image, iqdbApi);
                 if (image != images.LastOrDefault())
@@ -110,17 +112,7 @@ namespace Rubybooru.Console.IqdbTagger
         {
             try
             {
-                List<Match> matches;
-                try
-                {
-                    matches = await iqdbApi.SearchFile(GetImagePath(image), Options);
-                }
-                catch (FileSizeLimitException e)
-                {
-                    // matches = await DownloadResizedFile(file, iqdbApi);
-                    // TODO
-                    matches = new List<Match>();
-                }
+                List<Match> matches = await iqdbApi.SearchFile(GetImagePath(image), Options);
                 _imageTasks.Enqueue(ProcessMatches(image, matches));
             }
             catch (Exception e)
@@ -128,8 +120,6 @@ namespace Rubybooru.Console.IqdbTagger
                 System.Console.Error.WriteLine($"Error while getting iqdb data for {image.Id}");
                 Interlocked.Increment(ref _finishedCount);
             }
-
-
         }
 
         private async Task ProcessMatches(Image image, IReadOnlyCollection<Match> matches)
@@ -157,8 +147,8 @@ namespace Rubybooru.Console.IqdbTagger
                     AddImageTags(result, image);
                     break;
                 }
-                
             }
+
             Interlocked.Increment(ref _finishedCount);
         }
 
@@ -180,6 +170,7 @@ namespace Rubybooru.Console.IqdbTagger
                         _db.Add(dbTag);
                         _tags[type].Add(name, dbTag);
                     }
+
                     image.Tags.Add(new ImageTag()
                     {
                         Tag = _tags[type][name]
