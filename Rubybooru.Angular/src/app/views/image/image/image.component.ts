@@ -28,7 +28,7 @@ export class ImageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.titleService.setTitle("Rubybooru");
+    this.titleService.setTitle('Rubybooru');
   }
 
   public toggleMini(): void {
