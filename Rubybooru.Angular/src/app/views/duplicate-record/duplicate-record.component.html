@@ -1,6 +1,7 @@
 <div *ngIf="record" class="row">
   <div class="img-container col-lg-6">
     <span>
+      {{record.imageA.name}}<br>
       {{record.imageA.width ? record.imageA.width : '__'}}x{{record.imageA.height ? record.imageA.height : '__'}}
       [{{record.imageA.size | filesize}}]
     </span>
@@ -13,6 +14,7 @@
   </div>
   <div class="img-container col-lg-6">
     <span>
+      {{record.imageB.name}}<br>
       {{record.imageB.width ? record.imageB.width : '__'}}x{{record.imageB.height ? record.imageB.height : '__'}}
       [{{record.imageB.size | filesize}}]
     </span>
