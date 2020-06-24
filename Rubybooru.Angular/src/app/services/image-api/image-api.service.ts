@@ -150,6 +150,14 @@ export class ImageApiService extends RestApiService {
     );
   }
 
+  public randomId(): Observable<number> {
+    return this.http.get<number>({
+      url: this.getRandomIdUrl()
+    }).pipe(
+      catchError(this.handleError<number>('randomId()', 0))
+    );
+  }
+
   private getImageUrl( id: number = null ): string {
     return this.url + this.IMAGE_GET + (id !== null ? '/' + id : '');
   }
@@ -178,5 +186,9 @@ export class ImageApiService extends RestApiService {
 
   private getWithoutTagTypeCountUrl(): string {
     return this.getWithoutTagTypeUrl() + '/count';
+  }
+
+  private getRandomIdUrl() {
+    return this.getImageUrl() + '/random';
   }
 }

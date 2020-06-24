@@ -25,6 +25,7 @@ export class ImageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getImage();
+    this.route.params.subscribe(params =>  this.getImage());
   }
 
   ngOnDestroy(): void {
