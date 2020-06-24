@@ -9,6 +9,7 @@ import { TagService } from '../../services/tag-service/tag.service';
 import { SizeCondition } from '../../data/size-condition';
 import { GlobalEventService } from '../../services/global-event/global-event.service';
 import { GlobalEventType } from '../../services/global-event/global-event-type';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-search-bar',
@@ -33,7 +34,8 @@ export class SearchBarComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private tagService: TagService,
-    private globalEventService: GlobalEventService
+    private globalEventService: GlobalEventService,
+    private titleService: Title
   ) {
     this.urlParser = new UrlParserService(router, route);
     this.route.params.subscribe(() => this.onParamChange());
@@ -78,6 +80,11 @@ export class SearchBarComponent implements OnInit {
     }
 
     this.defaultValue = value;
+    if (value !== '') {
+      this.titleService.setTitle(this.defaultValue);
+    } else {
+      this.titleService.setTitle('Rubybooru');
+    }
 
     const conditions = this.urlParser.getSizeConditions();
     this.sizeConditions = conditions != null ? conditions : [];
