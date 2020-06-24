@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -158,6 +159,12 @@ namespace Rubybooru.Data.Sql
             return imageTagPairs
                 .GroupBy(it => it.ImageId)
                 .ToDictionary(g => g.Key, g => g.ToArray());
+        }
+
+        public int GetRandomId()
+        {
+            var image = _db.Images.FromSqlRaw("SELECT * FROM images ORDER BY RAND() LIMIT 1").FirstOrDefault();
+            return image?.Id ?? 0;
         }
     }
 }

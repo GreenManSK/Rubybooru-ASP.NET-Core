@@ -204,5 +204,19 @@ namespace Rubybooru.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
+
+        [HttpGet("random")]
+        public ActionResult<int> GetRandom()
+        {
+            try
+            {
+                return _imageData.GetRandomId();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while getting random image");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
     }
 }
