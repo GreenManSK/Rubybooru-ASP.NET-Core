@@ -118,6 +118,7 @@ namespace Rubybooru.Console.Runners
         private Dictionary<int, int[][,]> LoadImages(IEnumerable<Image> images)
         {
             var result = new Dictionary<int, int[][,]>();
+            var bwCounter = 0;
             foreach (var image in images)
             {
                 result.Add(image.Id, new[]
@@ -125,6 +126,11 @@ namespace Rubybooru.Console.Runners
                     _imageUtils.GetImageArray(GetFullBwPath(image)),
                     _imageUtils.GetImageArray(GetFullBwPath(image, true))
                 });
+                bwCounter++;
+                if (bwCounter % 500 == 0)
+                {
+                    System.Console.WriteLine($"Loaded {bwCounter} images");
+                }
             }
 
             return result;
