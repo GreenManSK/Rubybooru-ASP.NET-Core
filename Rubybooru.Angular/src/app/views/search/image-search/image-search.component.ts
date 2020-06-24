@@ -21,6 +21,8 @@ export class ImageSearchComponent {
   public maxPage: number;
   public count: number;
 
+  public loading = false;
+
   private urlParser: UrlParserService;
 
   constructor(
@@ -51,10 +53,12 @@ export class ImageSearchComponent {
     this.page = this.urlParser.getPage();
 
     if (!sameTags || this.page !== oldPage) {
+      this.loading = true;
       this.imageApi.getImages(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1), this.tags, this.sizeConditions)
         .subscribe(images => {
           this.images = images;
           this.sidePanelData.send(this.images);
+          this.loading = false;
         });
     }
   }

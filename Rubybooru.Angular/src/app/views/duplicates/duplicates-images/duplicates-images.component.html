@@ -1,3 +1,5 @@
+<app-loading [show]="loading"></app-loading>
+
 <app-duplicate-record-grid [records]="records"></app-duplicate-record-grid>
 
 <app-page-selector *ngIf="maxPage > 0" [actualPage]="page" [maxPage]="maxPage" (pageChange)="pageChange($event)"></app-page-selector>

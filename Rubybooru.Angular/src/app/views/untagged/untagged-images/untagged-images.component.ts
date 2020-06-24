@@ -17,6 +17,7 @@ export class UntaggedImagesComponent implements OnInit {
   public images: Image[];
   public page: number;
   public maxPage: number;
+  public loading = false;
 
   private urlParser: UrlParserService;
 
@@ -43,9 +44,11 @@ export class UntaggedImagesComponent implements OnInit {
     this.page = this.urlParser.getPage();
 
     if (this.page !== oldPage) {
+      this.loading = true;
       this.imageApi.getWithoutTagType(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1), TagType.Copyright)
         .subscribe(images => {
           this.images = images;
+          this.loading = false;
         });
     }
   }

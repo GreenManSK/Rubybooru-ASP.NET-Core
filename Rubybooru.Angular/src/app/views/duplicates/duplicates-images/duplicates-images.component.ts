@@ -16,6 +16,7 @@ export class DuplicatesImagesComponent implements OnInit {
   public records: DuplicateRecord[];
   public page: number;
   public maxPage: number;
+  public loading = false;
 
   private urlParser: UrlParserService;
 
@@ -42,9 +43,11 @@ export class DuplicatesImagesComponent implements OnInit {
     this.page = this.urlParser.getPage();
 
     if (this.page !== oldPage) {
+      this.loading = true;
       this.duplicateRecordApi.getRecords(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1))
         .subscribe(records => {
           this.records = records;
+          this.loading = false;
         });
     }
   }

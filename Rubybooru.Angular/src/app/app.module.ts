@@ -31,6 +31,7 @@ import { DuplicateRecordComponent } from './views/duplicate-record/duplicate-rec
 import { DuplicateRecordPanelComponent } from './views/duplicate-record-panel/duplicate-record-panel.component';
 import { TagsPanelComponent } from './views/tags/tags-panel/tags-panel.component';
 import { DuplicateTagFormComponent } from './components/duplicate-tag-form/duplicate-tag-form.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { DuplicateTagFormComponent } from './components/duplicate-tag-form/dupli
     DuplicateRecordComponent,
     DuplicateRecordPanelComponent,
     TagsPanelComponent,
-    DuplicateTagFormComponent
+    DuplicateTagFormComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
