@@ -54,7 +54,7 @@ namespace Rubybooru.Console.Runners
         public int Run(DuplicateCheckOptions options)
         {
             System.Console.WriteLine("Creating bw images");
-            var uncheckedImages = from i in _db.Images where !i.DuplicateCheck orderby i.Id select i;
+            var uncheckedImages = (from i in _db.Images where !i.DuplicateCheck orderby i.Id select i).ToList();
             CreateBwImages(uncheckedImages);
 
             System.Console.WriteLine("Loading all bw images");
@@ -62,6 +62,7 @@ namespace Rubybooru.Console.Runners
             var bwImages = LoadImages(allImages);
 
             System.Console.WriteLine("Checking for duplicates");
+            var transaction = _db.Database.BeginTransaction();
             foreach (var uncheckedImage in uncheckedImages)
             {
                 CheckIfDuplicate(uncheckedImage, allImages, bwImages);
@@ -69,11 +70,20 @@ namespace Rubybooru.Console.Runners
                 if (counter % 100 == 0)
                 {
                     System.Console.WriteLine($"Checked {counter} images");
+                    _db.SaveChanges();
+                    transaction.Commit();
+                    transaction.Dispose();
+                    transaction = _db.Database.BeginTransaction();
                 }
             }
 
             System.Console.WriteLine("Saving results");
-            _duplicateRecordData.Commit();
+            if (counter % 100 != 0)
+            {
+                _db.SaveChanges();
+                transaction.Commit();
+                transaction.Dispose();
+            }
 
             return 0;
         }
