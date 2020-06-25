@@ -2,8 +2,22 @@
 
 div
   text-align: center
+
   img
     cursor: pointer
+
     &.mini
       max-width: 100%
       max-height: calc(100vh - #{2 * $content-padding})
+
+.fullscreen
+  position: fixed
+  left: 0
+  right: 0
+  top: 0
+  bottom: 0
+  background: #000
+
+  img
+    max-height: 100vh
+    max-width: 100vh

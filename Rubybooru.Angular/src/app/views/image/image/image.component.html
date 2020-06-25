@@ -1,4 +1,4 @@
-<div>
+<div [class.fullscreen]="isFullscreen">
   <img *ngIf="image"
        [alt]="image.name"
        [src]="imageApi.getImageFileUrl(image.id)"

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ImageApiService } from '../../../services/image-api/image-api.service';
 import { Image } from '../../../entities/image';
@@ -14,6 +14,7 @@ export class ImageComponent implements OnInit, OnDestroy {
 
   public image: Image;
   public isMini = true;
+  public isFullscreen = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,7 +26,8 @@ export class ImageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getImage();
-    this.route.params.subscribe(params =>  this.getImage());
+    this.onResize(null);
+    this.route.params.subscribe(params => this.getImage());
   }
 
   ngOnDestroy(): void {
@@ -43,5 +45,10 @@ export class ImageComponent implements OnInit, OnDestroy {
       this.sidePanelData.send(this.image);
       this.titleService.setTitle(image.name);
     });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  public onResize( $event: any ): void {
+    this.isFullscreen = screen.height === window.innerHeight;
   }
 }
