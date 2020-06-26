@@ -210,8 +210,14 @@ namespace Rubybooru.Console.IqdbTagger
 
         private Dictionary<string, Tag> GetDbTags(TagType tagType)
         {
-            var dbTags = _tagData.GetAll(0, 0, tagType: tagType).ToDictionary(t => t.Tag.Name, t => t.Tag);
-            var duplicateTags = _tagDuplicateData.GetAll(tagType).ToDictionary(t => t.Name, t => t.TargetTag);
+            var dbTags = _tagData
+                .GetAll(0, 0, tagType: tagType)
+                .GroupBy(t => t.Tag.Name)
+                .ToDictionary(t => t.First().Tag.Name, t => t.First().Tag);
+            var duplicateTags = _tagDuplicateData
+                .GetAll(tagType)
+                .GroupBy(t => t.Name)
+                .ToDictionary(t => t.First().Name, t => t.First().TargetTag);
             return duplicateTags.Concat(dbTags).ToDictionary(x => x.Key, x => x.Value);
         }
 

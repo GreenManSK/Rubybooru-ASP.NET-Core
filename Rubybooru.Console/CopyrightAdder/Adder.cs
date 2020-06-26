@@ -98,9 +98,11 @@ namespace Rubybooru.Console.CopyrightAdder
         private Dictionary<string, Tag> GetCopyrightTags()
         {
             var dbTags = _tagData.GetAll(0, 0, TagSortOrder.Name, TagType.Copyright)
-                .ToDictionary(t => t.Tag.Name, t => t.Tag);
+                .GroupBy(t => t.Tag.Name)
+                .ToDictionary(t => t.First().Tag.Name, t => t.First().Tag);
             var duplicateTags = _tagDuplicateData.GetAll(TagType.Copyright)
-                .ToDictionary(t => t.TargetTag.Name, t => t.TargetTag);
+                .GroupBy(t => t.TargetTag.Name)
+                .ToDictionary(t => t.First().TargetTag.Name, t => t.First().TargetTag);
             return duplicateTags.Concat(dbTags).ToDictionary(x => x.Key, x => x.Value);
         }
 
