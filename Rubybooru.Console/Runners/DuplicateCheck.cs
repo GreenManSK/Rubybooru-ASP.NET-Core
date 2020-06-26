@@ -88,7 +88,7 @@ namespace Rubybooru.Console.Runners
             return 0;
         }
 
-        private void CheckIfDuplicate(Image uncheckedImage, List<Image> allImages, Dictionary<int, int[][,]> bwImages)
+        private void CheckIfDuplicate(Image uncheckedImage, List<Image> allImages, Dictionary<int, int[,]> bwImages)
         {
             var uncheckedBw = bwImages[uncheckedImage.Id];
 
@@ -114,28 +114,18 @@ namespace Rubybooru.Console.Runners
             uncheckedImage.DuplicateCheck = true;
         }
 
-        private bool IsDuplicate(int[][,] uncheckedBw, int[][,] imageBw)
+        private bool IsDuplicate(int[,] uncheckedBw, int[,] imageBw)
         {
-            if (_imageUtils.MeanSquaredError(uncheckedBw[0], imageBw[0]) < _maxRms)
-                return true;
-            if (_imageUtils.MeanSquaredError(uncheckedBw[0], imageBw[1]) < _maxRms)
-                return true;
-            if (_imageUtils.MeanSquaredError(uncheckedBw[1], imageBw[0]) < _maxRms)
-                return true;
-            return false;
+            return _imageUtils.MeanSquaredError(uncheckedBw, imageBw) < _maxRms;
         }
 
-        private Dictionary<int, int[][,]> LoadImages(IEnumerable<Image> images)
+        private Dictionary<int, int[,]> LoadImages(IEnumerable<Image> images)
         {
-            var result = new Dictionary<int, int[][,]>();
+            var result = new Dictionary<int, int[,]>();
             var bwCounter = 0;
             foreach (var image in images)
             {
-                result.Add(image.Id, new[]
-                {
-                    _imageUtils.GetImageArray(GetFullBwPath(image)),
-                    _imageUtils.GetImageArray(GetFullBwPath(image, true))
-                });
+                result.Add(image.Id, _imageUtils.GetImageArray(GetFullBwPath(image)));
                 bwCounter++;
                 if (bwCounter % 500 == 0)
                 {
@@ -157,12 +147,6 @@ namespace Rubybooru.Console.Runners
                     if (!File.Exists(bwPath))
                     {
                         imagePreprocessor.Save(bwPath);
-                    }
-
-                    var bwPathRotated = GetFullBwPath(image, true);
-                    if (!File.Exists(bwPathRotated))
-                    {
-                        imagePreprocessor.SaveRotated(bwPathRotated);
                     }
                 }
                 catch (Exception e)
