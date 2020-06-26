@@ -129,7 +129,7 @@ namespace Rubybooru.Console.Runners
         {
             var dbTags = _tagData.GetAll(0, 0).GroupBy(t => t.Tag.Name).ToDictionary(t => t.First().Tag.Name, t => t.First().Tag.Id);
             var duplicateTags = _tagDuplicateData.GetAll().GroupBy(t => t.TargetTag.Name).ToDictionary(t => t.First().TargetTag.Name, t => t.First().TargetTag.Id);
-            return duplicateTags.Concat(dbTags).ToDictionary(x => x.Key, x => x.Value);
+            return duplicateTags.Concat(dbTags).GroupBy(x => x.Key).ToDictionary(x => x.First().Key, x => x.First().Value);
         }
 
         private static Tuple<string, string> GetPathAndFileName(string fullPath, string root)

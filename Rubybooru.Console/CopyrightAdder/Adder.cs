@@ -103,7 +103,7 @@ namespace Rubybooru.Console.CopyrightAdder
             var duplicateTags = _tagDuplicateData.GetAll(TagType.Copyright)
                 .GroupBy(t => t.TargetTag.Name)
                 .ToDictionary(t => t.First().TargetTag.Name, t => t.First().TargetTag);
-            return duplicateTags.Concat(dbTags).ToDictionary(x => x.Key, x => x.Value);
+            return duplicateTags.Concat(dbTags).GroupBy(x => x.Key).ToDictionary(x => x.First().Key, x => x.First().Value);
         }
 
         private static IEnumerable<string> GetCharacters(Image image)
