@@ -159,7 +159,7 @@ namespace Rubybooru.Console.IqdbTagger
                 if (tag.Type == IqdbApi.Parsers.TagType.Character || tag.Type == IqdbApi.Parsers.TagType.Copyright)
                 {
                     var type = tag.Type == IqdbApi.Parsers.TagType.Copyright ? TagType.Copyright : TagType.Character;
-                    var name = tag.Value.ToLower();
+                    var name = tag.Value.ToLower().Replace(' ', '_');
                     if (!_tags[type].ContainsKey(name))
                     {
                         var dbTag = new Tag()
