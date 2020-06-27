@@ -5,6 +5,7 @@ import { Image } from '../../../entities/image';
 import { Tag } from '../../../entities/tag';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { TagService } from '../../../services/tag-service/tag.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-image-panel',
@@ -24,7 +25,8 @@ export class ImagePanelComponent implements OnInit {
   constructor(
     public imageApi: ImageApiService,
     private tagService: TagService,
-    private sidePanelData: SidePanelDataService
+    private sidePanelData: SidePanelDataService,
+    private location: Location
   ) {
     sidePanelData.subscribe(data => this.onImage(data));
   }
@@ -35,6 +37,15 @@ export class ImagePanelComponent implements OnInit {
 
   public toggleEditMode(): boolean {
     this.editMode = !this.editMode;
+    return false;
+  }
+
+  public deleteImage(): boolean {
+    if (confirm('Do you want to delete this image?')) {
+      this.imageApi.delete(this.image.id).subscribe(() => {
+        this.location.back();
+      });
+    }
     return false;
   }
 

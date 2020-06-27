@@ -110,6 +110,15 @@ export class ImageApiService extends RestApiService {
     );
   }
 
+  public delete( id: number ): Observable<Image> {
+    return this.http.delete<Image>({
+      url: this.getImageUrl(id)
+    })
+      .pipe(
+        catchError(this.handleError(`delete(${id})`, null))
+      );
+  }
+
   public getImageTags( id: number ): Observable<Tag[]> {
     return this.http.get<Tag[]>({
       url: this.getImageTagsUrl(id)

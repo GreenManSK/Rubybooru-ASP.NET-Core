@@ -9,6 +9,9 @@
         {{image.width ? image.width : '__'}}x{{image.height ? image.height : '__'}} [{{image.size | filesize}}]
       </a>
     </div>
+    <div *ngIf="editMode" class="line">
+      <a href="#" (click)="deleteImage()" title="Delete image">Delete image</a>
+    </div>
   </div>
   <app-tag-list *ngIf="!editMode" [tags]="tags"></app-tag-list>
   <app-tag-list *ngIf="editMode" [tags]="tags" (tagIconCallback)="removeTag($event)" [tagIcon]="faTrash"></app-tag-list>
