@@ -149,6 +149,22 @@ namespace Rubybooru.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public ActionResult<ImageDto> Delete(int id)
+        {
+            try
+            {
+                var image = _imageData.Delete(id);
+                _imageData.Commit();
+                return _mapper.Map<ImageDto>(image);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while deleting image with id {id}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
         [HttpGet("tags")]
         public ActionResult<Dictionary<string, TagDto[]>> GetTags([FromQuery] int[] ids)
         {
