@@ -36,7 +36,7 @@ export class CacheService {
     localStorage.setItem(options.key, JSON.stringify(record));
   }
 
-  public load( key: string ) {
+  public load( key: string, defaultValue: any = null ) {
     // Get cached data from localstorage
     const item = localStorage.getItem(key);
     if (item !== null) {
@@ -44,12 +44,12 @@ export class CacheService {
       const now = new Date().getTime();
       // Expired data will return null
       if (!record || (record.hasExpiration && record.expiration <= now)) {
-        return null;
+        return defaultValue;
       } else {
         return JSON.parse(record.value);
       }
     }
-    return null;
+    return defaultValue;
   }
 
   public remove( key: string ) {

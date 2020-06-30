@@ -12,6 +12,7 @@ export const environment = {
   defaultPaginationSize: 7,
   displayTagCount: 20,
   cacheTimeInMins: 1,
+  stateCacheLimit: 20,
 
   whispererTagLimit: 10,
   whispererUsedTags: [TagType.Copyright, TagType.Character, TagType.General, TagType.System],
