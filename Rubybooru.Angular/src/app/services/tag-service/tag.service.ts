@@ -25,7 +25,7 @@ export class TagService {
     return this.tagApi.add(tag).pipe(
       tap(result => {
         if (result != null) {
-          this.addToCache(tag);
+          this.addToCache(result);
         }
       })
     );
