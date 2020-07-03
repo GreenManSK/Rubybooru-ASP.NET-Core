@@ -22,6 +22,7 @@ export class TagService {
   }
 
   public add( tag: Tag ): Observable<Tag> {
+    tag.name = tag.name.toLowerCase();
     return this.tagApi.add(tag).pipe(
       tap(result => {
         if (result != null) {
@@ -32,6 +33,7 @@ export class TagService {
   }
 
   public edit( tag: Tag ): Observable<Tag> {
+    tag.name = tag.name.toLowerCase();
     return this.tagApi.update(tag).pipe(
       tap(result => {
         if (result != null) {
