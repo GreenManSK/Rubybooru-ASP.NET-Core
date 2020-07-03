@@ -15,6 +15,8 @@ namespace Rubybooru.Data.Interfaces
 
         Tag GetById(int id);
 
+        Tag GetByTypeAndName(TagType type, string name);
+
         Tag Add(Tag tag);
 
         Tag Update(Tag tag);

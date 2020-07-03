@@ -79,6 +79,10 @@ namespace Rubybooru.Controllers
             try
             {
                 var tag = _mapper.Map<Tag>(tagDto);
+                if (_tagData.GetByTypeAndName(tag.Type, tag.Name) != null)
+                {
+                    return BadRequest("Tag already exists");
+                }
                 _tagData.Add(tag);
                 _tagData.Commit();
                 return _mapper.Map<TagDto>(tag);

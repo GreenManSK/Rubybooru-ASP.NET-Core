@@ -58,6 +58,13 @@ namespace Rubybooru.Data.Sql
             return _db.Tags.Find(id);
         }
 
+        public Tag GetByTypeAndName(TagType type, string name)
+        {
+            return (from t in _db.Tags
+                where t.Name.Equals(name) && t.Type == type
+                select t).FirstOrDefault();
+        }
+
         public Tag Add(Tag tag)
         {
             _db.Add(tag);
