@@ -29,6 +29,7 @@ export class TagFormComponent {
 
   public save(): void {
     let operation: Observable<Tag>;
+    this.tag.name = this.tag.name.toLowerCase().trim();
     if (this.tag.id === 0) {
       operation = this.tagService.add(this.tag);
     } else {
