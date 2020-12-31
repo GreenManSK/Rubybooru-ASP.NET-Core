@@ -171,9 +171,15 @@ namespace Rubybooru.Console.IqdbTagger
                         _tags[type].Add(name, dbTag);
                     }
 
+                    var tagToAdd = _tags[type][name];
+                    if (image.Tags.Any(t => t.Tag == tagToAdd))
+                    {
+                        continue;
+                    }
+                    
                     image.Tags.Add(new ImageTag()
                     {
-                        Tag = _tags[type][name]
+                        Tag = tagToAdd
                     });
                 }
             }
