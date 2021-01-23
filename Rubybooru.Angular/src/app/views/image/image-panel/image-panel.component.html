@@ -15,7 +15,7 @@
   </div>
   <app-tag-list *ngIf="!editMode" [tags]="tags"></app-tag-list>
   <app-tag-list *ngIf="editMode" [tags]="tags" (tagIconCallback)="removeTag($event)" [tagIcon]="faTrash"></app-tag-list>
-  <app-tag-selector *ngIf="editMode" (tagCallback)="addTag($event)" [tags]="allTags" tagClasses="col-12"></app-tag-selector>
+  <app-tag-selector *ngIf="editMode" (tagCallback)="addTag($event)" [tags]="allTags" [enablePreview]="true" tagClasses="col-12"></app-tag-selector>
   <div class="info">
     <div class="line">
       <a href="#" (click)="toggleEditMode()" title="Toggle edit mode">Toggle edit mode</a>

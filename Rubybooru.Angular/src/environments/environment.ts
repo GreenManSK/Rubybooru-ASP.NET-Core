@@ -6,7 +6,7 @@ import { TagType } from '../app/entities/tag-type.enum';
 
 export const environment = {
   production: false,
-  restUrl: 'https://localhost:44397/api/',
+  restUrl: 'https://localhost:5001/api/',
 
   imagesPerPage: 24,
   defaultPaginationSize: 7,

@@ -3,6 +3,7 @@ import TrieSearch from 'trie-search';
 import { Tag } from '../../entities/tag';
 import { TagService } from 'src/app/services/tag-service/tag.service';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-tag-selector',
@@ -23,8 +24,12 @@ export class TagSelectorComponent {
   @Input()
   public tagClasses: string;
 
+  @Input()
+  public enablePreview = false;
+
   public TagService = TagService;
   public filteredTags: Tag[] = [];
+  public previewIcon = faEye;
 
   private trieSearch: TrieSearch;
   private lastSearch = '';
@@ -33,12 +38,12 @@ export class TagSelectorComponent {
     this.trieSearch = new TrieSearch('name');
   }
 
-  public onTagClick(tag: Tag): boolean {
+  public onTagClick( tag: Tag ): boolean {
     this.tagCallback.emit(tag);
     return false;
   }
 
-  public onTagIconClick(tag: Tag): boolean {
+  public onTagIconClick( tag: Tag ): boolean {
     if (this.tagIconCallback != null) {
       this.tagIconCallback.emit(tag);
     }
@@ -55,7 +60,7 @@ export class TagSelectorComponent {
     this.filteredTags = this.trieSearch.get(value);
   }
 
-  private createTrie(tags: Tag[]): void {
+  private createTrie( tags: Tag[] ): void {
     this.trieSearch = new TrieSearch('name');
     this.trieSearch.addAll(tags);
     if (this.lastSearch !== '') {
