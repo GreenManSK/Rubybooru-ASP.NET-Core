@@ -61,7 +61,10 @@ export class TagSelectorComponent {
   }
 
   private createTrie( tags: Tag[] ): void {
-    this.trieSearch = new TrieSearch('name');
+    this.trieSearch = new TrieSearch('name', {
+      min: 1,
+      splitOnRegEx: /_/g
+    });
     this.trieSearch.addAll(tags);
     if (this.lastSearch !== '') {
       this.valueChange(this.lastSearch);
