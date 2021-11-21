@@ -18,7 +18,7 @@
       (click)="addValue(item.name)"
       [class]="TagService.getTagClass(item.type)"
       [class.active]="i == activeIndex"
-      class="tag-color"
+      [class.tag-color]="true"
     >
       {{item.name}}
     </li>

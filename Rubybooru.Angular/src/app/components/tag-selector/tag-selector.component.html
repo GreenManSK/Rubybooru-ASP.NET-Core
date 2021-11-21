@@ -14,7 +14,7 @@
     class="img-container"
     [class]="tagClasses"
   >
-    <a href="#" (click)="onTagClick(tag)" [class]="TagService.getTagClass(tag.type)" class="tag-color" [title]="tag.name">{{tag.name}}</a>
+    <a href="#" (click)="onTagClick(tag)" [class]="TagService.getTagClass(tag.type)" [class.tag-color]="true" [title]="tag.name">{{tag.name}}</a>
     &nbsp;<a *ngIf="enablePreview" [routerLink]="['/1']" [queryParams]="{tags: tag.id + '_' + tag.name}" title="Show tag" target="_blank"><fa-icon [icon]="previewIcon"></fa-icon></a>
     <a *ngIf="tagIcon != null" href="#" title="Delete tag" (click)="onTagIconClick(tag)"><fa-icon [icon]="tagIcon"></fa-icon></a>
   </div>
