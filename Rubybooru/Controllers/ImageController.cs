@@ -190,8 +190,7 @@ namespace Rubybooru.Controllers
                 {
                     return NotFound();
                 }
-
-                return Redirect(Path.Combine(StaticImagesPath, image.Path, Uri.EscapeUriString(image.Name)));
+                return Redirect(Path.Combine(StaticImagesPath, PathHelper.RemoveAccents(image.Path), Uri.EscapeUriString(image.Name)));
             }
             catch (Exception e)
             {
