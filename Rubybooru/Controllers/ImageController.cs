@@ -21,7 +21,7 @@ namespace Rubybooru.Controllers
     [Route("api/[controller]")]
     public class ImageController : ControllerBase
     {
-        public const string StaticImagesPath = "/static/images";
+        public const string StaticImagesPath = "/static/Images";
 
         private readonly ILogger<ImageController> _logger;
         private readonly IImageData _imageData;
@@ -190,7 +190,8 @@ namespace Rubybooru.Controllers
                 {
                     return NotFound();
                 }
-                return Redirect(Path.Combine(StaticImagesPath, PathHelper.RemoveAccents(image.Path), Uri.EscapeUriString(image.Name)));
+                var redirectUrl = Path.Combine(StaticImagesPath, PathHelper.PrepareUrl(image.Path.Replace('\\','/')), Uri.EscapeUriString(image.Name));
+                return Redirect(redirectUrl);
             }
             catch (Exception e)
             {
