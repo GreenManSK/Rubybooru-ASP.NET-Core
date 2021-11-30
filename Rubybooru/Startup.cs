@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using AutoMapper;
@@ -86,6 +87,12 @@ namespace Rubybooru
                 await next();
                 if (context.Response.StatusCode == 404)
                 {
+                    var path = context.Request.Path.ToString();
+                    if (path.StartsWith("/static/"))
+                    {
+                        Console.WriteLine($@"Url not found: {path}");
+                    }
+
                     context.Request.Path = "/";
                     await next();
                 }
