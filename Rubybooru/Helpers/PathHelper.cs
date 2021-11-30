@@ -1,5 +1,5 @@
+using System;
 using System.Linq;
-using System.Net;
 
 namespace Rubybooru.Helpers
 {
@@ -9,7 +9,7 @@ namespace Rubybooru.Helpers
         {
             return string.Join(
                 "/",
-                text.Split("/").Select(s => WebUtility.UrlEncode(s))
+                text.Split("/").Select(s => Uri.EscapeDataString(s))
             );
         }
     }
