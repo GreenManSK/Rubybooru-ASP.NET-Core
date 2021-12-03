@@ -57,7 +57,7 @@ export class TagSelectorComponent {
 
   public valueChange( value: string ): void {
     this.lastSearch = value;
-    this.filteredTags = this.trieSearch.get(value);
+    this.filteredTags = this.trieSearch.get(value.trim());
   }
 
   private createTrie( tags: Tag[] ): void {
