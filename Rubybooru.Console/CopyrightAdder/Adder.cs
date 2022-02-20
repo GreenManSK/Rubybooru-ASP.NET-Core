@@ -22,11 +22,11 @@ namespace Rubybooru.Console.CopyrightAdder
             _tagDuplicateData = tagDuplicateData;
         }
 
-        public int Add(string mapFile, int StartId, int EndId)
+        public int AddByCharacter(string mapFile, int startId, int endId)
         {
             var map = GetMap(mapFile);
             var copyrightTags = GetCopyrightTags();
-            var images = GetImages(StartId, EndId).ToList();
+            var images = GetImages(startId, endId).ToList();
 
             System.Console.WriteLine("Adding tags");
             foreach (var image in images)
@@ -41,6 +41,33 @@ namespace Rubybooru.Console.CopyrightAdder
             System.Console.WriteLine("Saving data");
             _db.SaveChanges();
 
+            return 0;
+        }
+
+        public int AddByFilterTag(int filterTagId, int copyrightTagId, int startId, int endId)
+        {
+            var copyrightTag = _tagData.GetById(copyrightTagId);
+            if (copyrightTag == null)
+            {
+                System.Console.Error.WriteLine("Copyright tag not found");
+                return -1;
+            }
+
+            var images = GetImages(startId, endId)
+                .Where(i => i.Tags.Any(t => t.TagId == filterTagId))
+                .Where(i => i.Tags.All(t => t.Tag.Type != TagType.Character));
+
+            System.Console.WriteLine("Adding tags");
+            foreach (var image in images)
+            {
+                image.Tags.Add(new ImageTag()
+                {
+                    Tag = copyrightTag
+                });
+            }
+
+            System.Console.WriteLine("Saving data");
+            _db.SaveChanges();
             return 0;
         }
 
@@ -61,6 +88,7 @@ namespace Rubybooru.Console.CopyrightAdder
                     _tagData.Add(tag);
                     copyrightTags.Add(copyright, tag);
                 }
+
                 image.Tags.Add(new ImageTag()
                 {
                     Tag = copyrightTags[copyright]
@@ -68,7 +96,8 @@ namespace Rubybooru.Console.CopyrightAdder
             }
         }
 
-        private static HashSet<string> GetCharacterCopyrights(List<string> characters, Dictionary<string, List<string>> map)
+        private static HashSet<string> GetCharacterCopyrights(List<string> characters,
+            Dictionary<string, List<string>> map)
         {
             var result = new HashSet<string>();
             foreach (var character in characters)
@@ -103,7 +132,8 @@ namespace Rubybooru.Console.CopyrightAdder
             var duplicateTags = _tagDuplicateData.GetAll(TagType.Copyright)
                 .GroupBy(t => t.TargetTag.Name)
                 .ToDictionary(t => t.First().TargetTag.Name, t => t.First().TargetTag);
-            return duplicateTags.Concat(dbTags).GroupBy(x => x.Key).ToDictionary(x => x.First().Key, x => x.First().Value);
+            return duplicateTags.Concat(dbTags).GroupBy(x => x.Key)
+                .ToDictionary(x => x.First().Key, x => x.First().Value);
         }
 
         private static IEnumerable<string> GetCharacters(Image image)

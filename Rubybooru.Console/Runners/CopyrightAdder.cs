@@ -23,10 +23,19 @@ namespace Rubybooru.Console.Runners
             {
                 return MapCreator.Create(options.RawImageData, options.CopyrightMapPath, options.PercentageLimit);
             }
-            else
+            else if (options.CopyrightMapPath != null)
             {
                 var adder = new Adder(_db, _tagData, _tagDuplicateData);
-                return adder.Add(options.CopyrightMapPath, options.StartId, options.EndId);
+                return adder.AddByCharacter(options.CopyrightMapPath, options.StartId, options.EndId);
+            } else if (options.CopyrightTagId != -1 && options.FilterTagId != -1)
+            {
+                var adder = new Adder(_db, _tagData, _tagDuplicateData);
+                return adder.AddByFilterTag(options.FilterTagId, options.CopyrightTagId, options.StartId, options.EndId);
+            }
+            else
+            {
+                System.Console.Error.WriteLine("Need raw image data, copyright map or filter and copyright tag id");
+                return -1;
             }
         }
 
