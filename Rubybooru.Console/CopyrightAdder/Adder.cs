@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Rubybooru.Core;
 using Rubybooru.Data;
@@ -55,7 +54,8 @@ namespace Rubybooru.Console.CopyrightAdder
 
             var images = GetImages(startId, endId)
                 .Where(i => i.Tags.Any(t => t.TagId == filterTagId))
-                .Where(i => i.Tags.All(t => t.Tag.Type != TagType.Character));
+                .Where(i => i.Tags.All(t => t.Tag.Type != TagType.Character))
+                .ToList();
 
             System.Console.WriteLine("Adding tags");
             foreach (var image in images)
@@ -111,7 +111,7 @@ namespace Rubybooru.Console.CopyrightAdder
             return result;
         }
 
-        private IEnumerable<Image> GetImages(int startId, int endId)
+        private IQueryable<Image> GetImages(int startId, int endId)
         {
             var result = from i in _db.Images select i;
             result = result.Where(i => i.Tags.All(t => t.Tag.Type != TagType.Copyright));
