@@ -5,7 +5,7 @@ namespace Rubybooru.Console.Options
     [Verb("copyright-adder", HelpText = "Add copyright to images based on characters on them")]
     public class CopyrightAdderOptions : DefaultOptions
     {
-        [Option('m', "map", Required = true, HelpText = "Path to map build from Danbooru tags.")]
+        [Option('m', "map", Required = false, HelpText = "Path to map build from Danbooru tags.")]
         public string CopyrightMapPath { get; set; }
 
         [Option('r', "raw", Required = false,
