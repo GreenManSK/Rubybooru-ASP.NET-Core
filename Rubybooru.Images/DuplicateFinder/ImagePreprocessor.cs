@@ -1,21 +1,21 @@
 using System;
-using System.Drawing;
 using System.IO;
-using ImageProcessor;
-using ImageProcessor.Imaging;
-using ImageProcessor.Imaging.Filters.Photo;
-using ImageProcessor.Imaging.Formats;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace Rubybooru.Images.DuplicateFinder
 {
     public class ImagePreprocessor : IDisposable
     {
         private const int Size = 32;
-        private static readonly FormatBase Format = new PngFormat();
 
         public string ImagePath { get; set; }
-
-        private ImageFactory _imageFactory;
+        private Image _image;
+        private readonly ResizeOptions ResizeOptions = new ResizeOptions
+        {
+            Size = new Size(Size, Size),
+            Mode = ResizeMode.Stretch
+        };
 
         public ImagePreprocessor(string imagePath)
         {
@@ -24,50 +24,34 @@ namespace Rubybooru.Images.DuplicateFinder
 
         private void LoadImage()
         {
-            if (_imageFactory != null)
+            _image = Image.Load(ImagePath);
+            _image.Mutate(img =>
             {
-                return;
-            }
-
-            var imageBytes = File.ReadAllBytes(ImagePath);
-            using var inStream = new MemoryStream(imageBytes);
-            
-            var size = new Size(Size, Size);
-            var resizeLayer = new ResizeLayer(size, ResizeMode.Stretch);
-
-            _imageFactory = new ImageFactory();
-            _imageFactory.Load(inStream)
-                .Resize(resizeLayer)
-                .Filter(MatrixFilters.GreyScale);
-
-            var image = _imageFactory.Image;
-            if (image.Height > image.Width)
-            {
-                _imageFactory.Rotate(-90);
-            }
+                var shouldRotate = _image.Height > _image.Width;
+                img.Resize(ResizeOptions);
+                img.Grayscale();
+                if (shouldRotate)
+                {
+                    img.Rotate(-90);
+                }
+            });
         }
 
         public void Save(string path)
         {
             LoadImage();
-
-            using var outStream = File.Create(path);
-            _imageFactory.Format(Format)
-                .Save(outStream);
+            _image.SaveAsPng(path);
         }
 
         public void SaveRotated(string path)
         {
             LoadImage();
-            using var outStream = File.Create(path);
-            _imageFactory.Rotate(180)
-                .Format(Format)
-                .Save(outStream);
+            _image.Mutate(img => img.Rotate(180));
         }
 
         public void Dispose()
         {
-            _imageFactory?.Dispose();
+            _image?.Dispose();
         }
     }
 }

@@ -1,37 +1,23 @@
-﻿using System.Drawing;
-using System.IO;
-using ImageProcessor;
-using ImageProcessor.Configuration;
-using ImageProcessor.Imaging;
-using ImageProcessor.Imaging.Formats;
-using ImageProcessor.Plugins.WebP.Imaging.Formats;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 
 namespace Rubybooru.Images
 {
     public class PreviewMaker : IPreviewMaker
     {
-        public PreviewMaker()
-        {
-            ImageProcessorBootstrapper.Instance.AddImageFormats( new WebPFormat());
-        }
-
         public void CreatePreview(string imagePath, string previewPath, int width, int height, bool keepAspectRatio,
             int quality)
         {
-            var imageBytes = File.ReadAllBytes(imagePath);
-            var format = new JpegFormat {Quality = quality};
+            var jpegEncoder = new JpegEncoder {Quality = quality};
+            var resizeOptions = new ResizeOptions
+            {
+                Size = new Size(width, height), Mode = keepAspectRatio ? ResizeMode.Max : ResizeMode.Crop
+            };
 
-            using var inStream = new MemoryStream(imageBytes);
-            using var outStream = File.Create(previewPath);
-            using var imageFactory = new ImageFactory();
-
-            var size = new Size(width, height);
-            var resizeLayer = new ResizeLayer(size, keepAspectRatio ? ResizeMode.Max : ResizeMode.Crop);
-
-            imageFactory.Load(inStream)
-                .Resize(resizeLayer)
-                .Format(format)
-                .Save(outStream);
+            using var image = Image.Load(imagePath);
+            image.Mutate(img => img.Resize(resizeOptions));
+            image.SaveAsJpeg(previewPath, jpegEncoder);
         }
     }
 }

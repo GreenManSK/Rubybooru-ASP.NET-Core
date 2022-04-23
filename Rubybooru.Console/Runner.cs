@@ -1,13 +1,10 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using CommandLine;
-using ImageProcessor.Imaging.Quantizers;
-using ImageProcessor.Imaging.Quantizers.WuQuantizer;
 using Microsoft.EntityFrameworkCore;
 using Rubybooru.Console.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Rubybooru.Console.Runners;
 using Rubybooru.Data;
 using Rubybooru.Data.Interfaces;
@@ -97,8 +94,7 @@ namespace Rubybooru.Console
 
             serviceCollection.AddSingleton<ImagePreprocessorUtils>();
             serviceCollection.AddSingleton<IImagePreprocessorFactory, ImagePreprocessorFactory>();
-            serviceCollection.AddSingleton<IQuantizer, WuQuantizer>();
-            
+
             serviceCollection.AddScoped<ITagData, SqlTagData>();
             serviceCollection.AddScoped<IImageData, SqlImageData>();
             serviceCollection.AddScoped<IImageTagData, SqlImageTagData>();

@@ -1,42 +1,29 @@
 using System;
-using System.IO;
-using ImageProcessor;
-using ImageProcessor.Configuration;
-using ImageProcessor.Imaging.Quantizers;
-using ImageProcessor.Plugins.WebP.Imaging.Formats;
 using NumSharp;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Rubybooru.Images.DuplicateFinder
 {
     public class ImagePreprocessorUtils
     {
-        private readonly IQuantizer _quantizer;
-
-        public ImagePreprocessorUtils(IQuantizer quantizer)
-        {
-            _quantizer = quantizer;
-            ImageProcessorBootstrapper.Instance.AddImageFormats(new WebPFormat());
-        }
 
         public int[,] GetImageArray(string path)
         {
-            var imageBytes = File.ReadAllBytes(path);
-            using var inStream = new MemoryStream(imageBytes);
-            
-            var imageFactory = new ImageFactory();
-            imageFactory.Load(inStream);
-            var image = imageFactory.Image;
-
-            var bitmap = _quantizer.Quantize(image);
+            using var image = Image.Load<Rgba32>(path);
             var array = new int[image.Width,image.Height];
-            for (var x = 0; x < image.Width; x++)
+            image.ProcessPixelRows(accessor =>
             {
-                for (var y = 0; y < image.Height; y++)
+                for (var y = 0; y < accessor.Height; y++)
                 {
-                    array[y, x] = bitmap.GetPixel(x, y).G;
+                    var row = accessor.GetRowSpan(y);
+                    for (var x = 0; x < row.Length; x++)
+                    {
+                        ref var pixel = ref row[x];
+                        array[y, x] = pixel.G;
+                    }
                 }
-            }
-
+            });
             return array;
         }
 
