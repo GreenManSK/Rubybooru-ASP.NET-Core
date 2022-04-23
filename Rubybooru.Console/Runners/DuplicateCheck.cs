@@ -55,10 +55,11 @@ namespace Rubybooru.Console.Runners
         {
             System.Console.WriteLine("Creating bw images");
             var uncheckedImages = (from i in _db.Images where !i.DuplicateCheck orderby i.Id select i).ToList();
-            CreateBwImages(uncheckedImages);
+            var allImages = (from i in _db.Images orderby i.Id select i).ToList();
+
+            CreateBwImages(options.GenerateImages ? allImages : uncheckedImages);
 
             System.Console.WriteLine("Loading all bw images");
-            var allImages = (from i in _db.Images orderby i.Id select i).ToList();
             var bwImages = LoadImages(allImages);
 
             System.Console.WriteLine("Checking for duplicates");
