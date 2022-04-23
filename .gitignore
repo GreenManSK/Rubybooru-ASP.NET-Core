@@ -262,3 +262,6 @@ __pycache__/
 
 IISBuild/*
 IISBuild/
+
+Rubybooru/appsettings.json
+Rubybooru/appsettings.Development.json.json
