@@ -264,4 +264,4 @@ IISBuild/*
 IISBuild/
 
 Rubybooru/appsettings.json
-Rubybooru/appsettings.Development.json.json
+Rubybooru/appsettings.Development.json
