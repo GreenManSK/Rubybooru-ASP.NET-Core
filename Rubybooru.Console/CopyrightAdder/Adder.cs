@@ -84,12 +84,12 @@ namespace Rubybooru.Console.CopyrightAdder
         {
             _userTag = GetOrCreateSystemTag(UserTagName);
             _deepbooruTag = GetOrCreateSystemTag(DeepbooruTagName);
-            var images = GetTaggedImagesWithoutSystem();
+            var images = GetTaggedImagesWithoutSystem().ToList();
             
             System.Console.WriteLine("Adding tags");
             foreach (var image in images)
             {
-                var characters = image.Tags.Where(it => it.Tag.Type == TagType.Character);
+                var characters = image.Tags.Where(it => it.Tag.Type == TagType.Character).ToList();
                 var isUserTagged = characters.All(it => it.UserCreated);
                 image.Tags.Add(new ImageTag()
                 {
@@ -168,7 +168,7 @@ namespace Rubybooru.Console.CopyrightAdder
         private IQueryable<Image> GetTaggedImagesWithoutSystem()
         {
             var result = from i in _db.Images select i;
-            result = result.Where(i => i.Tags.All(t => t.Tag.Type != TagType.System));
+            result = result.Where(i => i.Tags.All(t => t.Tag.Type != TagType.System || t.Tag.Name.Contains(":")));
             result = result.Where(i => i.Tags.Any(t => t.Tag.Type == TagType.Copyright));
 
             return result;
