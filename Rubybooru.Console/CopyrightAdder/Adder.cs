@@ -10,9 +10,15 @@ namespace Rubybooru.Console.CopyrightAdder
 {
     public class Adder
     {
+        private const string DeepbooruTagName = "deepbooru";
+        private const string UserTagName = "user";
+        
         private readonly RubybooruDbContext _db;
         private readonly ITagData _tagData;
         private readonly ITagDuplicateData _tagDuplicateData;
+
+        private Tag _userTag;
+        private Tag _deepbooruTag;
 
         public Adder(RubybooruDbContext db, ITagData tagData, ITagDuplicateData tagDuplicateData)
         {
@@ -23,6 +29,9 @@ namespace Rubybooru.Console.CopyrightAdder
 
         public int AddByCharacter(string mapFile, int startId, int endId)
         {
+            _userTag = GetOrCreateSystemTag(UserTagName);
+            _deepbooruTag = GetOrCreateSystemTag(DeepbooruTagName);
+            
             var map = GetMap(mapFile);
             var copyrightTags = GetCopyrightTags();
             var images = GetImages(startId, endId).ToList();
@@ -71,7 +80,7 @@ namespace Rubybooru.Console.CopyrightAdder
             return 0;
         }
 
-        private void AddCopyrights(Image image, List<string> characters, Dictionary<string, List<string>> map,
+        private void AddCopyrights(Image image, List<CharacterTag> characters, Dictionary<string, List<string>> map,
             IDictionary<string, Tag> copyrightTags)
         {
             var copyrights = GetCharacterCopyrights(characters, map);
@@ -94,17 +103,26 @@ namespace Rubybooru.Console.CopyrightAdder
                     Tag = copyrightTags[copyright]
                 });
             }
+
+            if (copyrights.Count > 0)
+            {
+                var isUserTagged = characters.All(it => it.UserCreated);
+                image.Tags.Add(new ImageTag()
+                {
+                    Tag = isUserTagged ? _userTag : _deepbooruTag
+                });
+            }
         }
 
-        private static HashSet<string> GetCharacterCopyrights(List<string> characters,
+        private static HashSet<string> GetCharacterCopyrights(List<CharacterTag> characters,
             Dictionary<string, List<string>> map)
         {
             var result = new HashSet<string>();
             foreach (var character in characters)
             {
-                if (map.ContainsKey(character))
+                if (map.ContainsKey(character.Name))
                 {
-                    map[character].ForEach(c => result.Add(c));
+                    map[character.Name].ForEach(c => result.Add(c));
                 }
             }
 
@@ -136,9 +154,30 @@ namespace Rubybooru.Console.CopyrightAdder
                 .ToDictionary(x => x.First().Key, x => x.First().Value);
         }
 
-        private static IEnumerable<string> GetCharacters(Image image)
+        private Tag GetOrCreateSystemTag(string name)
         {
-            return image.Tags.Where(it => it.Tag.Type == TagType.Character).Select(it => it.Tag.Name);
+            var tag = (from t in _db.Tags where t.Name.Equals(name) && t.Type == TagType.System select t)
+                .FirstOrDefault();
+            if (tag == null)
+            {
+                tag = new Tag()
+                {
+                    Name = name,
+                    Type = TagType.System
+                };
+                _db.Add(tag);
+            }
+
+            return tag;
+        }
+
+        private static IEnumerable<CharacterTag> GetCharacters(Image image)
+        {
+            return image.Tags.Where(it => it.Tag.Type == TagType.Character).Select(it => new CharacterTag
+            {
+                Name = it.Tag.Name,
+                UserCreated = it.UserCreated
+            });
         }
 
         private static Dictionary<string, List<string>> GetMap(string mapFile)
