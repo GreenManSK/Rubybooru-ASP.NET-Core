@@ -27,5 +27,8 @@ namespace Rubybooru.Console.Options
 
         [Option('c', "copyright", Required = false, HelpText = "Tag to add to images without copyright with filtered tag")]
         public int CopyrightTagId { get; set; } = -1;
+
+        [Option("systemTags", Required = false, HelpText = "Add system tags based on how copyright was added")]
+        public bool AddSystemTags { get; set; } = false;
     }
 }

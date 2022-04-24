@@ -19,7 +19,11 @@ namespace Rubybooru.Console.Runners
         }
         public int Run(CopyrightAdderOptions options)
         {
-            if (options.RawImageData != null)
+            if (options.AddSystemTags)
+            {
+                var adder = new Adder(_db, _tagData, _tagDuplicateData);
+                return adder.AddSystemTags();
+            } else if (options.RawImageData != null)
             {
                 return MapCreator.Create(options.RawImageData, options.CopyrightMapPath, options.PercentageLimit);
             }

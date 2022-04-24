@@ -12,7 +12,7 @@ namespace Rubybooru.Console.CopyrightAdder
     {
         private const string DeepbooruTagName = "deepbooru";
         private const string UserTagName = "user";
-        
+
         private readonly RubybooruDbContext _db;
         private readonly ITagData _tagData;
         private readonly ITagDuplicateData _tagDuplicateData;
@@ -31,7 +31,7 @@ namespace Rubybooru.Console.CopyrightAdder
         {
             _userTag = GetOrCreateSystemTag(UserTagName);
             _deepbooruTag = GetOrCreateSystemTag(DeepbooruTagName);
-            
+
             var map = GetMap(mapFile);
             var copyrightTags = GetCopyrightTags();
             var images = GetImages(startId, endId).ToList();
@@ -77,6 +77,29 @@ namespace Rubybooru.Console.CopyrightAdder
 
             System.Console.WriteLine("Saving data");
             _db.SaveChanges();
+            return 0;
+        }
+
+        public int AddSystemTags()
+        {
+            _userTag = GetOrCreateSystemTag(UserTagName);
+            _deepbooruTag = GetOrCreateSystemTag(DeepbooruTagName);
+            var images = GetTaggedImagesWithoutSystem();
+            
+            System.Console.WriteLine("Adding tags");
+            foreach (var image in images)
+            {
+                var characters = image.Tags.Where(it => it.Tag.Type == TagType.Character);
+                var isUserTagged = characters.All(it => it.UserCreated);
+                image.Tags.Add(new ImageTag()
+                {
+                    Tag = isUserTagged ? _userTag : _deepbooruTag
+                });
+            }
+            
+            System.Console.WriteLine("Saving data");
+            _db.SaveChanges();
+            
             return 0;
         }
 
@@ -138,6 +161,15 @@ namespace Rubybooru.Console.CopyrightAdder
             {
                 result = result.Where(i => i.Id <= endId);
             }
+
+            return result;
+        }
+
+        private IQueryable<Image> GetTaggedImagesWithoutSystem()
+        {
+            var result = from i in _db.Images select i;
+            result = result.Where(i => i.Tags.All(t => t.Tag.Type != TagType.System));
+            result = result.Where(i => i.Tags.Any(t => t.Tag.Type == TagType.Copyright));
 
             return result;
         }
