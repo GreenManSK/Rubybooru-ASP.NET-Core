@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using Microsoft.Extensions.Configuration;
+using Rubybooru.Console.CopyrightAdder;
 using Rubybooru.Console.Options;
 using Rubybooru.Console.Runners;
 using Rubybooru.Core;
@@ -22,6 +24,7 @@ namespace Rubybooru.Console.IqdbTagger
     public class IqdbTagger
     {
         private const string IqdbTagName = "iqdb";
+        private const string DeepbooruTagName = Adder.DeepbooruTagName;
         private const int LoggingPeriodInMs = 60 * 1000;
 
         private static readonly IqdbApi.Api.Options Options = new IqdbApi.Api.Options(new HashSet<ServiceType>()
@@ -41,6 +44,7 @@ namespace Rubybooru.Console.IqdbTagger
         private int _finishedCount = 0;
 
         private Tag _iqdbTag;
+        private Tag _deepbooruTag;
         private readonly ConcurrentQueue<Task> _imageTasks = new ConcurrentQueue<Task>();
         private readonly MatchRanker _matchRanker;
         private readonly string _imagesPath;
@@ -62,6 +66,11 @@ namespace Rubybooru.Console.IqdbTagger
 
         public int Run(IqdbTaggerOptions options)
         {
+            return options.RecheckDeepbooru ? RunForDeepbooru(options.MaxAge) : RunForUntagged();
+        }
+
+        private int RunForUntagged()
+        {
             var images = GetImages();
             _iqdbTag = GetIqdbTag();
             _tags = GetTags();
@@ -75,7 +84,24 @@ namespace Rubybooru.Console.IqdbTagger
             return 0;
         }
 
-        private async Task DownloadImageData(List<Image> images)
+        private int RunForDeepbooru(int maxAge)
+        {
+            _iqdbTag = GetIqdbTag();
+            _deepbooruTag = GetDeepbooruTag();
+            _tags = GetTags();
+
+            var images = GetDeepbooruTaggedImages(_deepbooruTag, maxAge);
+            _imageCount = images.Count();
+            
+            var cancellationToken = new CancellationToken();
+            StartConsoleLogger(LoggingPeriodInMs, cancellationToken);
+            
+            DownloadImageData(images, true).Wait(cancellationToken);
+
+            return 0;
+        }
+
+        private async Task DownloadImageData(List<Image> images, bool retag = false)
         {
             using var iqdbApi = new IqdbApi.Api.IqdbApi();
             var delay = _configuration.GetValue<int>("IqdbRequestDelayInMs");
@@ -89,7 +115,7 @@ namespace Rubybooru.Console.IqdbTagger
                 }
 
                 image.IqdbCheckDateTime = now;
-                await DownloadImage(image, iqdbApi);
+                await DownloadImage(image, iqdbApi, retag);
                 if (image != images.LastOrDefault())
                 {
                     await Task.Delay(delay);
@@ -108,12 +134,12 @@ namespace Rubybooru.Console.IqdbTagger
             await _db.SaveChangesAsync();
         }
 
-        private async Task DownloadImage(Image image, IqdbApi.Api.IqdbApi iqdbApi)
+        private async Task DownloadImage(Image image, IqdbApi.Api.IqdbApi iqdbApi, bool retag)
         {
             try
             {
                 List<Match> matches = await iqdbApi.SearchFile(GetImagePath(image), Options);
-                _imageTasks.Enqueue(ProcessMatches(image, matches));
+                _imageTasks.Enqueue(ProcessMatches(image, matches, retag));
             }
             catch (Exception e)
             {
@@ -122,7 +148,7 @@ namespace Rubybooru.Console.IqdbTagger
             }
         }
 
-        private async Task ProcessMatches(Image image, IReadOnlyCollection<Match> matches)
+        private async Task ProcessMatches(Image image, IReadOnlyCollection<Match> matches, bool retag)
         {
             var bests = matches != null ? _matchRanker.OrderBest(matches) : Enumerable.Empty<Match>();
             foreach (var best in bests)
@@ -144,6 +170,10 @@ namespace Rubybooru.Console.IqdbTagger
 
                 if (result != null)
                 {
+                    if (retag)
+                    {
+                        RemoveImageTags(image);
+                    }
                     AddImageTags(result, image);
                     break;
                 }
@@ -176,7 +206,7 @@ namespace Rubybooru.Console.IqdbTagger
                     {
                         continue;
                     }
-                    
+
                     image.Tags.Add(new ImageTag()
                     {
                         Tag = tagToAdd
@@ -190,6 +220,23 @@ namespace Rubybooru.Console.IqdbTagger
                 {
                     Tag = _iqdbTag
                 });
+            }
+        }
+
+        private void RemoveImageTags(Image image)
+        {
+            var tagsToRemove = new List<ImageTag>();
+            foreach (var imageTag in image.Tags)
+            {
+                if (imageTag.TagId == _deepbooruTag.Id || imageTag.Tag.Type == TagType.Copyright || imageTag.Tag.Type == TagType.Character)
+                {
+                    tagsToRemove.Add(imageTag);
+                }
+            }
+
+            foreach (var imageTag in tagsToRemove)
+            {
+                image.Tags.Remove(imageTag);
             }
         }
 
@@ -224,7 +271,8 @@ namespace Rubybooru.Console.IqdbTagger
                 .GetAll(tagType)
                 .GroupBy(t => t.Name)
                 .ToDictionary(t => t.First().Name, t => t.First().TargetTag);
-            return duplicateTags.Concat(dbTags).GroupBy(x => x.Key).ToDictionary(x => x.First().Key, x => x.First().Value);
+            return duplicateTags.Concat(dbTags).GroupBy(x => x.Key)
+                .ToDictionary(x => x.First().Key, x => x.First().Value);
         }
 
         private Tag GetIqdbTag()
@@ -244,12 +292,41 @@ namespace Rubybooru.Console.IqdbTagger
             return tag;
         }
 
+        private Tag GetDeepbooruTag()
+        {
+            var tag = (from t in _db.Tags where t.Name.Equals(DeepbooruTagName) && t.Type == TagType.System select t)
+                .FirstOrDefault();
+            if (tag == null)
+            {
+                tag = new Tag()
+                {
+                    Name = DeepbooruTagName,
+                    Type = TagType.System
+                };
+                _db.Add(tag);
+            }
+
+            return tag;
+        }
+
         private List<Image> GetImages()
         {
             var validDate = DateTime.Now.AddDays(-1 * _configuration.GetValue<int>("IqdbCheckIntervalInDays"));
             var query = from i in _db.Images
                 where i.Tags.All(t => t.Tag.Type != TagType.Copyright)
                       && (!i.IqdbCheckDateTime.HasValue || i.IqdbCheckDateTime.Value.CompareTo(validDate) <= 0)
+                select i;
+
+            return query.ToList();
+        }
+
+        private List<Image> GetDeepbooruTaggedImages(Tag deepbooruTag, int maxAge)
+        {
+            var validDate = DateTime.Now.AddDays(-1 * maxAge * 365);
+            
+            var query = from i in _db.Images
+                where i.Tags.Any(t => t.TagId == deepbooruTag.Id)
+                      && i.AddedDateTime.CompareTo(validDate) >= 0
                 select i;
 
             return query.ToList();

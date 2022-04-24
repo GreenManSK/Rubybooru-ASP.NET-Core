@@ -10,7 +10,7 @@ namespace Rubybooru.Console.CopyrightAdder
 {
     public class Adder
     {
-        private const string DeepbooruTagName = "deepbooru";
+        public const string DeepbooruTagName = "deepbooru";
         private const string UserTagName = "user";
 
         private readonly RubybooruDbContext _db;
