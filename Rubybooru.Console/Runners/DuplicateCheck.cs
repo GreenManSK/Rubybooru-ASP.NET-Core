@@ -9,7 +9,6 @@ using Rubybooru.Data;
 using Rubybooru.Data.Interfaces;
 using Rubybooru.Images.DuplicateFinder;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Rubybooru.Console.Runners
 {
@@ -165,21 +164,9 @@ namespace Rubybooru.Console.Runners
 
         private string GetFullBwPath(Image image, bool rotated = false)
         {
-            var hash = GetHash(Path.Combine(image.Path, image.Name));
+            var hash = image.Id;
             var rotatedSuffix = rotated ? "_r" : "";
             return Path.Combine(_bwPath, $"{hash}{rotatedSuffix}.png");
-        }
-
-        private string GetHash(string imagePath)
-        {
-            var result = _hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(imagePath));
-            var hash = new StringBuilder();
-            foreach (var theByte in result)
-            {
-                hash.Append(theByte.ToString("x2"));
-            }
-
-            return hash.ToString();
         }
     }
 }
