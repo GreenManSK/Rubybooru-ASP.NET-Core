@@ -143,7 +143,7 @@ namespace Rubybooru.Console.IqdbTagger
             }
             catch (Exception e)
             {
-                System.Console.Error.WriteLine($"Error while getting iqdb data for {image.Id}");
+                System.Console.Error.WriteLine($"Error while getting iqdb data for {image.Id}: {e}");
                 Interlocked.Increment(ref _finishedCount);
             }
         }
@@ -334,7 +334,7 @@ namespace Rubybooru.Console.IqdbTagger
 
         private string GetImagePath(Image image)
         {
-            return Path.Combine(_imagesPath, image.Path, image.Name);
+            return Path.Combine(_imagesPath, image.GetSafePath(), image.Name);
         }
     }
 }

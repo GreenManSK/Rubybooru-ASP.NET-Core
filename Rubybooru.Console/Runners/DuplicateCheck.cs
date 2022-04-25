@@ -159,7 +159,7 @@ namespace Rubybooru.Console.Runners
 
         private string GetFullPath(Image image)
         {
-            return Path.Combine(_imagesPath, image.Path, image.Name);
+            return Path.Combine(_imagesPath, image.GetSafePath(), image.Name);
         }
 
         private string GetFullBwPath(Image image, bool rotated = false)

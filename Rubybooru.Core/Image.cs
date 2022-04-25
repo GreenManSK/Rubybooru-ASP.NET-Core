@@ -17,5 +17,10 @@ namespace Rubybooru.Core
         public DateTime? IqdbCheckDateTime { get; set; }
 
         public virtual List<ImageTag> Tags { get; set; } = new List<ImageTag>();
+
+        public string GetSafePath()
+        {
+            return Path.Replace('\\', '/');
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace Rubybooru.Helpers
 
         public string CreatePreview(Image image, int width, int height, bool keepAspectRatio)
         {
-            var imagePath = Path.Combine(image.Path, image.Name);
+            var imagePath = Path.Combine(image.GetSafePath(), image.Name);
             var imageFullPath = Path.Combine(_configuration.GetValue<string>("ImagesPath"), imagePath);
 
             var fileName = GenerateFileName(image, width, height, keepAspectRatio);

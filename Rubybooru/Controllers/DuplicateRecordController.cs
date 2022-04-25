@@ -133,7 +133,7 @@ namespace Rubybooru.Controllers
 
         private void DeleteFile(Image image)
         {
-            var imagePath = Path.Combine(image.Path, image.Name);
+            var imagePath = Path.Combine(image.GetSafePath(), image.Name);
             var imageFullPath = Path.Combine(_configuration.GetValue<string>("ImagesPath"), imagePath);
             try
             {
