@@ -4,7 +4,7 @@ export const environment = {
   production: true,
   restUrl: 'http://localhost:8080/api/',
 
-  imagesPerPage: 24,
+  imagesPerPage: 48,
   defaultPaginationSize: 7,
   displayTagCount: 20,
   cacheTimeInMins: 24 * 60,
