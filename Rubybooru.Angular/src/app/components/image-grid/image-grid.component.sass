@@ -14,14 +14,16 @@
       display: inline-block
 
     .img-link
-      display: inline-block
-      border: 3px solid $darken-light-pink
+      display: block
       img
+        display: inline-block
+        border: 3px solid $darken-light-pink
         max-width: 100%
         max-height: 180px
 
       &:hover
-        border-color: $light-pink
+        img
+          border-color: $light-pink
 
     .download-link
       font-size: 1.1rem

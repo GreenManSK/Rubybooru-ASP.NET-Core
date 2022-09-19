@@ -1,9 +1,11 @@
 <app-alerts></app-alerts>
 <div class="container-fluid">
-  <div class="side-panel">
+  <div class="side-panel side-panel-header">
     <h1 class="logo"><a title="Rubybooru" routerLink="/"><span>Rubybooru</span></a></h1>
     <app-menu></app-menu>
     <app-search-bar></app-search-bar>
+  </div>
+  <div class="side-panel side-panel-tags">
     <router-outlet name="sidebar"></router-outlet>
     <div class="buttons">
       <app-random-image-button></app-random-image-button><br>

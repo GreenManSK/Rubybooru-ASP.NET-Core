@@ -11,22 +11,23 @@ body
   background: $background-color
   color: $text-color
 
+.logo
+  margin: 10px auto 0
+  max-width: $logo-width
+  a
+    display: block
+    max-height: $logo-height
+    width: 100%
+    padding-top: 100% * ($logo-height / $logo-width)
+    background: url($logo-url)
+    background-size: cover
+    span
+      display: none
+
 .side-panel
   width: $menu-width
   float: left
-
-  .logo
-    margin: 10px auto 0
-    max-width: $logo-width
-    a
-      display: block
-      max-height: $logo-height
-      width: 100%
-      padding-top: 100% * ($logo-height / $logo-width)
-      background: url($logo-url)
-      background-size: cover
-      span
-        display: none
+  clear: both
 
   div.buttons
     text-align: center
@@ -37,7 +38,7 @@ body
 
 .content
   width: calc(100% - #{$menu-width})
-  float: right
+  margin-left: $menu-width
   padding: $content-padding
   position: relative
 
