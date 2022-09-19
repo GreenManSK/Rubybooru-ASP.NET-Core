@@ -5,7 +5,10 @@
     <app-menu></app-menu>
     <app-search-bar></app-search-bar>
     <router-outlet name="sidebar"></router-outlet>
-    <app-random-image-button></app-random-image-button>
+    <div class="buttons">
+      <app-random-image-button></app-random-image-button><br>
+      <app-refresh-catche-button></app-refresh-catche-button>
+    </div>
   </div>
   <div class="content">
     <router-outlet></router-outlet>

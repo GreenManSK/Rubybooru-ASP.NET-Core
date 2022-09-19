@@ -33,6 +33,7 @@ import { TagsPanelComponent } from './views/tags/tags-panel/tags-panel.component
 import { DuplicateTagFormComponent } from './components/duplicate-tag-form/duplicate-tag-form.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { RandomImageButtonComponent } from './components/random-image-button/random-image-button.component';
+import { RefreshCatcheButtonComponent } from './components/refresh-catche-button/refresh-catche-button.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { RandomImageButtonComponent } from './components/random-image-button/ran
     TagsPanelComponent,
     DuplicateTagFormComponent,
     LoadingComponent,
-    RandomImageButtonComponent
+    RandomImageButtonComponent,
+    RefreshCatcheButtonComponent
   ],
   imports: [
     BrowserModule,
