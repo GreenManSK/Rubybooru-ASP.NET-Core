@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Castle.Core.Internal;
 using Microsoft.Extensions.Configuration;
 using Rubybooru.Console.CopyrightAdder;
 using Rubybooru.Console.Options;
@@ -66,6 +65,10 @@ namespace Rubybooru.Console.IqdbTagger
 
         public int Run(IqdbTaggerOptions options)
         {
+            if (options.AddAuthors)
+            {
+                return RunForAuthors(options.MaxAge);
+            }
             return options.RecheckDeepbooru ? RunForDeepbooru(options.MaxAge) : RunForUntagged();
         }
 
@@ -92,10 +95,26 @@ namespace Rubybooru.Console.IqdbTagger
 
             var images = GetDeepbooruTaggedImages(_deepbooruTag, maxAge);
             _imageCount = images.Count();
-            
+
             var cancellationToken = new CancellationToken();
             StartConsoleLogger(LoggingPeriodInMs, cancellationToken);
-            
+
+            DownloadImageData(images, true).Wait(cancellationToken);
+
+            return 0;
+        }
+
+        private int RunForAuthors(int maxAge)
+        {
+            _iqdbTag = GetIqdbTag();
+            _tags = GetTags();
+
+            var images = GetImagesWithoutAuthor(maxAge);
+            _imageCount = images.Count();
+
+            var cancellationToken = new CancellationToken();
+            StartConsoleLogger(LoggingPeriodInMs, cancellationToken);
+
             DownloadImageData(images, true).Wait(cancellationToken);
 
             return 0;
@@ -174,6 +193,7 @@ namespace Rubybooru.Console.IqdbTagger
                     {
                         RemoveImageTags(image);
                     }
+
                     AddImageTags(result, image);
                     break;
                 }
@@ -186,9 +206,11 @@ namespace Rubybooru.Console.IqdbTagger
         {
             foreach (var tag in result.Tags)
             {
-                if (tag.Type == IqdbApi.Parsers.TagType.Character || tag.Type == IqdbApi.Parsers.TagType.Copyright)
+                if (tag.Type == IqdbApi.Parsers.TagType.Character || tag.Type == IqdbApi.Parsers.TagType.Copyright ||
+                    tag.Type == IqdbApi.Parsers.TagType.Artist)
                 {
-                    var type = tag.Type == IqdbApi.Parsers.TagType.Copyright ? TagType.Copyright : TagType.Character;
+                    var type = tag.Type == IqdbApi.Parsers.TagType.Copyright ? TagType.Copyright :
+                        tag.Type == IqdbApi.Parsers.TagType.Character ? TagType.Character : TagType.Author;
                     var name = tag.Value.ToLower().Replace(' ', '_');
                     if (!_tags[type].ContainsKey(name))
                     {
@@ -228,7 +250,10 @@ namespace Rubybooru.Console.IqdbTagger
             var tagsToRemove = new List<ImageTag>();
             foreach (var imageTag in image.Tags)
             {
-                if (imageTag.TagId == _deepbooruTag.Id || imageTag.Tag.Type == TagType.Copyright || imageTag.Tag.Type == TagType.Character)
+                if (imageTag.TagId == _deepbooruTag.Id ||
+                    imageTag.Tag.Type == TagType.Copyright ||
+                    imageTag.Tag.Type == TagType.Character ||
+                    imageTag.Tag.Type == TagType.Author)
                 {
                     tagsToRemove.Add(imageTag);
                 }
@@ -255,7 +280,8 @@ namespace Rubybooru.Console.IqdbTagger
             var result = new Dictionary<TagType, Dictionary<string, Tag>>
             {
                 {TagType.Copyright, GetDbTags(TagType.Copyright)},
-                {TagType.Character, GetDbTags(TagType.Character)}
+                {TagType.Character, GetDbTags(TagType.Character)},
+                {TagType.Author, GetDbTags(TagType.Author)}
             };
 
             return result;
@@ -323,9 +349,21 @@ namespace Rubybooru.Console.IqdbTagger
         private List<Image> GetDeepbooruTaggedImages(Tag deepbooruTag, int maxAge)
         {
             var validDate = DateTime.Now.AddDays(-1 * maxAge * 365);
-            
+
             var query = from i in _db.Images
                 where i.Tags.Any(t => t.TagId == deepbooruTag.Id)
+                      && i.AddedDateTime.CompareTo(validDate) >= 0
+                select i;
+
+            return query.ToList();
+        }
+
+        private List<Image> GetImagesWithoutAuthor(int maxAge)
+        {
+            var validDate = DateTime.Now.AddDays(-1 * maxAge * 365);
+
+            var query = from i in _db.Images
+                where i.Tags.All(t => t.Tag.Type != TagType.Author)
                       && i.AddedDateTime.CompareTo(validDate) >= 0
                 select i;
 

@@ -5,6 +5,7 @@ namespace Rubybooru.Core
         General,
         Character,
         System,
-        Copyright
+        Copyright,
+        Author
     }
 }

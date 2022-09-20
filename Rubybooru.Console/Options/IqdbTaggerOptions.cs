@@ -8,7 +8,10 @@ namespace Rubybooru.Console.Options
         [Option('r', "recheckDeepbooru", Required = false, HelpText = "Recheck images tagged by deepbooru to fix characters and copyrights tags")]
         public bool RecheckDeepbooru { get; set; } = false;
         
-        [Option('a', "age", Required = false, HelpText = "Maximum age of image to recheck in years")]
+        [Option('m', "age", Required = false, HelpText = "Maximum age of image to recheck in years")]
         public int MaxAge { get; set; } = 1;
+
+        [Option('a', "addAuthors", Required = false, HelpText = "Add author tags to images without author tag")]
+        public bool AddAuthors { get; set; } = false;
     }
 }
