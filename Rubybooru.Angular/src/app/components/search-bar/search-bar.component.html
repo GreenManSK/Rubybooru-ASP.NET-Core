@@ -6,6 +6,7 @@
       placeholder="kurosawa_ruby"
       [items]="tags"
       [defaultValue]="defaultValue"
+      (submitForm)="onSubmit()"
     ></app-input-whisperer>
     <div *ngIf="showConditions || sizeConditions.length > 0">
       <app-size-condition *ngFor="let condition of sizeConditions" [addIcon]="false" [condition]="condition" (buttonClick)="removeCondition($event)"></app-size-condition>

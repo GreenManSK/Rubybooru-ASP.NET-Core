@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Tag } from '../../entities/tag';
 import { WhispererTag } from './whisperer.tag';
@@ -19,6 +19,7 @@ export class InputWhispererComponent {
   @Input() name = '';
   @Input() placeholder = '';
   @Input() whisperLimit = environment.whispererTagLimit;
+  @Output() submitForm = new EventEmitter();
 
   public TagService = TagService;
   public whisperer = [];
@@ -80,6 +81,7 @@ export class InputWhispererComponent {
 
   public addIndexValue( event: Event ): boolean {
     if (this.activeIndex === -1) {
+      this.submitForm.emit();
       return true;
     }
     event.preventDefault();
