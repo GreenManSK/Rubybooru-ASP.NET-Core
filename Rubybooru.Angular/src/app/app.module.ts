@@ -34,6 +34,7 @@ import { DuplicateTagFormComponent } from './components/duplicate-tag-form/dupli
 import { LoadingComponent } from './components/loading/loading.component';
 import { RandomImageButtonComponent } from './components/random-image-button/random-image-button.component';
 import { RefreshCatcheButtonComponent } from './components/refresh-catche-button/refresh-catche-button.component';
+import { FocusModeButtonComponent } from './components/focus-mode-button/focus-mode-button.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { RefreshCatcheButtonComponent } from './components/refresh-catche-button
     DuplicateTagFormComponent,
     LoadingComponent,
     RandomImageButtonComponent,
-    RefreshCatcheButtonComponent
+    RefreshCatcheButtonComponent,
+    FocusModeButtonComponent
   ],
   imports: [
     BrowserModule,

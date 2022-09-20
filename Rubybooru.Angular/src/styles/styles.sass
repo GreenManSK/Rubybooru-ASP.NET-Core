@@ -3,6 +3,7 @@
 /* Importing Bootstrap SCSS file. */
 @import '../../node_modules/bootstrap/scss/bootstrap'
 @import 'variables'
+@import 'switches'
 
 html
   font-size: 62.5%
@@ -32,9 +33,10 @@ body
   div.buttons
     text-align: center
     padding-top: 1rem
+    font-size: 1.2rem
+    color: $light-pink
     a
       color: $light-pink
-      font-size: 1.2rem
 
 .content
   width: calc(100% - #{$menu-width})

@@ -4,6 +4,8 @@ import { ImageApiService } from '../../../services/image-api/image-api.service';
 import { Image } from '../../../entities/image';
 import { SidePanelDataService } from '../../../services/side-panel-data/side-panel-data.service';
 import { Title } from '@angular/platform-browser';
+import { FocusModeService } from '../../../services/focus-mode/focus-mode.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-image',
@@ -15,23 +17,29 @@ export class ImageComponent implements OnInit, OnDestroy {
   public image: Image;
   public isMini = true;
   public isFullscreen = false;
+  public isFocusMode = false;
+  private focusModeSubscription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     public imageApi: ImageApiService,
     private sidePanelData: SidePanelDataService,
-    private titleService: Title
+    private titleService: Title,
+    private focusModeService: FocusModeService
   ) {
   }
 
   ngOnInit(): void {
     this.getImage();
-    this.onResize(null);
-    this.route.params.subscribe(params => this.getImage());
+    this.onResize();
+    this.route.params.subscribe(() => this.getImage());
+    this.isFocusMode = this.focusModeService.getValue();
+    this.focusModeSubscription = this.focusModeService.subscribe(isOn => this.isFocusMode = isOn);
   }
 
   ngOnDestroy(): void {
     this.titleService.setTitle('Rubybooru');
+    this.focusModeSubscription?.unsubscribe();
   }
 
   public toggleMini(): void {
@@ -48,7 +56,7 @@ export class ImageComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('window:resize', ['$event'])
-  public onResize( $event: any ): void {
+  public onResize(): void {
     this.isFullscreen = screen.height === window.innerHeight;
   }
 }
