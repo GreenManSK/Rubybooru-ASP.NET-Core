@@ -55,7 +55,7 @@ export class ImageComponent implements OnInit, OnDestroy {
     });
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   public onResize(): void {
     this.isFullscreen = screen.height === window.innerHeight;
   }
