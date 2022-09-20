@@ -11,11 +11,12 @@ export const environment = {
   stateCacheLimit: 20,
 
   whispererTagLimit: 10,
-  whispererUsedTags: [TagType.Copyright, TagType.Character, TagType.General, TagType.System],
+  whispererUsedTags: [TagType.Copyright, TagType.Character, TagType.Author, TagType.General, TagType.System],
 
   tagTypeOrder: [
     TagType.Copyright,
     TagType.Character,
+    TagType.Author,
     TagType.General,
     TagType.System
   ]

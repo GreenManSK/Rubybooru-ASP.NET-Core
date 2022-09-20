@@ -107,6 +107,8 @@ export class TagService {
         return 'copyright';
       case TagType.System:
         return 'system';
+      case TagType.Author:
+        return 'author';
       default:
         return 'general';
     }
