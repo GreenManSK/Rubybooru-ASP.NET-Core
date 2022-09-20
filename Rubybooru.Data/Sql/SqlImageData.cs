@@ -10,10 +10,12 @@ namespace Rubybooru.Data.Sql
     public class SqlImageData : IImageData
     {
         private readonly RubybooruDbContext _db;
+        private readonly Random _random;
 
         public SqlImageData(RubybooruDbContext db)
         {
             _db = db;
+            _random = new Random();
         }
 
         public IEnumerable<Image> GetAll(int limit, int offset, int[] withTags = null,
@@ -165,6 +167,17 @@ namespace Rubybooru.Data.Sql
         {
             var image = _db.Images.FromSqlRaw("SELECT * FROM Images ORDER BY RAND() LIMIT 1").FirstOrDefault();
             return image?.Id ?? 0;
+        }
+
+        public int GetRandomFilteredId(int[] withTags = null, ISizeCondition[] sizeConditions = null)
+        {
+            var query = Filter(withTags, sizeConditions).Select(x => x.Id);
+            
+            var length = query.Count();
+            var pick = _random.Next(0, length - 1);
+
+            var imageId = query.Skip(pick).Take(1).FirstOrDefault();
+            return imageId;
         }
     }
 }

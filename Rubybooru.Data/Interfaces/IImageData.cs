@@ -36,6 +36,11 @@ namespace Rubybooru.Data.Interfaces
         Image GetByFullPath(string path, string name);
 
         int GetRandomId();
+        
+        int GetRandomFilteredId(
+            int[] withTags = null,
+            ISizeCondition[] sizeConditions = null
+        );
         void MergeTags(Image target, Image source);
         
         Image Add(Image image);

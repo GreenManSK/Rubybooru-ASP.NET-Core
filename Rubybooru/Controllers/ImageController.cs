@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using AutoMapper;
+using Castle.Core.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -46,6 +47,7 @@ namespace Rubybooru.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest, "Error while parsing size conditions");
             }
+
             try
             {
                 var images = _imageData.GetAll(limit, offset, withTags, parsedSizeConditions);
@@ -68,6 +70,7 @@ namespace Rubybooru.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest, "Error while parsing size conditions");
             }
+
             try
             {
                 return _imageData.CountImages(withTags, parsedSizeConditions);
@@ -95,11 +98,13 @@ namespace Rubybooru.Controllers
                 _logger.LogError(e, "Error while parsing size conditions {conditions}", conditions);
                 return null;
             }
+
             return parsedConditions.ToArray();
         }
-        
+
         [HttpGet("without-tag")]
-        public ActionResult<ImageDto[]> GetWithoutTagType([Range(1, 100)] int limit = 10, int offset = 0, TagType tagType = TagType.Copyright)
+        public ActionResult<ImageDto[]> GetWithoutTagType([Range(1, 100)] int limit = 10, int offset = 0,
+            TagType tagType = TagType.Copyright)
         {
             try
             {
@@ -109,7 +114,8 @@ namespace Rubybooru.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e,
-                    "Error while getting images without tagType={tagType} with limit={limit}, offset={offset}", tagType, limit, offset);
+                    "Error while getting images without tagType={tagType} with limit={limit}, offset={offset}", tagType,
+                    limit, offset);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
@@ -190,7 +196,9 @@ namespace Rubybooru.Controllers
                 {
                     return NotFound();
                 }
-                var redirectUrl = Path.Combine(StaticImagesPath, PathHelper.PrepareUrl(image.Path.Replace('\\','/')), Uri.EscapeUriString(image.Name));
+
+                var redirectUrl = Path.Combine(StaticImagesPath, PathHelper.PrepareUrl(image.Path.Replace('\\', '/')),
+                    Uri.EscapeUriString(image.Name));
                 return Redirect(redirectUrl);
             }
             catch (Exception e)
@@ -222,11 +230,23 @@ namespace Rubybooru.Controllers
         }
 
         [HttpGet("random")]
-        public ActionResult<int> GetRandom()
+        public ActionResult<int> GetRandom([FromQuery] int[] withTags = null,
+            [FromQuery] string[] sizeConditions = null)
         {
             try
             {
-                return _imageData.GetRandomId();
+                if (withTags.IsNullOrEmpty() && sizeConditions.IsNullOrEmpty())
+                {
+                    return _imageData.GetRandomId();
+                }
+                
+                var parsedSizeConditions = ParseSizeConditions(sizeConditions);
+                if (parsedSizeConditions == null)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, "Error while parsing size conditions");
+                }
+
+                return _imageData.GetRandomFilteredId(withTags, parsedSizeConditions);
             }
             catch (Exception e)
             {
