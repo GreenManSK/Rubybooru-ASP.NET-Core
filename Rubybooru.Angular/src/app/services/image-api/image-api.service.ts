@@ -167,6 +167,15 @@ export class ImageApiService extends RestApiService {
     );
   }
 
+  public randomFilteredId( tags: number[] = null, sizeConditions: SizeCondition[] = null ): Observable<number> {
+    const query = this.buildImageFilterQuery(null, null, tags, sizeConditions);
+    return this.http.get<number>({
+      url: this.getRandomIdUrl() + query
+    }).pipe(
+      catchError(this.handleError<number>('randomFilteredId()', 0))
+    );
+  }
+
   private getImageUrl( id: number = null ): string {
     return this.url + this.IMAGE_GET + (id !== null ? '/' + id : '');
   }

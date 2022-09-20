@@ -35,6 +35,7 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { RandomImageButtonComponent } from './components/random-image-button/random-image-button.component';
 import { RefreshCatcheButtonComponent } from './components/refresh-catche-button/refresh-catche-button.component';
 import { FocusModeButtonComponent } from './components/focus-mode-button/focus-mode-button.component';
+import { RandomFilteredImageButtonComponent } from './components/random-filtered-image-button/random-filtered-image-button.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { FocusModeButtonComponent } from './components/focus-mode-button/focus-m
     LoadingComponent,
     RandomImageButtonComponent,
     RefreshCatcheButtonComponent,
-    FocusModeButtonComponent
+    FocusModeButtonComponent,
+    RandomFilteredImageButtonComponent
   ],
   imports: [
     BrowserModule,
