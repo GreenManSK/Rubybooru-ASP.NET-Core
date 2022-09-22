@@ -69,6 +69,7 @@ namespace Rubybooru.Console.IqdbTagger
             {
                 return RunForAuthors(options.MaxAge);
             }
+
             return options.RecheckDeepbooru ? RunForDeepbooru(options.MaxAge) : RunForUntagged();
         }
 
@@ -107,6 +108,7 @@ namespace Rubybooru.Console.IqdbTagger
         private int RunForAuthors(int maxAge)
         {
             _iqdbTag = GetIqdbTag();
+            _deepbooruTag = GetDeepbooruTag();
             _tags = GetTags();
 
             var images = GetImagesWithoutAuthor(maxAge);
