@@ -20,10 +20,13 @@ namespace Rubybooru.Data.Interfaces
         IEnumerable<Image> GetWithoutTagType(
             int limit,
             int offset,
-            TagType tagType
+            TagType tagType,
+            int? year = null
         );
 
         int CountWithoutTagType(TagType tagType);
+
+        IEnumerable<int> GetYearsWithoutTagType(TagType tagType);
 
         IEnumerable<Image> GetWithoutDuplicateCheck(int limit, int offset);
 

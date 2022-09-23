@@ -104,18 +104,18 @@ namespace Rubybooru.Controllers
 
         [HttpGet("without-tag")]
         public ActionResult<ImageDto[]> GetWithoutTagType([Range(1, 100)] int limit = 10, int offset = 0,
-            TagType tagType = TagType.Copyright)
+            TagType tagType = TagType.Copyright, int? year = null)
         {
             try
             {
-                var images = _imageData.GetWithoutTagType(limit, offset, tagType);
+                var images = _imageData.GetWithoutTagType(limit, offset, tagType, year);
                 return _mapper.Map<ImageDto[]>(images);
             }
             catch (Exception e)
             {
                 _logger.LogError(e,
-                    "Error while getting images without tagType={tagType} with limit={limit}, offset={offset}", tagType,
-                    limit, offset);
+                    "Error while getting images without tagType={tagType} with limit={limit}, offset={offset}, year={year}", tagType,
+                    limit, offset, year);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
@@ -131,6 +131,21 @@ namespace Rubybooru.Controllers
             {
                 _logger.LogError(e,
                     "Error while getting count of images without tagType={tagType}", tagType);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        [HttpGet("without-tag/years")]
+        public ActionResult<int[]> GetYearsWithoutTagType(TagType tagType = TagType.Copyright)
+        {
+            try
+            {
+                return _imageData.GetYearsWithoutTagType(tagType).ToArray();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    "Error while getting years of images without tagType={tagType}", tagType);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }

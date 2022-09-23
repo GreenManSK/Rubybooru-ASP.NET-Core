@@ -55,9 +55,13 @@ namespace Rubybooru.Data.Sql
             return query;
         }
 
-        public IEnumerable<Image> GetWithoutTagType(int limit, int offset, TagType tagType)
+        public IEnumerable<Image> GetWithoutTagType(int limit, int offset, TagType tagType, int? year = null)
         {
             var query = QueryWithoutTagType(tagType);
+            if (year != null)
+            {
+                query = query.Where(i => i.AddedDateTime.Year == year);
+            }
             return query.OrderBy(i => i.AddedDateTime).Skip(offset).Take(limit);
         }
 
@@ -65,6 +69,12 @@ namespace Rubybooru.Data.Sql
         {
             var query = QueryWithoutTagType(tagType);
             return query.Count();
+        }
+
+        public IEnumerable<int> GetYearsWithoutTagType(TagType tagType)
+        {
+            var query = QueryWithoutTagType(tagType);
+            return query.Select(i => i.AddedDateTime.Year).Distinct().OrderBy(i => i);
         }
 
         private IQueryable<Image> QueryWithoutTagType(TagType tagType)
