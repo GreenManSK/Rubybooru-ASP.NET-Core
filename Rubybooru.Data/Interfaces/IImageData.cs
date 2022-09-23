@@ -24,7 +24,7 @@ namespace Rubybooru.Data.Interfaces
             int? year = null
         );
 
-        int CountWithoutTagType(TagType tagType);
+        int CountWithoutTagType(TagType tagType, int? year = null);
 
         IEnumerable<int> GetYearsWithoutTagType(TagType tagType);
 

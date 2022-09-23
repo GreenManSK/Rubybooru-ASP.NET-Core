@@ -121,16 +121,16 @@ namespace Rubybooru.Controllers
         }
 
         [HttpGet("without-tag/count")]
-        public ActionResult<int> CountWithoutTagType(TagType tagType = TagType.Copyright)
+        public ActionResult<int> CountWithoutTagType(TagType tagType = TagType.Copyright, int? year = null)
         {
             try
             {
-                return _imageData.CountWithoutTagType(tagType);
+                return _imageData.CountWithoutTagType(tagType, year);
             }
             catch (Exception e)
             {
                 _logger.LogError(e,
-                    "Error while getting count of images without tagType={tagType}", tagType);
+                    "Error while getting count of images without tagType={tagType}, year={year}", tagType, year);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }

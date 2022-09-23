@@ -58,16 +58,12 @@ namespace Rubybooru.Data.Sql
         public IEnumerable<Image> GetWithoutTagType(int limit, int offset, TagType tagType, int? year = null)
         {
             var query = QueryWithoutTagType(tagType);
-            if (year != null)
-            {
-                query = query.Where(i => i.AddedDateTime.Year == year);
-            }
             return query.OrderBy(i => i.AddedDateTime).Skip(offset).Take(limit);
         }
 
-        public int CountWithoutTagType(TagType tagType)
+        public int CountWithoutTagType(TagType tagType, int? year = null)
         {
-            var query = QueryWithoutTagType(tagType);
+            var query = QueryWithoutTagType(tagType, year);
             return query.Count();
         }
 
@@ -77,11 +73,15 @@ namespace Rubybooru.Data.Sql
             return query.Select(i => i.AddedDateTime.Year).Distinct().OrderBy(i => i);
         }
 
-        private IQueryable<Image> QueryWithoutTagType(TagType tagType)
+        private IQueryable<Image> QueryWithoutTagType(TagType tagType, int? year = null)
         {
             var query = from i in _db.Images
                 where i.Tags.All(t => t.Tag.Type != tagType)
                 select i;
+            if (year != null)
+            {
+                query = query.Where(i => i.AddedDateTime.Year == year);
+            }
             return query;
         }
 
