@@ -117,19 +117,21 @@ namespace Rubybooru.Console.IqdbTagger
             var cancellationToken = new CancellationToken();
             StartConsoleLogger(LoggingPeriodInMs, cancellationToken);
 
-            DownloadImageData(images, true).Wait(cancellationToken);
+            DownloadImageData(images, true, true).Wait(cancellationToken);
 
             return 0;
         }
 
-        private async Task DownloadImageData(List<Image> images, bool retag = false)
+        private async Task DownloadImageData(List<Image> images, bool retag = false, bool addAuthor = false)
         {
             using var iqdbApi = new IqdbApi.Api.IqdbApi();
             var delay = _configuration.GetValue<int>("IqdbRequestDelayInMs");
             var now = DateTime.Now;
             foreach (var image in images)
             {
-                if (image.Tags.Any(t => t.Tag == _iqdbTag))
+                var hasDataFromIqdb = image.Tags.Any(t => t.Tag == _iqdbTag);
+                var shouldSkip = addAuthor ? (!hasDataFromIqdb || image.Tags.Any(t => t.Tag.Type == TagType.Author)) : hasDataFromIqdb;
+                if (shouldSkip)
                 {
                     Interlocked.Increment(ref _finishedCount);
                     continue;
