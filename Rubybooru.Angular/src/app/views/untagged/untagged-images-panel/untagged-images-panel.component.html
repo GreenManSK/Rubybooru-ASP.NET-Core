@@ -1,3 +1,8 @@
 <div>
-  You have <strong>{{count}}</strong> images remaining!
+  You have <strong>{{count}}</strong> images remaining!<br>
+  Select year:
+  <select [(ngModel)]="selectedYear" (change)="onYearChange()">
+    <option [value]="undefined">All</option>
+    <option *ngFor="let year of years" [value]="year">{{year}}</option>
+  </select>
 </div>

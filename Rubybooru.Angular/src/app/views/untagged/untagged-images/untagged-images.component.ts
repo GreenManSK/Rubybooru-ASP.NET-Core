@@ -16,6 +16,7 @@ export class UntaggedImagesComponent implements OnInit {
 
   public images: Image[];
   public page: number;
+  public year: number;
   public maxPage: number;
   public loading = false;
 
@@ -33,24 +34,35 @@ export class UntaggedImagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.imageApi.getWithoutTagTypeCount(TagType.Copyright).subscribe(count => {
-      this.maxPage = Math.ceil(count / environment.imagesPerPage);
-      this.sidePanelData.send(count);
-    });
+    this.updateMaxPageData();
   }
 
   private onParamChange() {
     const oldPage = this.page;
     this.page = this.urlParser.getPage();
 
-    if (this.page !== oldPage) {
+    const oldYear = this.year;
+    this.year = this.urlParser.getYear();
+
+    if (this.year !== oldYear) {
+      this.updateMaxPageData();
+    }
+
+    if (this.page !== oldPage || this.year !== oldYear) {
       this.loading = true;
-      this.imageApi.getWithoutTagType(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1), TagType.Copyright)
+      this.imageApi.getWithoutTagType(environment.imagesPerPage, environment.imagesPerPage * (this.page - 1), TagType.Copyright, this.year)
         .subscribe(images => {
           this.images = images;
           this.loading = false;
         });
     }
+  }
+
+  updateMaxPageData() {
+    this.imageApi.getWithoutTagTypeCount(TagType.Copyright, this.urlParser.getYear()).subscribe(count => {
+      this.maxPage = Math.ceil(count / environment.imagesPerPage);
+      this.sidePanelData.send(count);
+    });
   }
 
   pageChange( page: number ) {

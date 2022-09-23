@@ -10,6 +10,7 @@ export class UrlParserService {
 
   private static PAGE = 'page';
   private static TAGS = 'tags';
+  private static YEAR = 'year';
   private static SIZE_CONDITIONS = 'sizeConditions';
 
   constructor( private router: Router, private route: ActivatedRoute ) {
@@ -21,6 +22,14 @@ export class UrlParserService {
       return 1;
     }
     return page;
+  }
+
+  getYear(): number | undefined {
+    const year = +this.route.snapshot.queryParams[UrlParserService.YEAR];
+    if (!year) {
+      return undefined;
+    }
+    return year;
   }
 
   getTags(): number[] {

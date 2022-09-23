@@ -21,7 +21,13 @@ export class ImageApiService extends RestApiService {
     super(http, alertService);
   }
 
-  public getImages( limit: number, offset: number = 0, tags: number[] = null, sizeConditions: SizeCondition[] = null ): Observable<Image[]> {
+  public getImages(
+    limit: number,
+    offset: number = 0,
+    tags: number[] = null,
+    sizeConditions:
+      SizeCondition[] = null
+  ): Observable<Image[]> {
     const query = this.buildImageFilterQuery(limit, offset, tags, sizeConditions);
     return this.http.get<Image[]>({
       url: this.getImageUrl() + query
@@ -64,8 +70,8 @@ export class ImageApiService extends RestApiService {
     return query;
   }
 
-  public getWithoutTagType( limit: number, offset: number, tagType: TagType ): Observable<Image[]> {
-    const query = this.buildWithoutTagFilterQuery(limit, offset, tagType);
+  public getWithoutTagType( limit: number, offset: number, tagType: TagType, year?: number ): Observable<Image[]> {
+    const query = this.buildWithoutTagFilterQuery(limit, offset, tagType, year);
     return this.http.get<Image[]>({
       url: this.getWithoutTagTypeUrl() + query
     })
@@ -74,8 +80,8 @@ export class ImageApiService extends RestApiService {
       );
   }
 
-  public getWithoutTagTypeCount( tagType: TagType ): Observable<number> {
-    const query = this.buildWithoutTagFilterQuery(null, null, tagType);
+  public getWithoutTagTypeCount( tagType: TagType, year?: number ): Observable<number> {
+    const query = this.buildWithoutTagFilterQuery(null, null, tagType, year);
     return this.http.get<number>({
       url: this.getWithoutTagTypeCountUrl() + query
     })
@@ -84,7 +90,16 @@ export class ImageApiService extends RestApiService {
       );
   }
 
-  private buildWithoutTagFilterQuery( limit: number, offset: number, tagType: TagType ): string {
+  public getWithoutTagTypeYears( tagType: TagType ): Observable<number[]> {
+    return this.http.get<number[]>({
+      url: this.getWithoutTagTypeYearsUrl()
+    })
+      .pipe(
+        catchError(this.handleError(`getWithoutTagTypeYears(${tagType})`, []))
+      );
+  }
+
+  private buildWithoutTagFilterQuery( limit: number, offset: number, tagType: TagType, year?: number ): string {
     let query = '?';
 
     if (limit !== null) {
@@ -93,6 +108,10 @@ export class ImageApiService extends RestApiService {
 
     if (offset !== null) {
       query += 'offset=' + offset + '&';
+    }
+
+    if (year) {
+      query += 'year=' + year + '&';
     }
 
     if (tagType != null) {
@@ -204,6 +223,10 @@ export class ImageApiService extends RestApiService {
 
   private getWithoutTagTypeCountUrl(): string {
     return this.getWithoutTagTypeUrl() + '/count';
+  }
+
+  private getWithoutTagTypeYearsUrl(): string {
+    return this.getWithoutTagTypeUrl() + '/years';
   }
 
   private getRandomIdUrl() {
