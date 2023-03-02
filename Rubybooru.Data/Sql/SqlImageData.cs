@@ -23,7 +23,11 @@ namespace Rubybooru.Data.Sql
         {
             var query = Filter(withTags, sizeConditions);
 
-            return query.OrderByDescending(i => i.AddedDateTime).Skip(offset).Take(limit);
+            return query
+                .OrderByDescending(i => i.AddedDateTime)
+                .ThenByDescending(i => i.Id)
+                .Skip(offset)
+                .Take(limit);
         }
 
         public int CountImages(int[] withTags = null, ISizeCondition[] sizeConditions = null)
@@ -58,7 +62,11 @@ namespace Rubybooru.Data.Sql
         public IEnumerable<Image> GetWithoutTagType(int limit, int offset, TagType tagType, int? year = null)
         {
             var query = QueryWithoutTagType(tagType, year);
-            return query.OrderBy(i => i.AddedDateTime).Skip(offset).Take(limit);
+            return query
+                .OrderBy(i => i.AddedDateTime)
+                .ThenByDescending(i => i.Id)
+                .Skip(offset)
+                .Take(limit);
         }
 
         public int CountWithoutTagType(TagType tagType, int? year = null)
