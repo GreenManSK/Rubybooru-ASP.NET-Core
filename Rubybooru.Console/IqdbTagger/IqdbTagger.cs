@@ -30,7 +30,8 @@ namespace Rubybooru.Console.IqdbTagger
         {
             ServiceType.Gelbooru,
             ServiceType.Konachan,
-            ServiceType.YandeRe
+            ServiceType.YandeRe,
+            ServiceType.Danbooru
         }, false);
 
         private readonly RubybooruDbContext _db;
