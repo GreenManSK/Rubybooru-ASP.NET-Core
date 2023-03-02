@@ -28,10 +28,9 @@ namespace Rubybooru.Console.IqdbTagger
 
         private static readonly IqdbApi.Api.Options Options = new IqdbApi.Api.Options(new HashSet<ServiceType>()
         {
-            ServiceType.Danbooru,
+            ServiceType.Gelbooru,
             ServiceType.Konachan,
-            ServiceType.YandeRe,
-            ServiceType.Gelbooru
+            ServiceType.YandeRe
         }, false);
 
         private readonly RubybooruDbContext _db;

@@ -56,6 +56,20 @@ namespace Rubybooru.IqdbApi.Api.Parser
                 var type = ServiceType.GetTypeByUrl(url);
 
                 result.Add(new Match(similarity, width, height, type, url));
+
+                var relativeServices = rows.ElementAt(ServiceRow).Descendants("a");
+                if (relativeServices.Any())
+                {
+                    foreach (var relativeService in relativeServices)
+                    {
+                        var relativeUrl = new Uri(baseUrl, relativeService.GetAttributeValue("href", ""));
+                        var relativeType = ServiceType.GetTypeByUrl(relativeUrl);
+                        if (relativeType != type)
+                        {
+                            result.Add(new Match(similarity, width, height, relativeType, relativeUrl));
+                        }
+                    }
+                }
             }
 
             result.Sort();
