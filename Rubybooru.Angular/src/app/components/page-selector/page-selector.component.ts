@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { faAngleDoubleLeft, faAngleDoubleRight, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faRandom, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-page-selector',
@@ -16,6 +16,7 @@ export class PageSelectorComponent implements OnInit {
 
   public leftIcon = faAngleLeft;
   public rightIcon = faAngleRight;
+  public randomIcon = faRandom;
 
   constructor() {
   }
@@ -27,6 +28,14 @@ export class PageSelectorComponent implements OnInit {
     this.actualPage = page;
     this.pageChange.emit(page);
     return false;
+  }
+
+  public changeToRandomPage() {
+    const page = Math.floor(Math.random() * (this.maxPage - 1) + 1);
+    if (page === this.actualPage) {
+      return this.changeToRandomPage();
+    }
+    return this.changePage(page);
   }
 
   pageArray(): any[] {
