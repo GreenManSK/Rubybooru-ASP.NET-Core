@@ -107,6 +107,10 @@ export class ImageSearchComponent implements OnInit {
 
   public pageChange( page: number ) {
     this.urlParser.navigatePage(page);
+    const element = document.querySelector('app-image-grid');
+    if (element != null) {
+      element.scrollIntoView();
+    }
   }
 
   private filterChanged(): boolean {
