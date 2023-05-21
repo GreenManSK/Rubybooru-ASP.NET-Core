@@ -1,14 +1,14 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import { useConfigContext } from "./providers/config-provider";
 
 function App() {
+  const { isProduction } = useConfigContext();
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          You are running {isProduction ? "production" : "development"} build.
         </p>
         <a
           className="App-link"
