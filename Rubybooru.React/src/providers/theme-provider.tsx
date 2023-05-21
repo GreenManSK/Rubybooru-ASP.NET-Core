@@ -21,9 +21,15 @@ export const themeOptions: ThemeOptions = {
       disabled: "rgba(254,114,139,0.5)",
     },
   },
+  typography: {
+    htmlFontSize: 10,
+  },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        html: {
+          fontSize: "62.5%",
+        },
         body: {
           backgroundColor: "background.default",
         },
