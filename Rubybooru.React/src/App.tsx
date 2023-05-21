@@ -1,8 +1,8 @@
 import React from "react";
-import "./App.css";
 import { useConfigContext } from "./providers/config-provider";
 import { useHttpClient } from "./providers/http-client-provider";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button, Box, Link } from "@mui/material";
 
 function App() {
   const { isProduction, restUrl } = useConfigContext();
@@ -15,28 +15,30 @@ function App() {
   });
 
   return (
-    <div className="App">
+    <Box component="main">
       <header className="App-header">
         <p>
           You are running {isProduction ? "production" : "development"} build.
           <br />
           Your api url is {restUrl}.{" "}
-          <button onClick={() => queryClient.resetQueries(["images"])}>
+          <Button
+            variant="contained"
+            onClick={() => queryClient.resetQueries(["images"])}
+          >
             Delete images cache
-          </button>
+          </Button>
           <br />
           Data: {JSON.stringify(data)}
         </p>
-        <a
-          className="App-link"
+        <Link
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
           Learn React
-        </a>
+        </Link>
       </header>
-    </div>
+    </Box>
   );
 }
 
