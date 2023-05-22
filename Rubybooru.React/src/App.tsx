@@ -10,6 +10,7 @@ import { Logo } from "./components/side/logo";
 import { Navigation } from "./components/side/navigation";
 import { Loader } from "./components/utils/loader";
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 
 const ImageList = React.lazy(
   () => import("./components/image-list/image-list")
@@ -25,7 +26,10 @@ function App() {
       <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>Tags</Box>
       <Box sx={contentStyles} component="main">
         <React.Suspense fallback={<Loader />}>
-          <ImageList />
+          <Routes>
+            <Route path="/:page" element={<ImageList />} />
+            <Route path="/" element={<ImageList />} />
+          </Routes>
         </React.Suspense>
       </Box>
     </Box>
