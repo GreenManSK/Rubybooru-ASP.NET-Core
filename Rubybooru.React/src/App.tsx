@@ -15,8 +15,17 @@ import { Routes, Route } from "react-router-dom";
 const ImageList = React.lazy(
   () => import("./components/image-list/image-list")
 );
+const SearchTagList = React.lazy(
+  () => import("./components/tag-list/search-tag-list")
+);
 
-const TagList = React.lazy(() => import("./components/tag-list/tag-list"));
+const Image = React.lazy(
+  () => import(/* webpackPrefetch: true */ "./components/image/image")
+);
+const ImageTagList = React.lazy(
+  () =>
+    import(/* webpackPrefetch: true */ "./components/tag-list/image-tag-list")
+);
 
 function App() {
   return (
@@ -28,14 +37,16 @@ function App() {
       <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>
         <React.Suspense fallback={<Loader />}>
           <Routes>
-            <Route path="/:page" element={<TagList />} />
-            <Route path="/" element={<TagList />} />
+            <Route path="image/:id" element={<ImageTagList />} />
+            <Route path="/:page" element={<SearchTagList />} />
+            <Route path="/" element={<SearchTagList />} />
           </Routes>
         </React.Suspense>
       </Box>
       <Box sx={contentStyles} component="main">
         <React.Suspense fallback={<Loader />}>
           <Routes>
+            <Route path="image/:id" element={<Image />} />
             <Route path="/:page" element={<ImageList />} />
             <Route path="/" element={<ImageList />} />
           </Routes>

@@ -16,7 +16,7 @@ export const themeOptions: ThemeOptions = {
       main: "#973363",
     },
     text: {
-      primary: "#fe728b",
+      primary: "#bebebe",
       secondary: "rgba(254,114,139,0.7)",
       disabled: "rgba(254,114,139,0.5)",
     },

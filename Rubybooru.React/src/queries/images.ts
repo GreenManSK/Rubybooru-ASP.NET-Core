@@ -3,6 +3,7 @@ import { useHttpClient } from "../providers/http-client-provider";
 import { IImage } from "../entities/image";
 import React from "react";
 import { useConfigContext } from "../providers/config-provider";
+import { get } from "http";
 
 type ImagesOptions = {
   imagesPerPage: number;
@@ -47,7 +48,13 @@ export const useImagesCount = (options: ImagesOptions) => {
   });
 };
 
-export const useImage = (id: number) => {};
+export const useImage = (id: number) => {
+  const client = useHttpClient();
+  return useQuery({
+    queryKey: [ImageQueryKeys.image, id],
+    queryFn: () => client.get<IImage>(getImageUrl(id)),
+  });
+};
 
 export const useGetImagePreviewUrl = (
   id: number,
@@ -59,6 +66,11 @@ export const useGetImagePreviewUrl = (
   return `${restUrl}${getImageUrl(
     id
   )}/preview?width=${width}&height=${height}&keepAspectRatio=${keepAspectRatio}`;
+};
+
+export const useGetImageFileUrl = (id: number) => {
+  const { restUrl } = useConfigContext();
+  return `${restUrl}${getImageUrl(id)}/file`;
 };
 
 export const getImageUrl = (id?: number) => `/image/${id ?? ""}`;

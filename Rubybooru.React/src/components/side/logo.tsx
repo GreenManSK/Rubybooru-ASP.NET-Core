@@ -1,6 +1,8 @@
 import logoImg from "../../assets/logo.png";
-import { Typography, Link } from "@mui/material";
+import { Typography } from "@mui/material";
 import { hiddenStyle, mobileMediaQuery } from "../../styles.constants";
+import { Link as RouterLink } from "react-router-dom";
+import styled from "@emotion/styled";
 
 const width = 426;
 const height = 167;
@@ -22,10 +24,12 @@ const linkStyles = {
   backgroundSize: "cover",
 };
 
+const Link = styled(RouterLink)(linkStyles);
+
 // TODO: Switch for navigation link
 export const Logo = () => (
   <Typography variant="h1" sx={typographyStyles}>
-    <Link sx={linkStyles}>
+    <Link to="/">
       <Typography sx={hiddenStyle}>Rubybooru</Typography>
     </Link>
   </Typography>
