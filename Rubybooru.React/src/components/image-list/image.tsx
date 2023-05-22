@@ -3,7 +3,11 @@ import { IImage } from "../../entities/image";
 import styled from "@emotion/styled";
 import React from "react";
 import { hiddenStyle } from "../../styles.constants";
-import { useGetImagePreviewUrl } from "../../queries/images";
+import {
+  useGetImageFileUrl,
+  useGetImagePreviewUrl,
+} from "../../queries/images";
+import { Link as RouterLink, LinkProps } from "react-router-dom";
 
 export interface IImageProps {
   image: IImage;
@@ -11,8 +15,6 @@ export interface IImageProps {
 
 const previewWidth = 350;
 const previewHeight = 180;
-
-// TODO: Navigation link
 
 const imgLinkStyle = (theme: Theme) => ({
   display: "block",
@@ -42,21 +44,29 @@ const Img = styled("img")({
   maxHeight: previewHeight,
 });
 
+const StyledRouterLink = styled(RouterLink)(
+  (props: LinkProps & { isImgLoaded: boolean }) => ({
+    ...imgLinkStyle,
+    ...(!props.isImgLoaded ? hiddenStyle : {}),
+  })
+);
+
 export const Image = ({ image }: IImageProps) => {
   const [isImgLoaded, setIsImgLoaded] = React.useState(false);
-  const { id, name, path, width, height } = image;
+  const { id, name, width, height } = image;
 
   const previewUrl = useGetImagePreviewUrl(id, previewWidth, previewHeight);
+  const fileUrl = useGetImageFileUrl(id);
 
   return (
     <>
       {!isImgLoaded && (
         <Skeleton variant="rectangular" height={previewHeight} />
       )}
-      <Link href="#img" sx={[imgLinkStyle, !isImgLoaded ? hiddenStyle : {}]}>
+      <StyledRouterLink to={`/image/${id}`} isImgLoaded={isImgLoaded}>
         <Img alt={name} src={previewUrl} onLoad={() => setIsImgLoaded(true)} />
-      </Link>
-      <Link href={path} target="_blank" sx={downloadLinkStyle}>
+      </StyledRouterLink>
+      <Link href={fileUrl} target="_blank" sx={downloadLinkStyle}>
         {width ?? "__"}x{height ?? "__"}
       </Link>
     </>

@@ -1,7 +1,7 @@
 import { mobileMediaQuery } from "./styles.constants";
 
 const menuWidth = "330px";
-const contentPadding = "2rem";
+export const contentPadding = "2rem";
 
 export const containerStyles = {
   padding: "0 1rem",

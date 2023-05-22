@@ -43,8 +43,8 @@ const ImageList = () => {
     <Stack spacing={2}>
       <Grid id={containerId} container spacing={2}>
         {images
-          ? images.map((image, key) => (
-              <ImageItem key={key}>
+          ? images.map((image) => (
+              <ImageItem key={image.id}>
                 <Image image={image} />
               </ImageItem>
             ))

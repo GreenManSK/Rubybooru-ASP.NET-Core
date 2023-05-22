@@ -12,7 +12,7 @@ export interface ITagProps {
 const boxStyles = {
   padding: 0,
   margin: 0,
-  lineHeight: 1,
+  lineHeight: 1.2,
 };
 
 const textStyles = {
@@ -31,18 +31,21 @@ const iconStyles = {
   },
 };
 
-const numberStyles = {
-  color: "#bebebe",
-};
+const numberStyles = (theme: Theme) => ({
+  color: theme.palette.text.primary,
+});
 
 export const Tag = ({ tag }: ITagProps) => (
   <Box component="li" sx={boxStyles}>
     <Link href="#tag" sx={[textStyles, tagTextStyles[tag.type]]}>
       <LabelIcon sx={iconStyles} />
-      {tag.name}{" "}
-      <Typography component="span" sx={[textStyles, numberStyles]}>
-        ({tag.count})
-      </Typography>
+      {tag.name}
+      {tag.count ? (
+        <Typography component="span" sx={[textStyles, numberStyles]}>
+          {" "}
+          ({tag.count})
+        </Typography>
+      ) : null}
     </Link>
   </Box>
 );
