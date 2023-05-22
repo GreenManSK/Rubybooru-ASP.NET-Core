@@ -61,7 +61,7 @@ export const useGetImagePreviewUrl = (
   )}/preview?width=${width}&height=${height}&keepAspectRatio=${keepAspectRatio}`;
 };
 
-const getImageUrl = (id?: number) => `/image/${id ?? ""}`;
+export const getImageUrl = (id?: number) => `/image/${id ?? ""}`;
 
 const buildImagesQuery = (options: ImagesOptions) => {
   const queries: string[] = [];

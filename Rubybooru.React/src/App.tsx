@@ -16,6 +16,8 @@ const ImageList = React.lazy(
   () => import("./components/image-list/image-list")
 );
 
+const TagList = React.lazy(() => import("./components/tag-list/tag-list"));
+
 function App() {
   return (
     <Box sx={containerStyles}>
@@ -23,7 +25,14 @@ function App() {
         <Logo />
         <Navigation />
       </Box>
-      <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>Tags</Box>
+      <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>
+        <React.Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path="/:page" element={<TagList />} />
+            <Route path="/" element={<TagList />} />
+          </Routes>
+        </React.Suspense>
+      </Box>
       <Box sx={contentStyles} component="main">
         <React.Suspense fallback={<Loader />}>
           <Routes>
