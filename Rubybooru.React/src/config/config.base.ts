@@ -1,3 +1,3 @@
-export const configBase: Partial<IConfig> = {
+export const configBase = {
   imagesPerPage: 48,
 };
