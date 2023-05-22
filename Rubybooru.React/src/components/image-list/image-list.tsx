@@ -24,7 +24,7 @@ const ImageItem: React.FC<PropsWithChildren> = ({ children }) => (
 const ImageList = () => {
   const navigate = useNavigate();
   const { page: pageParam = "1" } = useParams();
-  const [page, setPage] = React.useState(parseInt(pageParam));
+  const page = parseInt(pageParam);
   const { imagesPerPage } = useConfigContext();
   const containerId = "images-container";
 
@@ -36,7 +36,6 @@ const ImageList = () => {
 
   const navigateToPage = (page: number) => {
     navigate(`/${page}`);
-    setPage(page);
     document.getElementById(containerId)?.scrollIntoView();
   };
 
