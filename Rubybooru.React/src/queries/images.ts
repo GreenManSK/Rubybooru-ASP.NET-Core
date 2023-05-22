@@ -6,22 +6,22 @@ import { useConfigContext } from "../providers/config-provider";
 
 type ImagesOptions = {
   imagesPerPage: number;
-  page?: number;
+  page: number;
 };
 
 export const ImageQueryKeys = {
   images: "images",
   image: "image",
+  count: "count",
 };
 
 export const useImages = (options: ImagesOptions) => {
-  const { imagesPerPage, page = 1 } = options;
   const client = useHttpClient();
   const queryClient = useQueryClient();
   const url = `${getImageUrl()}${buildImagesQuery(options)}`;
 
   const result = useQuery({
-    queryKey: [ImageQueryKeys.images, imagesPerPage, page],
+    queryKey: [ImageQueryKeys.images, ...imagesOptionsToKey(options)],
     queryFn: () => client.get<IImage[]>(url),
   });
 
@@ -34,6 +34,17 @@ export const useImages = (options: ImagesOptions) => {
   }, [isSuccess, data, queryClient]);
 
   return result;
+};
+
+export const useImagesCount = (options: ImagesOptions) => {
+  const client = useHttpClient();
+  options = { ...options };
+  options.page = 0;
+  const url = `${getImageUrl()}count/${buildImagesQuery(options)}`;
+  return useQuery({
+    queryKey: [ImageQueryKeys.count, ...imagesOptionsToKey(options)],
+    queryFn: () => client.get<number>(url),
+  });
 };
 
 export const useImage = (id: number) => {};
@@ -65,3 +76,8 @@ const buildImagesQuery = (options: ImagesOptions) => {
 
   return `?${queries.join("&")}`;
 };
+
+const imagesOptionsToKey = (options: ImagesOptions) => [
+  options.imagesPerPage,
+  options.page,
+];

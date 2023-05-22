@@ -1,8 +1,11 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { useConfigContext } from "../../providers/config-provider";
 import { Image, ImageSkeleton } from "./image";
-import { useImages } from "../../queries/images";
+import { useImages, useImagesCount } from "../../queries/images";
 import { PropsWithChildren } from "react";
+import { Stack } from "@mui/material";
+import React from "react";
+import { Pagination } from "./pagination";
 
 // TODO: Responsive
 
@@ -20,23 +23,32 @@ const ImageItem: React.FC<PropsWithChildren> = ({ children }) => (
 );
 
 const ImageList = () => {
+  const [page, setPage] = React.useState(1);
   const { imagesPerPage } = useConfigContext();
-  const { data: images } = useImages({ imagesPerPage });
+
+  const options = { imagesPerPage, page };
+
+  const { data: images } = useImages(options);
+  const { data: imageCount = 1 } = useImagesCount(options);
+  const pageCount = Math.ceil(imageCount / imagesPerPage);
 
   return (
-    <Grid container spacing={2}>
-      {images
-        ? images.map((image) => (
-            <ImageItem key={image.id}>
-              <Image image={image} />
-            </ImageItem>
-          ))
-        : [...new Array(imagesPerPage)].map((_, i) => (
-            <ImageItem key={i}>
-              <ImageSkeleton />
-            </ImageItem>
-          ))}
-    </Grid>
+    <Stack spacing={2}>
+      <Grid container spacing={2}>
+        {images
+          ? images.map((image) => (
+              <ImageItem key={image.id}>
+                <Image image={image} />
+              </ImageItem>
+            ))
+          : [...new Array(imagesPerPage)].map((_, i) => (
+              <ImageItem key={i}>
+                <ImageSkeleton />
+              </ImageItem>
+            ))}
+      </Grid>
+      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
+    </Stack>
   );
 };
 
