@@ -6,8 +6,7 @@ import { PropsWithChildren } from "react";
 import { Stack } from "@mui/material";
 import React from "react";
 import { Pagination } from "./pagination";
-
-// TODO: Responsive
+import { useParams, useNavigate } from "react-router-dom";
 
 const gridStyles = {
   textAlign: "center",
@@ -23,8 +22,11 @@ const ImageItem: React.FC<PropsWithChildren> = ({ children }) => (
 );
 
 const ImageList = () => {
-  const [page, setPage] = React.useState(1);
+  const navigate = useNavigate();
+  const { page: pageParam = "1" } = useParams();
+  const [page, setPage] = React.useState(parseInt(pageParam));
   const { imagesPerPage } = useConfigContext();
+  const containerId = "images-container";
 
   const options = { imagesPerPage, page };
 
@@ -32,9 +34,15 @@ const ImageList = () => {
   const { data: imageCount = 1 } = useImagesCount(options);
   const pageCount = Math.ceil(imageCount / imagesPerPage);
 
+  const navigateToPage = (page: number) => {
+    navigate(`/${page}`);
+    setPage(page);
+    document.getElementById(containerId)?.scrollIntoView();
+  };
+
   return (
     <Stack spacing={2}>
-      <Grid container spacing={2}>
+      <Grid id={containerId} container spacing={2}>
         {images
           ? images.map((image) => (
               <ImageItem key={image.id}>
@@ -47,7 +55,11 @@ const ImageList = () => {
               </ImageItem>
             ))}
       </Grid>
-      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        onPageChange={navigateToPage}
+      />
     </Stack>
   );
 };
