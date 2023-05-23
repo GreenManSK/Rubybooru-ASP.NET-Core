@@ -12,6 +12,7 @@ import { Loader } from "./components/utils/loader";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Search } from "./components/side/search";
+import { MiscButtons } from "./components/side/misc-buttons";
 
 const ImageList = React.lazy(
   () => import("./components/image-list/image-list")
@@ -44,6 +45,7 @@ function App() {
             <Route path="/" element={<SearchTagList />} />
           </Routes>
         </React.Suspense>
+        <MiscButtons />
       </Box>
       <Box sx={contentStyles} component="main">
         <React.Suspense fallback={<Loader />}>
