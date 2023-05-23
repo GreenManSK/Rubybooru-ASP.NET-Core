@@ -46,8 +46,8 @@ const Img = styled("img")({
 
 const StyledRouterLink = styled(RouterLink, {
   shouldForwardProp: (prop) => prop !== "isImgLoaded",
-})((props: LinkProps & { isImgLoaded: boolean }) => ({
-  ...imgLinkStyle,
+})<LinkProps & { isImgLoaded: boolean }>((props) => ({
+  ...imgLinkStyle(props.theme as unknown as any),
   ...(!props.isImgLoaded ? hiddenStyle : {}),
 }));
 
