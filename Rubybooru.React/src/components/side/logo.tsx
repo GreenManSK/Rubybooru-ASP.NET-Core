@@ -26,7 +26,6 @@ const linkStyles = {
 
 const Link = styled(RouterLink)(linkStyles);
 
-// TODO: Switch for navigation link
 export const Logo = () => (
   <Typography variant="h1" sx={typographyStyles}>
     <Link to="/">
