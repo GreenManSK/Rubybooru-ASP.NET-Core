@@ -2,7 +2,7 @@ import { Skeleton, Box } from "@mui/material";
 import { ITag } from "../../entities/tag";
 import { useConfigContext } from "../../providers/config-provider";
 import React from "react";
-import { Tag } from "./tag";
+import { ITagButtonProps, Tag } from "./tag";
 import { mobileMediaQuery } from "../../styles.constants";
 import { useNormalizedTags } from "../../utils/tags";
 
@@ -19,9 +19,10 @@ const ulStyles = {
 interface ITagListProps {
   isLoading: boolean;
   tags?: ITag[];
+  button?: ITagButtonProps
 }
 
-const TagList = ({ tags, isLoading }: ITagListProps) => {
+const TagList = ({ tags, isLoading, button }: ITagListProps) => {
   const { tagTypeOrder } = useConfigContext();
 
   const normalizedTags = useNormalizedTags(tags);
@@ -46,7 +47,7 @@ const TagList = ({ tags, isLoading }: ITagListProps) => {
   return (
     <Box component="ul" sx={ulStyles}>
       {sortedTags.map((tag) => (
-        <Tag tag={tag} key={tag.id} />
+        <Tag tag={tag} key={tag.id} button={button} />
       ))}
     </Box>
   );

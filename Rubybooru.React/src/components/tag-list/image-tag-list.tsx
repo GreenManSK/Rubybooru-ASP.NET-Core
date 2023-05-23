@@ -7,8 +7,10 @@ import {
   useImage,
 } from "../../queries/images";
 import { filesize } from "filesize";
-import { useImageTags } from "../../queries/tags";
+import { useImageTags, useRemoveImageTag } from "../../queries/tags";
 import React from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ITag } from "../../entities/tag";
 
 const infoStyles = {
   fontSize: "1.3rem",
@@ -32,6 +34,7 @@ const ImageTagList = () => {
   const { data: image, isLoading } = useImage(id);
   const { data: tags, isLoading: isLoadingTags } = useImageTags(id);
   const { mutate: deleteImage, isSuccess: isDeleted } = useDeleteImage(id);
+  const { mutate: removeTag } = useRemoveImageTag(id);
 
   React.useEffect(() => {
     if (isDeleted) {
@@ -51,6 +54,11 @@ const ImageTagList = () => {
   };
 
   // TODO: Delete tags
+  const onRemoveTag = React.useCallback((tag: ITag) => {
+    if (window.confirm(`Do you want to remove ${tag.name} from the image?`)) {
+      removeTag(tag.id);
+    }
+  }, []);
   // TODO: Add tags
 
   return (
@@ -88,7 +96,15 @@ const ImageTagList = () => {
           )}
         </Box>
       )}
-      <TagList tags={tags} isLoading={isLoadingTags} />
+      <TagList
+        tags={tags}
+        isLoading={isLoadingTags}
+        button={
+          isEditMode
+            ? { Icon: DeleteIcon, label: "Remove tag", onClick: onRemoveTag }
+            : undefined
+        }
+      />
       <Box sx={infoStyles}>
         <Link
           title="Toggle edit mode"
