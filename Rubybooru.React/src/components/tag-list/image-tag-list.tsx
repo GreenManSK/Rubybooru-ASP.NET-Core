@@ -54,13 +54,11 @@ const ImageTagList = () => {
     }
   };
 
-  // TODO: Delete tags
   const onRemoveTag = React.useCallback((tag: ITag) => {
     if (window.confirm(`Do you want to remove ${tag.name} from the image?`)) {
       removeTag(tag.id);
     }
   }, []);
-  // TODO: Add tags
 
   return (
     <>
