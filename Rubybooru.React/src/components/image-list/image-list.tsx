@@ -57,6 +57,7 @@ const ImageList = () => {
             ))}
       </Grid>
       <Pagination
+        items={imageCount}
         page={page}
         pageCount={pageCount}
         onPageChange={navigateToPage}
