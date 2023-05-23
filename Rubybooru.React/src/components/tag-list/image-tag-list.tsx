@@ -1,9 +1,14 @@
 import { Skeleton, Box, Theme, Link } from "@mui/material";
 import TagList from "./tag-list";
-import { useParams } from "react-router-dom";
-import { useGetImageFileUrl, useImage } from "../../queries/images";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useDeleteImage,
+  useGetImageFileUrl,
+  useImage,
+} from "../../queries/images";
 import { filesize } from "filesize";
 import { useImageTags } from "../../queries/tags";
+import React from "react";
 
 const infoStyles = {
   fontSize: "1.3rem",
@@ -18,13 +23,28 @@ const lineStyles = (theme: Theme) => ({
 });
 
 const ImageTagList = () => {
+  const [isEditMode, setIsEditMode] = React.useState(false);
+  const navigate = useNavigate();
+
   const { id: idParam = "1" } = useParams();
   const id = parseInt(idParam);
 
   const { data: image, isLoading } = useImage(id);
   const { data: tags, isLoading: isLoadingTags } = useImageTags(id);
+  const { mutate: deleteImage } = useDeleteImage(id);
 
   const fileUrl = useGetImageFileUrl(id);
+
+  // TODO: Delete image callback
+  const onDeleteClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    if (window.confirm("Do you want to delete this image?")) {
+      deleteImage();
+      navigate("/");
+    }
+  };
 
   return (
     <>
@@ -52,9 +72,25 @@ const ImageTagList = () => {
               </Link>
             </>
           </Box>
+          {isEditMode && (
+            <Box sx={lineStyles}>
+              <Link title="Delete image" href="#" onClick={onDeleteClick}>
+                Delete image
+              </Link>
+            </Box>
+          )}
         </Box>
       )}
       <TagList tags={tags} isLoading={isLoadingTags} />
+      <Box sx={infoStyles}>
+        <Link
+          title="Toggle edit mode"
+          href="#"
+          onClick={() => setIsEditMode(!isEditMode)}
+        >
+          Toggle edit mode
+        </Link>
+      </Box>
     </>
   );
 };
