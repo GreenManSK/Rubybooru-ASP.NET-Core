@@ -7,19 +7,19 @@ import {
 import { useHttpClient } from "../providers/http-client-provider";
 import { IImage } from "../entities/image";
 import React from "react";
-import { useConfigContext } from "../providers/config-provider";
-import { TagType } from "../entities/tag";
-
-type SearchImagesOptions = {
-  imagesPerPage: number;
-  page: number;
-  tags: number[];
-};
-
-type UntaggedImagesOptions = {
-  imagesPerPage: number;
-  page: number;
-};
+import {
+  SearchImagesOptions,
+  UntaggedImagesOptions,
+  imagesOptionsToKey,
+  untaggedImagesOptionsToKey,
+} from "./types";
+import {
+  getImageSearchCountUrl,
+  getImageSearchUrl,
+  getImageUrl,
+  getUntaggedCountUrl,
+  getUntaggedUrl,
+} from "./image-urls";
 
 export const ImageQueryKeys = {
   images: "images",
@@ -45,7 +45,7 @@ const useUpdateImagesInCache = (
 export const useImages = (options: SearchImagesOptions) => {
   const client = useHttpClient();
   const queryClient = useQueryClient();
-  const url = `${getImageUrl()}${buildImagesQuery(options)}`;
+  const url = getImageSearchUrl(options);
 
   const result = useQuery({
     queryKey: [ImageQueryKeys.images, ...imagesOptionsToKey(options)],
@@ -62,7 +62,7 @@ export const useImagesCount = (options: SearchImagesOptions) => {
   const client = useHttpClient();
   options = { ...options };
   options.page = 0;
-  const url = `${getImageUrl()}count/${buildImagesQuery(options)}`;
+  const url = getImageSearchCountUrl(options);
   return useQuery({
     queryKey: [ImageQueryKeys.count, ...imagesOptionsToKey(options)],
     queryFn: () => client.get<number>(url),
@@ -93,7 +93,7 @@ export const useDeleteImage = (id: number) => {
 export const useUntaggedImages = (options: UntaggedImagesOptions) => {
   const client = useHttpClient();
   const queryClient = useQueryClient();
-  const url = `${getUntaggedUrl()}${buildUntaggedQuery(options)}`;
+  const url = getUntaggedUrl(options);
 
   const result = useQuery({
     queryKey: [ImageQueryKeys.untagged, ...untaggedImagesOptionsToKey(options)],
@@ -110,7 +110,7 @@ export const useUntaggedImagesCount = (options: UntaggedImagesOptions) => {
   const client = useHttpClient();
   options = { ...options };
   options.page = 0;
-  const url = `${getUntaggedUrl()}count/${buildUntaggedQuery(options)}`;
+  const url = getUntaggedCountUrl(options);
   return useQuery({
     queryKey: [
       ImageQueryKeys.untaggedCount,
@@ -119,69 +119,3 @@ export const useUntaggedImagesCount = (options: UntaggedImagesOptions) => {
     queryFn: () => client.get<number>(url),
   });
 };
-
-export const useGetImagePreviewUrl = (
-  id: number,
-  width: number,
-  height: number,
-  keepAspectRatio = true
-) => {
-  const { restUrl } = useConfigContext();
-  return `${restUrl}${getImageUrl(
-    id
-  )}/preview?width=${width}&height=${height}&keepAspectRatio=${keepAspectRatio}`;
-};
-
-export const useGetImageFileUrl = (id: number) => {
-  const { restUrl } = useConfigContext();
-  return `${restUrl}${getImageUrl(id)}/file`;
-};
-
-export const getImageUrl = (id?: number) => `/image/${id ?? ""}`;
-
-const buildImagesQuery = (options: SearchImagesOptions) => {
-  const queries: string[] = [];
-
-  if (options.imagesPerPage) {
-    queries.push(`limit=${options.imagesPerPage}`);
-  }
-
-  if (options.page) {
-    queries.push(`offset=${options.imagesPerPage * (options.page - 1)}`);
-  }
-
-  if (options.tags.length) {
-    options.tags.forEach((tag) => queries.push(`withTags=${tag}`));
-  }
-
-  return `?${queries.join("&")}`;
-};
-
-const getUntaggedUrl = () => `${getImageUrl()}/without-tag/`;
-
-const buildUntaggedQuery = (options: UntaggedImagesOptions) => {
-  const queries: string[] = [];
-
-  if (options.imagesPerPage) {
-    queries.push(`limit=${options.imagesPerPage}`);
-  }
-
-  if (options.page) {
-    queries.push(`offset=${options.imagesPerPage * (options.page - 1)}`);
-  }
-
-  queries.push(`tagType=${TagType.Copyright}`);
-
-  return `?${queries.join("&")}`;
-};
-
-const imagesOptionsToKey = (options: SearchImagesOptions) => [
-  options.imagesPerPage,
-  options.page,
-  options.tags.join(","),
-];
-
-const untaggedImagesOptionsToKey = (options: UntaggedImagesOptions) => [
-  options.imagesPerPage,
-  options.page,
-];

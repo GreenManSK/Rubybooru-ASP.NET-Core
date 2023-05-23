@@ -6,7 +6,7 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 import { useHttpClient } from "../providers/http-client-provider";
-import { getImageUrl } from "./images";
+import { getImagesTagsUrl, getImageTagUrl, getTagUrl } from "./tag-urls";
 
 const TagQueryKeys = {
   tags: "tags",
@@ -88,11 +88,3 @@ export const useAddImageTag = (imageId: number) => {
     },
   });
 };
-
-const getTagUrl = (id?: number) => `/tag/${id ?? ""}`;
-
-const getImagesTagsUrl = (ids: number[]) =>
-  `${getImageUrl()}/tags?${ids.map((id) => `ids=${id}`).join("&")}`;
-
-const getImageTagUrl = (imageId: number, tagId?: number) =>
-  `${getImageUrl(imageId)}/tag/${tagId ?? ""}`;

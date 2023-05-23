@@ -1,10 +1,11 @@
 import { Box, Skeleton, styled } from "@mui/material";
 import { contentPadding } from "../../App.styles";
 import { useParams } from "react-router-dom";
-import { useGetImageFileUrl, useImage } from "../../queries/images";
+import { useImage } from "../../queries/images";
 import React from "react";
 import { hiddenStyle } from "../../styles.constants";
 import { useFocusMode } from "../../providers/focus-mode-provider";
+import { useGetImageFileUrl } from "../../queries/image-urls";
 
 const boxStyles = {
   textAlign: "center",

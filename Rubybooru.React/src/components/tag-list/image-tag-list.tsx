@@ -3,7 +3,7 @@ import TagList from "./tag-list";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useDeleteImage,
-  useGetImageFileUrl,
+  
   useImage,
 } from "../../queries/images";
 import { filesize } from "filesize";
@@ -12,6 +12,7 @@ import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ITag } from "../../entities/tag";
 import { AddImageTagForm } from "../image/add-image-tag-form";
+import { useGetImageFileUrl } from "../../queries/image-urls";
 
 const infoStyles = {
   fontSize: "1.3rem",

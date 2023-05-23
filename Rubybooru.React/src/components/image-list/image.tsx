@@ -6,7 +6,7 @@ import { hiddenStyle } from "../../styles.constants";
 import {
   useGetImageFileUrl,
   useGetImagePreviewUrl,
-} from "../../queries/images";
+} from "../../queries/image-urls";
 import { Link as RouterLink, LinkProps } from "react-router-dom";
 
 export interface IImageProps {
