@@ -39,6 +39,7 @@ export const QueryClientProvider: React.FC<PropsWithChildren> = ({
       persistOptions={{
         persister: localStoragePersister,
         maxAge: queryCacheTime,
+        buster: localStorage.getItem("cache-buster") ?? "",
       }}
     >
       {children}

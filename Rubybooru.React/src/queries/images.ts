@@ -63,7 +63,8 @@ export const useDeleteImage = (id: number) => {
   return useMutation({
     mutationFn: () => client.delete(getImageUrl(id)),
     onSuccess: () => {
-      queryClient.resetQueries([ImageQueryKeys.images]);
+      queryClient.removeQueries([ImageQueryKeys.images]);
+      queryClient.invalidateQueries([ImageQueryKeys.images]);
     },
   });
 };
