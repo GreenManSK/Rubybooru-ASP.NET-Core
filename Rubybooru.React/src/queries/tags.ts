@@ -1,8 +1,12 @@
 import { ITag } from "./../entities/tag";
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { useHttpClient } from "../providers/http-client-provider";
 import { getImageUrl } from "./images";
-import React from "react";
 
 const TagQueryKeys = {
   tags: "tags",
@@ -36,7 +40,30 @@ export const useImageTags = (id: number) => {
   const client = useHttpClient();
   return useQuery<ITag[]>({
     queryKey: [TagQueryKeys.imageTags, id],
-    queryFn: () => client.get<ITag[]>(`${getImageUrl(id)}/tag`),
+    queryFn: () => client.get<ITag[]>(getImageTagUrl(id)),
+  });
+};
+
+export const useRemoveImageTag = (imageId: number) => {
+  const client = useHttpClient();
+  const queryClient = useQueryClient();
+  const queryKey = [TagQueryKeys.imageTags, imageId];
+
+  return useMutation({
+    mutationFn: (tagId: number) =>
+      client.delete(getImageTagUrl(imageId, tagId)),
+    onMutate: (tagId) => {
+      const previousTags = queryClient.getQueryData<ITag[]>(queryKey);
+      queryClient.setQueryData<ITag[]>(queryKey, (old) =>
+        old?.filter((t) => t.id !== tagId)
+      );
+      return () => queryClient.setQueryData(queryKey, previousTags);
+    },
+    onError: (_, __, rollback) =>
+      typeof rollback === "function" ? rollback() : null,
+    onSettled: () => {
+      queryClient.invalidateQueries(queryKey);
+    },
   });
 };
 
@@ -44,3 +71,6 @@ const getTagUrl = (id?: number) => `/tag/${id ?? ""}`;
 
 const getImagesTagsUrl = (ids: number[]) =>
   `${getImageUrl()}/tags?${ids.map((id) => `ids=${id}`).join("&")}`;
+
+const getImageTagUrl = (imageId: number, tagId?: number) =>
+  `${getImageUrl(imageId)}/tag/${tagId ?? ""}`;
