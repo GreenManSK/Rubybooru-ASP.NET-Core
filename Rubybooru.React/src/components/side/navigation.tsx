@@ -1,4 +1,5 @@
-import { Box, Link, Theme } from "@mui/material";
+import { Box, Link, Theme, styled } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
 const ulStyles = {
   margin: "0 0 1rem",
@@ -9,7 +10,7 @@ const ulStyles = {
 const liStyles = (theme: Theme) => ({
   listStyle: "none",
   display: "inline-block",
-  ["&::before"]: {
+  "&::before": {
     content: "'■'",
     display: "inline-block",
     padding: "4px .7rem 0",
@@ -17,10 +18,14 @@ const liStyles = (theme: Theme) => ({
     fontSize: "1rem",
     color: theme.palette.secondary.main,
   },
-  ["&:first-child::before"]: {
+  "&:first-child::before": {
     display: "none",
   },
 });
+
+const StyledRouterLink = styled(RouterLink)((props) => ({
+  color: props.theme.palette.primary.main,
+}));
 
 export const Navigation = () => {
   return (
@@ -30,7 +35,9 @@ export const Navigation = () => {
           <Link href="#">Search</Link>
         </Box>
         <Box component="li" sx={liStyles}>
-          <Link href="#">Untagged</Link>
+          <StyledRouterLink to="/untagged/" title="Untagged images">
+            Untagged
+          </StyledRouterLink>
         </Box>
         <Box component="li" sx={liStyles}>
           <Link href="#">Duplicates</Link>

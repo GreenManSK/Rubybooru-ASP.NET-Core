@@ -16,3 +16,10 @@ export const useSearchImages = () => {
   const { data } = useImages(options);
   return data;
 };
+
+export const useUntaggedImagesOptions = () => {
+  const { imagesPerPage } = useConfigContext();
+  const { page: pageParam = "1" } = useParams();
+  const page = parseInt(pageParam);
+  return { imagesPerPage, page };
+};
