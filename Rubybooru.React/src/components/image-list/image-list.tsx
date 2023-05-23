@@ -1,12 +1,13 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { useConfigContext } from "../../providers/config-provider";
 import { Image, ImageSkeleton } from "./image";
-import { useImages, useImagesCount } from "../../queries/images";
+import { useImagesCount } from "../../queries/images";
 import { PropsWithChildren } from "react";
 import { Stack } from "@mui/material";
 import React from "react";
 import { Pagination } from "./pagination";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { useSearchImages, useSearchImagesOptions } from "../../utils/images";
 
 const gridStyles = {
   textAlign: "center",
@@ -22,20 +23,21 @@ const ImageItem: React.FC<PropsWithChildren> = ({ children }) => (
 );
 
 const ImageList = () => {
-  const navigate = useNavigate();
-  const { page: pageParam = "1" } = useParams();
-  const page = parseInt(pageParam);
-  const { imagesPerPage } = useConfigContext();
   const containerId = "images-container";
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchOptions = useSearchImagesOptions();
+  const { page, imagesPerPage } = searchOptions;
 
-  const options = { imagesPerPage, page };
-
-  const { data: images } = useImages(options);
-  const { data: imageCount = 1 } = useImagesCount(options);
+  const images = useSearchImages();
+  const { data: imageCount = 1 } = useImagesCount(searchOptions);
   const pageCount = Math.ceil(imageCount / imagesPerPage);
 
   const navigateToPage = (page: number) => {
-    navigate(`/${page}`);
+    navigate({
+      pathname: `/${page}`,
+      search: searchParams.toString(),
+    });
     document.getElementById(containerId)?.scrollIntoView();
   };
 

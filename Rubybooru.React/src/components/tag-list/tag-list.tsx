@@ -4,6 +4,7 @@ import { useConfigContext } from "../../providers/config-provider";
 import React from "react";
 import { Tag } from "./tag";
 import { mobileMediaQuery } from "../../styles.constants";
+import { useNormalizedTags } from "../../utils/tags";
 
 const ulStyles = {
   clear: "both",
@@ -23,10 +24,12 @@ interface ITagListProps {
 const TagList = ({ tags, isLoading }: ITagListProps) => {
   const { tagTypeOrder } = useConfigContext();
 
+  const normalizedTags = useNormalizedTags(tags);
+
   const sortedTags = React.useMemo(
     () =>
-      tags
-        ? tags.sort((a: any, b: any) => {
+      normalizedTags
+        ? normalizedTags.sort((a: any, b: any) => {
             if (a.type === b.type) {
               return b.count - a.count;
             }
@@ -35,7 +38,7 @@ const TagList = ({ tags, isLoading }: ITagListProps) => {
               : 1;
           })
         : [],
-    [tags, tagTypeOrder]
+    [normalizedTags, tagTypeOrder]
   );
 
   if (isLoading) return <TagListSkeleton />;

@@ -44,12 +44,12 @@ const Img = styled("img")({
   maxHeight: previewHeight,
 });
 
-const StyledRouterLink = styled(RouterLink)(
-  (props: LinkProps & { isImgLoaded: boolean }) => ({
-    ...imgLinkStyle,
-    ...(!props.isImgLoaded ? hiddenStyle : {}),
-  })
-);
+const StyledRouterLink = styled(RouterLink, {
+  shouldForwardProp: (prop) => prop !== "isImgLoaded",
+})((props: LinkProps & { isImgLoaded: boolean }) => ({
+  ...imgLinkStyle,
+  ...(!props.isImgLoaded ? hiddenStyle : {}),
+}));
 
 export const Image = ({ image }: IImageProps) => {
   const [isImgLoaded, setIsImgLoaded] = React.useState(false);

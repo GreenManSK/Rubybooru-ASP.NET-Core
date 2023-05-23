@@ -10,4 +10,5 @@ export const configBase = {
     TagType.System,
   ],
   displayTagCount: 20,
+  tagWhispererLimit: 10,
 };

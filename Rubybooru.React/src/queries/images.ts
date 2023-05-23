@@ -3,11 +3,11 @@ import { useHttpClient } from "../providers/http-client-provider";
 import { IImage } from "../entities/image";
 import React from "react";
 import { useConfigContext } from "../providers/config-provider";
-import { get } from "http";
 
 type ImagesOptions = {
   imagesPerPage: number;
   page: number;
+  tags: number[];
 };
 
 export const ImageQueryKeys = {
@@ -86,10 +86,15 @@ const buildImagesQuery = (options: ImagesOptions) => {
     queries.push(`offset=${options.imagesPerPage * (options.page - 1)}`);
   }
 
+  if (options.tags.length) {
+    options.tags.forEach((tag) => queries.push(`withTags=${tag}`));
+  }
+
   return `?${queries.join("&")}`;
 };
 
 const imagesOptionsToKey = (options: ImagesOptions) => [
   options.imagesPerPage,
   options.page,
+  options.tags.join(","),
 ];

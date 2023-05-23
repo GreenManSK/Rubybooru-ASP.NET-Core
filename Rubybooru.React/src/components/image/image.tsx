@@ -54,7 +54,6 @@ const Image = () => {
 
     setIsImgLoaded(false);
   }, [fileUrl]);
-  console.log(previousImageRef.current, currentImageRef.current);
 
   const havePreviousImage =
     previousImageRef.current !== currentImageRef.current;
