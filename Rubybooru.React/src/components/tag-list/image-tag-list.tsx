@@ -31,20 +31,27 @@ const ImageTagList = () => {
 
   const { data: image, isLoading } = useImage(id);
   const { data: tags, isLoading: isLoadingTags } = useImageTags(id);
-  const { mutate: deleteImage } = useDeleteImage(id);
+  const { mutate: deleteImage, isSuccess: isDeleted } = useDeleteImage(id);
+
+  React.useEffect(() => {
+    if (isDeleted) {
+      navigate("/");
+    }
+  }, [isDeleted, navigate]);
 
   const fileUrl = useGetImageFileUrl(id);
 
-  // TODO: Delete image callback
   const onDeleteClick = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
     e.preventDefault();
     if (window.confirm("Do you want to delete this image?")) {
       deleteImage();
-      navigate("/");
     }
   };
+
+  // TODO: Delete tags
+  // TODO: Add tags
 
   return (
     <>

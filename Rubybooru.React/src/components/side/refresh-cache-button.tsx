@@ -2,10 +2,9 @@ import { Link } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const RefreshCacheButton = () => {
-  const queryClient = useQueryClient();
   const onClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
-    queryClient.resetQueries();
+    localStorage.setItem("cache-buster", new Date().toString());
     window.location.reload();
   };
 
