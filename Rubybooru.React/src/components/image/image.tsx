@@ -17,6 +17,7 @@ const fullscreenBoxStyles = {
   top: 0,
   bottom: 0,
   background: "#000",
+  zIndex: 1000,
   "& img": {
     maxHeight: "100vh",
     maxWidth: "100vw",
