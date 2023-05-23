@@ -11,4 +11,5 @@ export const configBase = {
   ],
   displayTagCount: 20,
   tagWhispererLimit: 10,
+  tagAddingWhispererLimit: 100,
 };

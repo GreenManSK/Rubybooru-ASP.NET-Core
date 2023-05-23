@@ -1,15 +1,11 @@
-import { TextField, Theme, MenuList, MenuItem, Box } from "@mui/material";
+import { Theme, MenuList, MenuItem, Box } from "@mui/material";
 import React from "react";
 import { useTagUtils } from "../../providers/tag-utils-provider";
 import { tagTextStyles } from "../../styles.constants";
+import { InputTextField, inputStyles } from "../utils/input-text-field";
 
 const boxStyles = {
   position: "relative",
-};
-
-const searchBarInputStyles = {
-  fontSize: "1.1rem",
-  padding: "0.5rem 1rem",
 };
 
 const menuStyles = (theme: Theme) => ({
@@ -22,7 +18,7 @@ const menuStyles = (theme: Theme) => ({
 });
 
 const menuItemStyles = {
-  ...searchBarInputStyles,
+  ...inputStyles,
   minHeight: "auto",
 };
 
@@ -121,16 +117,8 @@ export const SearchBar = (props: ISearchBarProps) => {
 
   return (
     <Box sx={boxStyles}>
-      <TextField
+      <InputTextField
         inputRef={inputRef}
-        placeholder="kurosawa_ruby"
-        size="small"
-        fullWidth
-        color="primary"
-        variant="filled"
-        inputProps={{
-          sx: searchBarInputStyles,
-        }}
         value={value}
         onChange={onValueChange}
         onFocus={onFocus}

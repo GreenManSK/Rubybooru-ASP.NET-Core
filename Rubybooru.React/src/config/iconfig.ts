@@ -10,4 +10,5 @@ export interface IConfig {
   displayTagCount: number;
 
   tagWhispererLimit: number;
+  tagAddingWhispererLimit: number;
 }

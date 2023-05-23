@@ -60,7 +60,7 @@ export const Tag = ({ tag, button }: ITagProps) => {
       <Link tagType={tag.type} to={getTagsToLink(tag)} title={tag.name}>
         <LabelIcon sx={iconStyles} />
         {tag.name}
-        {tag.count ? (
+        {tag.count && tag.count > 0 ? (
           <Typography component="span" sx={[textStyles, numberStyles]}>
             {" "}
             ({tag.count})
