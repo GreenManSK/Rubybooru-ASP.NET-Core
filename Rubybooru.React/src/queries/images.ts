@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useHttpClient } from "../providers/http-client-provider";
 import { IImage } from "../entities/image";
 import React from "react";
@@ -53,6 +53,18 @@ export const useImage = (id: number) => {
   return useQuery({
     queryKey: [ImageQueryKeys.image, id],
     queryFn: () => client.get<IImage>(getImageUrl(id)),
+  });
+};
+
+export const useDeleteImage = (id: number) => {
+  const client = useHttpClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => client.delete(getImageUrl(id)),
+    onSuccess: () => {
+      queryClient.resetQueries([ImageQueryKeys.images]);
+    },
   });
 };
 
