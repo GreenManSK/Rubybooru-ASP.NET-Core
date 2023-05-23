@@ -8,4 +8,6 @@ export interface IConfig {
   imagesPerPage: number;
   tagTypeOrder: TagType[];
   displayTagCount: number;
+
+  tagWhispererLimit: number;
 }

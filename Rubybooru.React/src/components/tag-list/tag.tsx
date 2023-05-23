@@ -1,18 +1,22 @@
-import { Box, Link, Typography, Theme } from "@mui/material";
-import { ITag } from "../../entities/tag";
+import { Box, Typography, Theme } from "@mui/material";
+import { ITag, TagType } from "../../entities/tag";
 import LabelIcon from "@mui/icons-material/Label";
 import { mobileMediaQuery, tagTextStyles } from "../../styles.constants";
+import { Link as RouterLink, LinkProps } from "react-router-dom";
+import styled from "@emotion/styled";
+import { getTagsToLink } from "../../utils/navigation-helpers";
 
 export interface ITagProps {
   tag: ITag;
 }
 
-// TODO: Navigation
-
 const boxStyles = {
   padding: 0,
   margin: 0,
   lineHeight: 1.2,
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
 };
 
 const textStyles = {
@@ -35,9 +39,16 @@ const numberStyles = (theme: Theme) => ({
   color: theme.palette.text.primary,
 });
 
+const Link = styled(RouterLink, {
+  shouldForwardProp: (prop) => prop !== "tagType",
+})<LinkProps & { tagType: TagType }>((props) => {
+  const tagStyle = tagTextStyles[props.tagType];
+  return { ...textStyles, ...tagStyle(props.theme as unknown as any) };
+});
+
 export const Tag = ({ tag }: ITagProps) => (
   <Box component="li" sx={boxStyles}>
-    <Link href="#tag" sx={[textStyles, tagTextStyles[tag.type]]}>
+    <Link tagType={tag.type} to={getTagsToLink(tag)} title={tag.name}>
       <LabelIcon sx={iconStyles} />
       {tag.name}
       {tag.count ? (

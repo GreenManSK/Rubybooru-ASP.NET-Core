@@ -11,6 +11,7 @@ import { Navigation } from "./components/side/navigation";
 import { Loader } from "./components/utils/loader";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { Search } from "./components/side/search";
 
 const ImageList = React.lazy(
   () => import("./components/image-list/image-list")
@@ -33,6 +34,7 @@ function App() {
       <Box sx={[sidePanelStyles, headerSidePanelStyles]}>
         <Logo />
         <Navigation />
+        <Search />
       </Box>
       <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>
         <React.Suspense fallback={<Loader />}>

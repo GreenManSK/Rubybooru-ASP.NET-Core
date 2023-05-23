@@ -1,20 +1,16 @@
 import { ITag } from "../../entities/tag";
 import { useConfigContext } from "../../providers/config-provider";
 import React from "react";
-import { useTags } from "../../queries/tags";
-import { useParams } from "react-router-dom";
-import { useImages } from "../../queries/images";
+import { useImagesTags } from "../../queries/tags";
 import TagList from "./tag-list";
+import { useSearchImages } from "../../utils/images";
 
 const SearchTagList = () => {
-  const { imagesPerPage, displayTagCount } = useConfigContext();
-  // TODO: Unify between ImageList
-  const { page: pageParam = "1" } = useParams();
-  const page = parseInt(pageParam);
-  const options = { imagesPerPage, page };
-  const { data: images } = useImages(options);
+  const { displayTagCount } = useConfigContext();
 
-  const { isLoading, data } = useTags(images?.map((i) => i.id) ?? [], {
+  const images = useSearchImages();
+
+  const { isLoading, data } = useImagesTags(images?.map((i) => i.id) ?? [], {
     enabled: !!images,
   });
   const tags = React.useMemo(() => {

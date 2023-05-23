@@ -43,7 +43,8 @@ const ImageTagList = () => {
           <Box sx={lineStyles}>
             <>
               <strong>Size:</strong>
-              <Link href={fileUrl}>
+              <Link href={fileUrl} title="Download image">
+                {" "}
                 <>
                   {image.width ?? "__"}x{image.height ?? "__"} [
                   {filesize(image.size, { base: 2, standard: "jedec" })}]

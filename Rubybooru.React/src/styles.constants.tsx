@@ -1,3 +1,4 @@
+import { Theme } from "@mui/material";
 import { TagType } from "./entities/tag";
 
 export const mobileMediaQuery =
@@ -15,9 +16,11 @@ export const tagColors = {
 };
 
 export const tagTextStyles = {
-  [TagType.General]: {},
-  [TagType.Author]: { color: tagColors[TagType.Author] },
-  [TagType.Character]: { color: tagColors[TagType.Character] },
-  [TagType.System]: { color: tagColors[TagType.System] },
-  [TagType.Copyright]: { color: tagColors[TagType.Copyright] },
+  [TagType.General]: (theme: Theme) => ({
+    color: theme.palette.primary.main,
+  }),
+  [TagType.Author]: () => ({ color: tagColors[TagType.Author] }),
+  [TagType.Character]: () => ({ color: tagColors[TagType.Character] }),
+  [TagType.System]: () => ({ color: tagColors[TagType.System] }),
+  [TagType.Copyright]: () => ({ color: tagColors[TagType.Copyright] }),
 };
