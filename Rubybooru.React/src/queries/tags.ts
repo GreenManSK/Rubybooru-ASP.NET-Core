@@ -67,6 +67,28 @@ export const useRemoveImageTag = (imageId: number) => {
   });
 };
 
+export const useAddImageTag = (imageId: number) => {
+  const client = useHttpClient();
+  const queryClient = useQueryClient();
+  const queryKey = [TagQueryKeys.imageTags, imageId];
+
+  return useMutation({
+    mutationFn: (tag: ITag) => client.post(getImageTagUrl(imageId, tag.id)),
+    onMutate: (tag) => {
+      const previousTags = queryClient.getQueryData<ITag[]>(queryKey);
+      queryClient.setQueryData<ITag[]>(queryKey, (old) =>
+        old ? [...old, tag] : [tag]
+      );
+      return () => queryClient.setQueryData(queryKey, previousTags);
+    },
+    onError: (_, __, rollback) =>
+      typeof rollback === "function" ? rollback() : null,
+    onSettled: () => {
+      queryClient.invalidateQueries(queryKey);
+    },
+  });
+};
+
 const getTagUrl = (id?: number) => `/tag/${id ?? ""}`;
 
 const getImagesTagsUrl = (ids: number[]) =>

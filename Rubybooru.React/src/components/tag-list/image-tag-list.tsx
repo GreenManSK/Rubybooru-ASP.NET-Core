@@ -11,6 +11,7 @@ import { useImageTags, useRemoveImageTag } from "../../queries/tags";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ITag } from "../../entities/tag";
+import { AddImageTagForm } from "../image/add-image-tag-form";
 
 const infoStyles = {
   fontSize: "1.3rem",
@@ -105,6 +106,7 @@ const ImageTagList = () => {
             : undefined
         }
       />
+      {isEditMode && <AddImageTagForm imageId={id} />}
       <Box sx={infoStyles}>
         <Link
           title="Toggle edit mode"
