@@ -7,3 +7,6 @@ export const getImagesTagsUrl = (ids: number[]) =>
 
 export const getImageTagUrl = (imageId: number, tagId?: number) =>
   `${getImageUrl(imageId)}tag/${tagId ?? ""}`;
+
+export const getTagDuplicateUrl = (originalId: number, duplicateId: number) =>
+  `/tagduplicate/?originalId=${originalId}&duplicateId=${duplicateId}`;
