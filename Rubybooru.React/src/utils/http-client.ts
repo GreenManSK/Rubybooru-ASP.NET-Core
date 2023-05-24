@@ -39,7 +39,7 @@ export class HttpClient {
     };
 
     return window
-      .fetch(`${this.apiUrl}/${endpoint}`, config)
+      .fetch(`${this.apiUrl}/${endpoint.replace(/^\//, "")}`, config)
       .then(async (response) => {
         try {
           const data = await response.json();
