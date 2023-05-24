@@ -17,7 +17,7 @@ const gridStyles = {
 };
 
 const GridItem: React.FC<PropsWithChildren> = ({ children }) => (
-  <Grid xl={2} lg={3} sm={4} xs={12} sx={gridStyles}>
+  <Grid item xl={2} lg={3} sm={4} xs={12} sx={gridStyles}>
     {children}
   </Grid>
 );
@@ -39,8 +39,6 @@ const DuplicatesList = () => {
     });
     document.getElementById(containerId)?.scrollIntoView();
   };
-
-  // TODO: Skeleton
 
   return (
     <Stack spacing={2}>

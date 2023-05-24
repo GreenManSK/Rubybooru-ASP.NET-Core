@@ -1,11 +1,7 @@
 import { Skeleton, Box, Theme, Link } from "@mui/material";
 import TagList from "./tag-list";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  useDeleteImage,
-  
-  useImage,
-} from "../../queries/images";
+import { useDeleteImage, useImage } from "../../queries/images";
 import { filesize } from "filesize";
 import { useImageTags, useRemoveImageTag } from "../../queries/tags";
 import React from "react";
@@ -55,11 +51,14 @@ const ImageTagList = () => {
     }
   };
 
-  const onRemoveTag = React.useCallback((tag: ITag) => {
-    if (window.confirm(`Do you want to remove ${tag.name} from the image?`)) {
-      removeTag(tag.id);
-    }
-  }, []);
+  const onRemoveTag = React.useCallback(
+    (tag: ITag) => {
+      if (window.confirm(`Do you want to remove ${tag.name} from the image?`)) {
+        removeTag(tag.id);
+      }
+    },
+    [removeTag]
+  );
 
   return (
     <>

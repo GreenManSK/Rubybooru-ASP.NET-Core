@@ -41,11 +41,15 @@ export class HttpClient {
     return window
       .fetch(`${this.apiUrl}/${endpoint}`, config)
       .then(async (response) => {
-        const data = await response.json();
-        if (response.ok) {
-          return data;
-        } else {
-          return Promise.reject(data);
+        try {
+          const data = await response.json();
+          if (response.ok) {
+            return data;
+          } else {
+            return Promise.reject(data);
+          }
+        } catch (_) {
+          return;
         }
       });
   }
