@@ -16,6 +16,10 @@ const DuplicateRecord = () => {
 
   const { data } = useDuplicate(id);
 
+  React.useEffect(() => {
+    document.title = `Duplicate ${id}`;
+  });
+
   return (
     <Grid container spacing={2}>
       <Duplicate image={data?.imageA} />

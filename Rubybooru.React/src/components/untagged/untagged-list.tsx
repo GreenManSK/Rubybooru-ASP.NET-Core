@@ -5,6 +5,7 @@ import {
   useUntaggedImages,
   useUntaggedImagesCount,
 } from "../../queries/images";
+import React from "react";
 
 const UntaggedList = () => {
   const navigate = useNavigate();
@@ -13,6 +14,10 @@ const UntaggedList = () => {
 
   const { data: images } = useUntaggedImages(imagesOptions);
   const { data: imageCount = 0 } = useUntaggedImagesCount(imagesOptions);
+
+  React.useEffect(() => {
+    document.title = `Untagged images`;
+  });
 
   const navigateToPage = (page: number) => {
     navigate({
