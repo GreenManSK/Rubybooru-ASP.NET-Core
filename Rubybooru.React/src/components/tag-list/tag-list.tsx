@@ -22,6 +22,7 @@ interface ITagListProps {
   button?: ITagButtonProps;
   ContainerElement?: React.ComponentType<PropsWithChildren>;
   TagElement?: React.ComponentType<PropsWithChildren>;
+  onTagClick?: (tag: ITag) => void;
 }
 
 const TagList = ({
@@ -30,6 +31,7 @@ const TagList = ({
   button,
   ContainerElement,
   TagElement,
+  onTagClick
 }: ITagListProps) => {
   const { tagTypeOrder } = useConfigContext();
 
@@ -57,7 +59,7 @@ const TagList = ({
   return (
     <Container>
       {sortedTags.map((tag) => (
-        <Tag tag={tag} key={tag.id} button={button} TagElement={TagElement} />
+        <Tag tag={tag} key={tag.id} button={button} TagElement={TagElement} onTagClick={onTagClick} />
       ))}
     </Container>
   );

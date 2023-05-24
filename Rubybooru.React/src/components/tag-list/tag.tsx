@@ -8,16 +8,17 @@ import { getTagsToLink } from "../../utils/navigation-helpers";
 import { SvgIconComponent } from "@mui/icons-material";
 import React, { PropsWithChildren } from "react";
 
-export interface ITagButtonProps {
-  Icon: SvgIconComponent;
-  label: string;
-  onClick: (tag: ITag) => void;
-}
-
 export interface ITagProps {
   tag: ITag;
   button?: ITagButtonProps;
   TagElement?: React.ComponentType<PropsWithChildren>;
+  onTagClick?: (tag: ITag) => void;
+}
+
+export interface ITagButtonProps {
+  Icon: SvgIconComponent;
+  label: string;
+  onClick: (tag: ITag) => void;
 }
 
 const boxStyles = {
@@ -56,11 +57,44 @@ const Link = styled(RouterLink, {
   return { ...textStyles, ...tagStyle(props.theme as unknown as any) };
 });
 
-export const Tag = ({ tag, button, TagElement }: ITagProps) => {
+interface ITagLinkProps {
+  tag: ITag;
+  onTagClick?: (tag: ITag) => void;
+}
+
+const TagLink: React.FC<PropsWithChildren<ITagLinkProps>> = ({
+  tag,
+  onTagClick,
+  children,
+}) => {
+  if (onTagClick) {
+    const onClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      e.preventDefault();
+      onTagClick(tag);
+    };
+    return (
+      <MaterialLink
+        title={tag.name}
+        href="#"
+        onClick={onClick}
+        sx={[textStyles, tagTextStyles[tag.type]]}
+      >
+        {children}
+      </MaterialLink>
+    );
+  }
+  return (
+    <Link tagType={tag.type} to={getTagsToLink(tag)} title={tag.name}>
+      {children}
+    </Link>
+  );
+};
+
+export const Tag = ({ tag, button, TagElement, onTagClick }: ITagProps) => {
   const Container = TagElement ?? DefaultContainer;
   return (
     <Container>
-      <Link tagType={tag.type} to={getTagsToLink(tag)} title={tag.name}>
+      <TagLink tag={tag} onTagClick={onTagClick}>
         <LabelIcon sx={iconStyles} />
         {tag.name}
         {tag.count && tag.count > 0 ? (
@@ -69,7 +103,7 @@ export const Tag = ({ tag, button, TagElement }: ITagProps) => {
             ({tag.count})
           </Typography>
         ) : null}
-      </Link>
+      </TagLink>
       {button && (
         <MaterialLink
           href="#"

@@ -102,6 +102,27 @@ export const useAddTag = () => {
   });
 };
 
+export const useEditTag = () => {
+  const client = useHttpClient();
+  const queryClient = useQueryClient();
+  const queryKey = [TagQueryKeys.tags];
+  return useMutation({
+    mutationFn: (tag: ITag) => client.put(getTagUrl(tag.id), tag),
+    onMutate: (tag: ITag) => {
+      const previousTags = queryClient.getQueryData<ITag[]>(queryKey);
+      queryClient.setQueryData<ITag[]>(queryKey, (old) =>
+        old ? [...old?.filter((t) => t.id !== tag.id), tag] : [tag]
+      );
+      return () => queryClient.setQueryData(queryKey, previousTags);
+    },
+    onError: (_, __, rollback) =>
+      typeof rollback === "function" ? rollback() : null,
+    onSettled: () => {
+      queryClient.invalidateQueries(queryKey);
+    },
+  });
+};
+
 export const useDeleteTag = () => {
   const client = useHttpClient();
   const queryClient = useQueryClient();
