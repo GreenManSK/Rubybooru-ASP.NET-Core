@@ -1,4 +1,4 @@
-import { ITag } from "./../entities/tag";
+import { ITag, TagType } from "./../entities/tag";
 import {
   useMutation,
   useQuery,
@@ -83,6 +83,19 @@ export const useAddImageTag = (imageId: number) => {
     },
     onError: (_, __, rollback) =>
       typeof rollback === "function" ? rollback() : null,
+    onSettled: () => {
+      queryClient.invalidateQueries(queryKey);
+    },
+  });
+};
+
+export const useAddTag = () => {
+  const client = useHttpClient();
+  const queryClient = useQueryClient();
+  const queryKey = [TagQueryKeys.tags];
+  return useMutation({
+    mutationFn: (data: { name: string; type: TagType }) =>
+      client.post(getTagUrl(), data),
     onSettled: () => {
       queryClient.invalidateQueries(queryKey);
     },
