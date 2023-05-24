@@ -32,6 +32,10 @@ const DuplicatesList = () => {
   const { data: duplicatesCount = 0 } = useDuplicatesCount();
   const pageCount = Math.ceil(duplicatesCount / imagesPerPage);
 
+  React.useEffect(() => {
+    document.title = `Duplicates`;
+  });
+
   const navigateToPage = (page: number) => {
     navigate({
       pathname: `/duplicates/${page}`,

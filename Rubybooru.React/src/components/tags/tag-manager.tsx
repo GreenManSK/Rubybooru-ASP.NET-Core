@@ -22,6 +22,10 @@ const TagManager = () => {
   const { whisperer } = useTagUtils();
   const { mutate: deleteTag } = useDeleteTag();
 
+  React.useEffect(() => {
+    document.title = `Tags`;
+  });
+
   const [tag, setTag] = React.useState<ITag | undefined>(undefined);
 
   const onValueChange = React.useCallback(

@@ -6,6 +6,7 @@ import React from "react";
 import { hiddenStyle } from "../../styles.constants";
 import { useFocusMode } from "../../providers/focus-mode-provider";
 import { useGetImageFileUrl } from "../../queries/image-urls";
+import { DEFAULT_TITLE } from "../../constants";
 
 const boxStyles = {
   textAlign: "center",
@@ -43,6 +44,10 @@ const Image = () => {
   const { id: idParam = "1" } = useParams();
   const id = parseInt(idParam);
   const { data: image } = useImage(id);
+
+  React.useEffect(() => {
+    document.title = image?.name ?? DEFAULT_TITLE;
+  }, [image]);
 
   const fileUrl = useGetImageFileUrl(id);
   const [isImgLoaded, setIsImgLoaded] = React.useState(false);
