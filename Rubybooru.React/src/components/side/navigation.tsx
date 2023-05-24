@@ -27,12 +27,22 @@ const StyledRouterLink = styled(RouterLink)((props) => ({
   color: props.theme.palette.primary.main,
 }));
 
-export const Navigation = () => {
+interface INavigationProps {
+  toggleAdvancedSearch: () => void;
+}
+
+export const Navigation = (props: INavigationProps) => {
+  const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    event.preventDefault();
+    props.toggleAdvancedSearch();
+  };
   return (
     <Box component="nav">
       <Box component="ul" sx={ulStyles}>
         <Box component="li" sx={liStyles}>
-          <Link href="#">Search</Link>
+          <Link href="#" title="Toggle advanced search" onClick={onClick}>
+            Search
+          </Link>
         </Box>
         <Box component="li" sx={liStyles}>
           <StyledRouterLink to="/untagged/" title="Untagged images">

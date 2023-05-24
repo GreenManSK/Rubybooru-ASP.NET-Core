@@ -1,5 +1,4 @@
 import { Link } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
 
 export const RefreshCacheButton = () => {
   const onClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
