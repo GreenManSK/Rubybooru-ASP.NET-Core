@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, Stack, Typography } from "@mui/material";
 import { useTagUtils } from "../../providers/tag-utils-provider";
 import React, { PropsWithChildren } from "react";
 import { InputTextField } from "../utils/input-text-field";
@@ -7,6 +7,12 @@ import TagList from "../tag-list/tag-list";
 import { useConfigContext } from "../../providers/config-provider";
 import { ITag } from "../../entities/tag";
 import { useDeleteTag } from "../../queries/tags";
+import { TagForm } from "./tag-form";
+
+const headerStyle = {
+  fontSize: "3.5rem",
+  fontWeight: "bold",
+};
 
 const TagManager = () => {
   const { tagAddingWhispererLimit } = useConfigContext();
@@ -42,7 +48,10 @@ const TagManager = () => {
     );
   }, [whisperer, value, tagAddingWhispererLimit]);
   return (
-    <>
+    <Stack spacing={2}>
+      <Typography sx={headerStyle} variant="h1">
+        Tags
+      </Typography>
       <InputTextField value={value} onChange={onValueChange} />
       <TagList
         tags={whisperedTags}
@@ -51,7 +60,9 @@ const TagManager = () => {
         ContainerElement={TagsContainer}
         TagElement={TagElement}
       />
-    </>
+      <hr />
+      <TagForm />
+    </Stack>
   );
 };
 
@@ -65,7 +76,6 @@ const TagElementStyles = {
   textOverflow: "ellipsis",
 };
 const TagElement: React.FC<PropsWithChildren> = ({ children }) => (
-  // TODO: Overflow
   <Grid item xl={2} lg={3} sm={4} xs={12} sx={TagElementStyles}>
     {children}
   </Grid>
