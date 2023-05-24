@@ -1,3 +1,4 @@
+import { ISizeCondition } from "../entities/size-condition";
 import { TagType } from "../entities/tag";
 import { useConfigContext } from "../providers/config-provider";
 import { SearchImagesOptions, UntaggedImagesOptions } from "./types";
@@ -22,6 +23,18 @@ export const useGetImageFileUrl = (id: number) => {
 };
 
 export const randomImageUrl = `${getImageUrl()}random/`;
+
+export const randomSearchImageUrl = (
+  tags: number[],
+  sizeConditions: ISizeCondition[]
+) => {
+  return `${getImageUrl()}random/${buildImagesQuery({
+    tags,
+    sizeConditions,
+    page: 0,
+    imagesPerPage: 0,
+  })}`;
+};
 
 export const getUntaggedBaseUrl = () => `${getImageUrl()}without-tag/`;
 

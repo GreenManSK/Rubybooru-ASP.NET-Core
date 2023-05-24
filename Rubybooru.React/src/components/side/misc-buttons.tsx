@@ -2,6 +2,7 @@ import { Stack } from "@mui/material";
 import { RandomButton } from "./random-button";
 import { RefreshCacheButton } from "./refresh-cache-button";
 import { FocusModeButton } from "./focus-mode-button";
+import { SearchRandomButton } from "./search-random-button";
 
 const boxStyles = {
   textAlign: "center",
@@ -11,6 +12,7 @@ const boxStyles = {
 
 export const MiscButtons = () => (
   <Stack sx={boxStyles}>
+    <SearchRandomButton />
     <RandomButton />
     <RefreshCacheButton />
     <FocusModeButton />
