@@ -38,6 +38,10 @@ const UntaggedSidePanel = React.lazy(
 
 const TagManager = React.lazy(() => import("./components/tags/tag-manager"));
 
+const DuplicatesList = React.lazy(
+  () => import("./components/duplicates/duplicates-list")
+);
+
 function App() {
   return (
     <Box sx={containerStyles}>
@@ -49,6 +53,7 @@ function App() {
       <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>
         <React.Suspense fallback={<Loader />}>
           <Routes>
+            <Route path="/duplicates/:page?" element={<></>} />
             <Route path="/tags/" element={<></>} />
             <Route path="/untagged/:page?" element={<UntaggedSidePanel />} />
             <Route path="image/:id" element={<ImageTagList />} />
@@ -60,6 +65,7 @@ function App() {
       <Box sx={contentStyles} component="main">
         <React.Suspense fallback={<Loader />}>
           <Routes>
+            <Route path="/duplicates/:page?" element={<DuplicatesList />} />
             <Route path="/tags/" element={<TagManager />} />
             <Route path="/untagged/:page?" element={<UntaggedList />} />
             <Route path="image/:id" element={<Image />} />

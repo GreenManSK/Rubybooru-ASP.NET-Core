@@ -2,7 +2,11 @@ import { Link, Theme, Skeleton } from "@mui/material";
 import { IImage } from "../../entities/image";
 import styled from "@emotion/styled";
 import React from "react";
-import { hiddenStyle } from "../../styles.constants";
+import {
+  hiddenStyle,
+  previewHeight,
+  previewWidth,
+} from "../../styles.constants";
 import {
   useGetImageFileUrl,
   useGetImagePreviewUrl,
@@ -12,9 +16,6 @@ import { Link as RouterLink, LinkProps } from "react-router-dom";
 export interface IImageProps {
   image: IImage;
 }
-
-const previewWidth = 350;
-const previewHeight = 180;
 
 const imgLinkStyle = (theme: Theme) => ({
   display: "block",
@@ -38,17 +39,20 @@ const downloadLinkStyle = (theme: Theme) => ({
   },
 });
 
-const Img = styled("img")({
+export const Img = styled("img", {
+  shouldForwardProp: (prop) => prop !== "isImgLoaded",
+})<{ isImgLoaded?: boolean }>((props) => ({
   display: "inline-block",
   maxWidth: "100%",
   maxHeight: previewHeight,
-});
+  ...(props.isImgLoaded !== undefined && !props.isImgLoaded ? hiddenStyle : {}),
+}));
 
-const StyledRouterLink = styled(RouterLink, {
+export const StyledRouterLink = styled(RouterLink, {
   shouldForwardProp: (prop) => prop !== "isImgLoaded",
-})<LinkProps & { isImgLoaded: boolean }>((props) => ({
+})<LinkProps & { isImgLoaded?: boolean }>((props) => ({
   ...imgLinkStyle(props.theme as unknown as any),
-  ...(!props.isImgLoaded ? hiddenStyle : {}),
+  ...(props.isImgLoaded !== undefined && !props.isImgLoaded ? hiddenStyle : {}),
 }));
 
 export const Image = ({ image }: IImageProps) => {

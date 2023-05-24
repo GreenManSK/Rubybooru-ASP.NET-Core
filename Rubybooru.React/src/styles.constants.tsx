@@ -24,3 +24,6 @@ export const tagTextStyles = {
   [TagType.System]: () => ({ color: tagColors[TagType.System] }),
   [TagType.Copyright]: () => ({ color: tagColors[TagType.Copyright] }),
 };
+
+export const previewWidth = 350;
+export const previewHeight = 180;
