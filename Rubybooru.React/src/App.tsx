@@ -36,6 +36,8 @@ const UntaggedSidePanel = React.lazy(
   () => import("./components/untagged/untagged-side-panel")
 );
 
+const TagManager = React.lazy(() => import("./components/tags/tag-manager"));
+
 function App() {
   return (
     <Box sx={containerStyles}>
@@ -47,6 +49,7 @@ function App() {
       <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>
         <React.Suspense fallback={<Loader />}>
           <Routes>
+            <Route path="/tags/" element={<></>} />
             <Route path="/untagged/:page?" element={<UntaggedSidePanel />} />
             <Route path="image/:id" element={<ImageTagList />} />
             <Route path="/:page?" element={<SearchTagList />} />
@@ -57,6 +60,7 @@ function App() {
       <Box sx={contentStyles} component="main">
         <React.Suspense fallback={<Loader />}>
           <Routes>
+            <Route path="/tags/" element={<TagManager />} />
             <Route path="/untagged/:page?" element={<UntaggedList />} />
             <Route path="image/:id" element={<Image />} />
             <Route path="/:page?" element={<SearchImageList />} />

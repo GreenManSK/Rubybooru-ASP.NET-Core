@@ -1,7 +1,7 @@
-import { Skeleton, Box } from "@mui/material";
+import { Skeleton, Box, Grid } from "@mui/material";
 import { ITag } from "../../entities/tag";
 import { useConfigContext } from "../../providers/config-provider";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { ITagButtonProps, Tag } from "./tag";
 import { mobileMediaQuery } from "../../styles.constants";
 import { useNormalizedTags } from "../../utils/tags";
@@ -19,10 +19,18 @@ const ulStyles = {
 interface ITagListProps {
   isLoading: boolean;
   tags?: ITag[];
-  button?: ITagButtonProps
+  button?: ITagButtonProps;
+  ContainerElement?: React.ComponentType<PropsWithChildren>;
+  TagElement?: React.ComponentType<PropsWithChildren>;
 }
 
-const TagList = ({ tags, isLoading, button }: ITagListProps) => {
+const TagList = ({
+  tags,
+  isLoading,
+  button,
+  ContainerElement,
+  TagElement,
+}: ITagListProps) => {
   const { tagTypeOrder } = useConfigContext();
 
   const normalizedTags = useNormalizedTags(tags);
@@ -44,14 +52,22 @@ const TagList = ({ tags, isLoading, button }: ITagListProps) => {
 
   if (isLoading) return <TagListSkeleton />;
 
+  const Container = ContainerElement ?? DefaultContainer;
+
   return (
-    <Box component="ul" sx={ulStyles}>
+    <Container>
       {sortedTags.map((tag) => (
-        <Tag tag={tag} key={tag.id} button={button} />
+        <Tag tag={tag} key={tag.id} button={button} TagElement={TagElement} />
       ))}
-    </Box>
+    </Container>
   );
 };
+
+const DefaultContainer: React.FC<PropsWithChildren> = ({ children }) => (
+  <Box component="ul" sx={ulStyles}>
+    {children}
+  </Box>
+);
 
 const TagListSkeleton = () => (
   <>

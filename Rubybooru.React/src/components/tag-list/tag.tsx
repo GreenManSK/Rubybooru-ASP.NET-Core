@@ -6,6 +6,7 @@ import { Link as RouterLink, LinkProps } from "react-router-dom";
 import styled from "@emotion/styled";
 import { getTagsToLink } from "../../utils/navigation-helpers";
 import { SvgIconComponent } from "@mui/icons-material";
+import React, { PropsWithChildren } from "react";
 
 export interface ITagButtonProps {
   Icon: SvgIconComponent;
@@ -16,6 +17,7 @@ export interface ITagButtonProps {
 export interface ITagProps {
   tag: ITag;
   button?: ITagButtonProps;
+  TagElement?: React.ComponentType<PropsWithChildren>;
 }
 
 const boxStyles = {
@@ -54,9 +56,10 @@ const Link = styled(RouterLink, {
   return { ...textStyles, ...tagStyle(props.theme as unknown as any) };
 });
 
-export const Tag = ({ tag, button }: ITagProps) => {
+export const Tag = ({ tag, button, TagElement }: ITagProps) => {
+  const Container = TagElement ?? DefaultContainer;
   return (
-    <Box component="li" sx={boxStyles}>
+    <Container>
       <Link tagType={tag.type} to={getTagsToLink(tag)} title={tag.name}>
         <LabelIcon sx={iconStyles} />
         {tag.name}
@@ -77,6 +80,12 @@ export const Tag = ({ tag, button }: ITagProps) => {
           <button.Icon sx={iconStyles} />
         </MaterialLink>
       )}
-    </Box>
+    </Container>
   );
 };
+
+const DefaultContainer: React.FC<PropsWithChildren> = ({ children }) => (
+  <Box component="li" sx={boxStyles}>
+    {children}
+  </Box>
+);
