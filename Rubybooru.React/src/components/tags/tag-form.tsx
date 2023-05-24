@@ -11,8 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { TagType } from "../../entities/tag";
-import { useAddTag } from "../../queries/tags";
+import { ITag, TagType } from "../../entities/tag";
+import { useAddTag, useEditTag } from "../../queries/tags";
 
 const headerStyle = {
   fontSize: "3rem",
@@ -27,11 +27,25 @@ const TagTypeOptions = [
   { value: TagType.System, label: "System" },
 ];
 
-export const TagForm = () => {
+interface ITagFormProps {
+  id?: string;
+  tag?: ITag;
+  close?: () => void;
+}
+
+export const TagForm = (props: ITagFormProps) => {
+  const { id, tag, close } = props;
+
   const [name, setName] = React.useState("");
   const [type, setType] = React.useState(TagType.General);
 
+  React.useEffect(() => {
+    setName(tag?.name ?? "");
+    setType(tag?.type ?? TagType.General);
+  }, [tag]);
+
   const { mutate: addTag } = useAddTag();
+  const { mutate: editTag } = useEditTag();
 
   const onTypeChange = (event: SelectChangeEvent) => {
     setType(parseInt(event.target.value));
@@ -39,7 +53,11 @@ export const TagForm = () => {
 
   const onSubmit = () => {
     const normalizedName = name.trim().toLocaleLowerCase().replace(" ", "_");
-    addTag({ name: normalizedName, type: type });
+    if (tag) {
+      editTag({ ...tag, name: normalizedName, type: type });
+    } else {
+      addTag({ name: normalizedName, type: type });
+    }
     setName("");
     setType(TagType.General);
   };
@@ -48,7 +66,7 @@ export const TagForm = () => {
     <Grid container spacing={2}>
       <Grid item sm={6} xs={12}>
         <Stack spacing={2}>
-          <Typography sx={headerStyle} variant="h2">
+          <Typography sx={headerStyle} variant="h2" id={id}>
             Tag form
           </Typography>
           <TextField
@@ -74,15 +92,28 @@ export const TagForm = () => {
               ))}
             </Select>
           </FormControl>
-          <Button
-            size="small"
-            fullWidth
-            color="primary"
-            variant="contained"
-            onClick={onSubmit}
-          >
-            Add tag
-          </Button>
+          <Stack spacing={2} direction="row">
+            <Button
+              size="small"
+              fullWidth
+              color="primary"
+              variant="contained"
+              onClick={onSubmit}
+            >
+              {tag ? "Edit" : "Add"}
+            </Button>
+            {tag && close && (
+              <Button
+                size="small"
+                fullWidth
+                color="secondary"
+                variant="contained"
+                onClick={close}
+              >
+                Close
+              </Button>
+            )}
+          </Stack>
         </Stack>
       </Grid>
       <Grid item sm={6} xs={12}></Grid>

@@ -14,11 +14,15 @@ const headerStyle = {
   fontWeight: "bold",
 };
 
+const formId = "tag-edit-form";
+
 const TagManager = () => {
   const { tagAddingWhispererLimit } = useConfigContext();
   const [value, setValue] = React.useState("");
   const { whisperer } = useTagUtils();
   const { mutate: deleteTag } = useDeleteTag();
+
+  const [tag, setTag] = React.useState<ITag | undefined>(undefined);
 
   const onValueChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +45,12 @@ const TagManager = () => {
     [deleteTag]
   );
 
+  const onSetTag = (tag: ITag) => {
+    setTag(tag);
+    const form = document.getElementById(formId);
+    form?.scrollIntoView();
+  };
+
   const whisperedTags = React.useMemo(() => {
     if (value.length < 1) return [];
     return whisperer(value.toLocaleLowerCase(), tagAddingWhispererLimit).map(
@@ -59,9 +69,10 @@ const TagManager = () => {
         button={tagButton}
         ContainerElement={TagsContainer}
         TagElement={TagElement}
+        onTagClick={onSetTag}
       />
       <hr />
-      <TagForm />
+      <TagForm id={formId} close={() => setTag(undefined)} tag={tag} />
     </Stack>
   );
 };
