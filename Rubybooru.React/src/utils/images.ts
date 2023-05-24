@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useConfigContext } from "../providers/config-provider";
 import { useImages } from "../queries/images";
-import { useSearchTags } from "./navigation-helpers";
+import { useSearchTags, useUntaggedYear } from "./navigation-helpers";
 
 export const useSearchImagesOptions = () => {
   const { imagesPerPage } = useConfigContext();
@@ -19,7 +19,8 @@ export const useSearchImages = () => {
 
 export const useUntaggedImagesOptions = () => {
   const { imagesPerPage } = useConfigContext();
+  const [year] = useUntaggedYear();
   const { page: pageParam = "1" } = useParams();
   const page = parseInt(pageParam);
-  return { imagesPerPage, page };
+  return { imagesPerPage, page, year };
 };

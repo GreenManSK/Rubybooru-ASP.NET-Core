@@ -19,6 +19,7 @@ import {
   getImageUrl,
   getUntaggedCountUrl,
   getUntaggedUrl,
+  getUntaggedYearsUrl,
 } from "./image-urls";
 
 export const ImageQueryKeys = {
@@ -27,6 +28,7 @@ export const ImageQueryKeys = {
   count: "count",
   untagged: "untagged",
   untaggedCount: "untagged-count",
+  untaggedYears: "untagged-years",
 };
 
 const useUpdateImagesInCache = (
@@ -117,5 +119,13 @@ export const useUntaggedImagesCount = (options: UntaggedImagesOptions) => {
       ...untaggedImagesOptionsToKey(options),
     ],
     queryFn: () => client.get<number>(url),
+  });
+};
+
+export const useUntaggedYears = () => {
+  const client = useHttpClient();
+  return useQuery({
+    queryKey: [ImageQueryKeys.untaggedYears],
+    queryFn: () => client.get<number[]>(getUntaggedYearsUrl()),
   });
 };

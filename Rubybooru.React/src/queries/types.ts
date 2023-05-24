@@ -13,9 +13,11 @@ export const imagesOptionsToKey = (options: SearchImagesOptions) => [
 export type UntaggedImagesOptions = {
   imagesPerPage: number;
   page: number;
+  year?: number;
 };
 
 export const untaggedImagesOptionsToKey = (options: UntaggedImagesOptions) => [
   options.imagesPerPage,
   options.page,
+  options.year
 ];
