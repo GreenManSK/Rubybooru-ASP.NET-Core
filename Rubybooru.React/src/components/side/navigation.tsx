@@ -43,7 +43,9 @@ export const Navigation = () => {
           <Link href="#">Duplicates</Link>
         </Box>
         <Box component="li" sx={liStyles}>
-          <Link href="#">Tags</Link>
+          <StyledRouterLink title="Tags" to="/tags/">
+            Tags
+          </StyledRouterLink>
         </Box>
       </Box>
     </Box>

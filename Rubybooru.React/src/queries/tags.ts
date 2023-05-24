@@ -88,3 +88,25 @@ export const useAddImageTag = (imageId: number) => {
     },
   });
 };
+
+export const useDeleteTag = () => {
+  const client = useHttpClient();
+  const queryClient = useQueryClient();
+  const queryKey = [TagQueryKeys.tags];
+
+  return useMutation({
+    mutationFn: (tagId: number) => client.delete(getTagUrl(tagId)),
+    onMutate: (tagId) => {
+      const previousTags = queryClient.getQueryData<ITag[]>(queryKey);
+      queryClient.setQueryData<ITag[]>(queryKey, (old) =>
+        old?.filter((t) => t.id !== tagId)
+      );
+      return () => queryClient.setQueryData(queryKey, previousTags);
+    },
+    onError: (_, __, rollback) =>
+      typeof rollback === "function" ? rollback() : null,
+    onSettled: () => {
+      queryClient.invalidateQueries(queryKey);
+    },
+  });
+};
