@@ -19,7 +19,7 @@ const fullscreenBoxStyles = {
 };
 
 export const FocusModeButton = () => {
-  const { isFocusModeSet, setIsFocusMode } = useFocusMode();
+  const { isFocusModeSet, isFullscreen, setIsFocusMode } = useFocusMode();
 
   const isOnImage = !!useMatch("image/:id");
 
@@ -28,7 +28,11 @@ export const FocusModeButton = () => {
   };
 
   return (
-    <Box sx={isOnImage && isFocusModeSet ? fullscreenBoxStyles : {}}>
+    <Box
+      sx={
+        isOnImage && isFocusModeSet && !isFullscreen ? fullscreenBoxStyles : {}
+      }
+    >
       <FormControlLabel
         componentsProps={formControlLabelStyles}
         label="Focus mode"
