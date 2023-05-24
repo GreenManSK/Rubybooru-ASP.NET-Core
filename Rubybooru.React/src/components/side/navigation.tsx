@@ -40,7 +40,9 @@ export const Navigation = () => {
           </StyledRouterLink>
         </Box>
         <Box component="li" sx={liStyles}>
-          <Link href="#">Duplicates</Link>
+          <StyledRouterLink to="/duplicates/" title="Duplicate images">
+            Duplicates
+          </StyledRouterLink>
         </Box>
         <Box component="li" sx={liStyles}>
           <StyledRouterLink title="Tags" to="/tags/">

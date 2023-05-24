@@ -24,3 +24,11 @@ export const useUntaggedImagesOptions = () => {
   const page = parseInt(pageParam);
   return { imagesPerPage, page, year };
 };
+
+
+export const useDuplicatesOptions = () => {
+  const { imagesPerPage } = useConfigContext();
+  const { page: pageParam = "1" } = useParams();
+  const page = parseInt(pageParam);
+  return { imagesPerPage, page };
+};

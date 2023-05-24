@@ -19,5 +19,15 @@ export type UntaggedImagesOptions = {
 export const untaggedImagesOptionsToKey = (options: UntaggedImagesOptions) => [
   options.imagesPerPage,
   options.page,
-  options.year
+  options.year,
+];
+
+export type DuplicatesOptions = {
+  imagesPerPage: number;
+  page: number;
+};
+
+export const duplicatesOptionsToKey = (options: DuplicatesOptions) => [
+  options.imagesPerPage,
+  options.page,
 ];
