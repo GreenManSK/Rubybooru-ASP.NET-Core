@@ -88,6 +88,8 @@ export const useDeleteImage = (id: number) => {
     onSuccess: () => {
       queryClient.removeQueries([ImageQueryKeys.images]);
       queryClient.invalidateQueries([ImageQueryKeys.images]);
+      queryClient.removeQueries([ImageQueryKeys.count]);
+      queryClient.invalidateQueries([ImageQueryKeys.count]);
     },
   });
 };

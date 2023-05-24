@@ -27,7 +27,7 @@ export const DuplicateItem = ({ duplicateRecord }: IDuplicateItemProps) => {
 
   return (
     <>
-      <StyledRouterLink to={`duplicate/${id}`}>
+      <StyledRouterLink to={`/duplicate/${id}`}>
         {!isImgALoaded && <ImageSkeleton />}
         <Img
           alt={imageA.name}

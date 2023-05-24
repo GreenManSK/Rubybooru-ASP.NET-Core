@@ -41,6 +41,12 @@ const TagManager = React.lazy(() => import("./components/tags/tag-manager"));
 const DuplicatesList = React.lazy(
   () => import("./components/duplicates/duplicates-list")
 );
+const DuplicateRecord = React.lazy(
+  () => import("./components/duplicates/duplicate-record")
+);
+const DuplicateRecordSide = React.lazy(
+  () => import("./components/duplicates/duplicate-record-side")
+);
 
 function App() {
   return (
@@ -53,6 +59,7 @@ function App() {
       <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>
         <React.Suspense fallback={<Loader />}>
           <Routes>
+            <Route path="/duplicate/:id?" element={<DuplicateRecordSide />} />
             <Route path="/duplicates/:page?" element={<></>} />
             <Route path="/tags/" element={<></>} />
             <Route path="/untagged/:page?" element={<UntaggedSidePanel />} />
@@ -65,6 +72,7 @@ function App() {
       <Box sx={contentStyles} component="main">
         <React.Suspense fallback={<Loader />}>
           <Routes>
+            <Route path="/duplicate/:id?" element={<DuplicateRecord />} />
             <Route path="/duplicates/:page?" element={<DuplicatesList />} />
             <Route path="/tags/" element={<TagManager />} />
             <Route path="/untagged/:page?" element={<UntaggedList />} />

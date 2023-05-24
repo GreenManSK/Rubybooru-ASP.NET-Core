@@ -1,7 +1,13 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { DuplicateRecordResolution } from "./../../../Rubybooru.Angular/src/app/data/duplicate-record-resolution";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHttpClient } from "../providers/http-client-provider";
 import { DuplicatesOptions, duplicatesOptionsToKey } from "./types";
-import { getDuplicatesCountUrl, getDuplicatesUrl } from "./duplicates-urls";
+import {
+  getDuplicateResolveUrl,
+  getDuplicateUrl,
+  getDuplicatesCountUrl,
+  getDuplicatesUrl,
+} from "./duplicates-urls";
 import { IDuplicateRecord } from "../entities/duplicate-record";
 import React from "react";
 
@@ -40,5 +46,35 @@ export const useDuplicatesCount = () => {
   return useQuery({
     queryKey: [DuplicateKeys.duplicatesCount],
     queryFn: () => client.get<number>(getDuplicatesCountUrl()),
+  });
+};
+
+export const useDuplicate = (id: number) => {
+  const client = useHttpClient();
+  return useQuery({
+    queryKey: [DuplicateKeys.duplicate, id],
+    queryFn: () => client.get<IDuplicateRecord>(getDuplicateUrl(id)),
+  });
+};
+
+export const useResolveDuplicate = (id: number) => {
+  const client = useHttpClient();
+  const queryClient = useQueryClient();
+  const queryKeys = [DuplicateKeys.duplicates, DuplicateKeys.duplicatesCount];
+
+  return useMutation({
+    mutationFn: (data: {
+      resolution: DuplicateRecordResolution;
+      mergeTags: boolean;
+    }) =>
+      client.get<void>(
+        getDuplicateResolveUrl(id, data.resolution, data.mergeTags)
+      ),
+    onSuccess: () => {
+      queryKeys.forEach((queryKey) => queryClient.removeQueries([queryKey]));
+      queryKeys.forEach((queryKey) =>
+        queryClient.invalidateQueries([queryKey])
+      );
+    },
   });
 };
