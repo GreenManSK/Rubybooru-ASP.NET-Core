@@ -13,6 +13,7 @@ import {
 import React from "react";
 import { ITag, TagType } from "../../entities/tag";
 import { useAddTag, useEditTag } from "../../queries/tags";
+import { TagDuplicateForm } from "./tag-duplicate-form";
 
 const headerStyle = {
   fontSize: "3rem",
@@ -53,6 +54,7 @@ export const TagForm = (props: ITagFormProps) => {
 
   const onSubmit = () => {
     const normalizedName = name.trim().toLocaleLowerCase().replace(" ", "_");
+    if (!normalizedName) return;
     if (tag) {
       editTag({ ...tag, name: normalizedName, type: type });
     } else {
@@ -116,7 +118,16 @@ export const TagForm = (props: ITagFormProps) => {
           </Stack>
         </Stack>
       </Grid>
-      <Grid item sm={6} xs={12}></Grid>
+      <Grid item sm={6} xs={12}>
+        {tag && (
+          <>
+            <Typography sx={headerStyle} variant="h2" id={id}>
+              Find duplicates
+            </Typography>
+            <TagDuplicateForm tag={tag} />
+          </>
+        )}
+      </Grid>
     </Grid>
   );
 };

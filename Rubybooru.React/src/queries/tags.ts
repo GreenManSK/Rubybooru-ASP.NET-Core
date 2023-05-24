@@ -6,7 +6,7 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 import { useHttpClient } from "../providers/http-client-provider";
-import { getImagesTagsUrl, getImageTagUrl, getTagUrl } from "./tag-urls";
+import { getImagesTagsUrl, getImageTagUrl, getTagDuplicateUrl, getTagUrl } from "./tag-urls";
 
 const TagQueryKeys = {
   tags: "tags",
@@ -134,6 +134,29 @@ export const useDeleteTag = () => {
       const previousTags = queryClient.getQueryData<ITag[]>(queryKey);
       queryClient.setQueryData<ITag[]>(queryKey, (old) =>
         old?.filter((t) => t.id !== tagId)
+      );
+      return () => queryClient.setQueryData(queryKey, previousTags);
+    },
+    onError: (_, __, rollback) =>
+      typeof rollback === "function" ? rollback() : null,
+    onSettled: () => {
+      queryClient.invalidateQueries(queryKey);
+    },
+  });
+};
+
+export const useSetTagDuplicate = () => {
+  const client = useHttpClient();
+  const queryClient = useQueryClient();
+  const queryKey = [TagQueryKeys.tags];
+
+  return useMutation({
+    mutationFn: (data: { originalId: number; duplicateId: number }) =>
+      client.get(getTagDuplicateUrl(data.originalId, data.duplicateId)),
+    onMutate: (data) => {
+      const previousTags = queryClient.getQueryData<ITag[]>(queryKey);
+      queryClient.setQueryData<ITag[]>(queryKey, (old) =>
+        old?.filter((t) => t.id !== data.duplicateId)
       );
       return () => queryClient.setQueryData(queryKey, previousTags);
     },
