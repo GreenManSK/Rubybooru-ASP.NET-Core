@@ -32,6 +32,9 @@ const ImageTagList = React.lazy(
 const UntaggedList = React.lazy(
   () => import("./components/untagged/untagged-list")
 );
+const UntaggedSidePanel = React.lazy(
+  () => import("./components/untagged/untagged-side-panel")
+);
 
 function App() {
   return (
@@ -44,7 +47,7 @@ function App() {
       <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>
         <React.Suspense fallback={<Loader />}>
           <Routes>
-            <Route path="/untagged/:page?" element={<></>} />
+            <Route path="/untagged/:page?" element={<UntaggedSidePanel />} />
             <Route path="image/:id" element={<ImageTagList />} />
             <Route path="/:page?" element={<SearchTagList />} />
           </Routes>

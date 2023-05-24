@@ -8,6 +8,8 @@ import React from "react";
 import { ITag } from "../entities/tag";
 
 export const SEARCH_TAG_KEY = "tags";
+export const UNTAGGED_YEAR_KEY = "year";
+
 export const useSearchTags = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -36,4 +38,24 @@ export const getTagsToLink = (tag: ITag | ITag[]) => {
     pathname: "/",
     search: createSearchParams({ [SEARCH_TAG_KEY]: tagNames }).toString(),
   };
+};
+
+export const useUntaggedYear = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const year = parseInt(searchParams.get(UNTAGGED_YEAR_KEY) ?? "");
+
+  const setYear = React.useCallback(
+    (year: number) => {
+      if (year !== 0) {
+        searchParams.set(UNTAGGED_YEAR_KEY, year.toString());
+      } else {
+        searchParams.delete(UNTAGGED_YEAR_KEY);
+      }
+      setSearchParams(searchParams);
+    },
+    [setSearchParams, searchParams]
+  );
+
+  return [!isNaN(year) ? year : undefined, setYear] as const;
 };

@@ -31,11 +31,13 @@ export const getImageSearchUrl = (options: SearchImagesOptions) =>
 export const getImageSearchCountUrl = (options: SearchImagesOptions) =>
   `${getImageUrl()}count/${buildImagesQuery(options)}`;
 
-  export const getUntaggedUrl = (options: UntaggedImagesOptions) =>
+export const getUntaggedUrl = (options: UntaggedImagesOptions) =>
   `${getUntaggedBaseUrl()}${buildUntaggedQuery(options)}`;
 
-  export const getUntaggedCountUrl = (options: UntaggedImagesOptions) =>
-    `${getUntaggedBaseUrl()}count/${buildUntaggedQuery(options)}`;
+export const getUntaggedCountUrl = (options: UntaggedImagesOptions) =>
+  `${getUntaggedBaseUrl()}count/${buildUntaggedQuery(options)}`;
+
+export const getUntaggedYearsUrl = () => `${getUntaggedBaseUrl()}years/`;
 
 export const buildImagesQuery = (options: SearchImagesOptions) => {
   const queries: string[] = [];
@@ -64,6 +66,10 @@ export const buildUntaggedQuery = (options: UntaggedImagesOptions) => {
 
   if (options.page) {
     queries.push(`offset=${options.imagesPerPage * (options.page - 1)}`);
+  }
+
+  if (options.year) {
+    queries.push(`year=${options.year}`);
   }
 
   queries.push(`tagType=${TagType.Copyright}`);
