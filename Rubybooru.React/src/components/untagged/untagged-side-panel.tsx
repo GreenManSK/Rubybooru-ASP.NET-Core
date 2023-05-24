@@ -1,4 +1,8 @@
-import { useUntaggedImagesCount, useUntaggedYears } from "../../queries/images";
+import {
+  useRefreshUntaggedData,
+  useUntaggedImagesCount,
+  useUntaggedYears,
+} from "../../queries/images";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,6 +13,7 @@ import { useUntaggedImagesOptions } from "../../utils/images";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
+import Link from "@mui/material/Link";
 
 const boxStyles = {
   marginTop: "2rem",
@@ -18,6 +23,7 @@ const boxStyles = {
 const UntaggedSidePanel = () => {
   const [year, setYear] = useUntaggedYear();
   const imagesOptions = useUntaggedImagesOptions();
+  const refreshData = useRefreshUntaggedData();
 
   const { data: imageCount = 0, isSuccess } =
     useUntaggedImagesCount(imagesOptions);
@@ -26,6 +32,12 @@ const UntaggedSidePanel = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setYear(parseInt(event.target.value));
   };
+
+  const refreshDataCallback = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    refreshData();
+  };
+
   return (
     <Stack sx={boxStyles} spacing={2}>
       {isSuccess ? (
@@ -35,6 +47,9 @@ const UntaggedSidePanel = () => {
       ) : (
         <Skeleton variant="text" />
       )}
+      <Link title="Refresh untagged" href="#" onClick={refreshDataCallback}>
+        Refresh untagged
+      </Link>
       <FormControl size="small" fullWidth>
         <InputLabel id="untagged-year-label">Select year</InputLabel>
         <Select

@@ -129,3 +129,18 @@ export const useUntaggedYears = () => {
     queryFn: () => client.get<number[]>(getUntaggedYearsUrl()),
   });
 };
+
+export const useRefreshUntaggedData = () => {
+  const queryClient = useQueryClient();
+  const keys = [
+    ImageQueryKeys.untagged,
+    ImageQueryKeys.untaggedCount,
+    ImageQueryKeys.untaggedYears,
+  ];
+  return () => {
+    for (const key of keys) {
+      queryClient.removeQueries([key]);
+      queryClient.invalidateQueries([key]);
+    }
+  };
+};
