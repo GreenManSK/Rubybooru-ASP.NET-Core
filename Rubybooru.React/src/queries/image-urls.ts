@@ -54,6 +54,12 @@ export const buildImagesQuery = (options: SearchImagesOptions) => {
     options.tags.forEach((tag) => queries.push(`withTags=${tag}`));
   }
 
+  if (options.sizeConditions?.length) {
+    options.sizeConditions.forEach((condition) =>
+      queries.push(`sizeConditions=${JSON.stringify(condition)}`)
+    );
+  }
+
   return `?${queries.join("&")}`;
 };
 

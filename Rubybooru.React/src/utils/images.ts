@@ -1,14 +1,14 @@
 import { useParams } from "react-router";
 import { useConfigContext } from "../providers/config-provider";
 import { useImages } from "../queries/images";
-import { useSearchTags, useUntaggedYear } from "./navigation-helpers";
+import { useImageSearchParams, useUntaggedYear } from "./navigation-helpers";
 
 export const useSearchImagesOptions = () => {
   const { imagesPerPage } = useConfigContext();
   const { page: pageParam = "1" } = useParams();
   const page = parseInt(pageParam);
-  const [tags] = useSearchTags();
-  return { imagesPerPage, page, tags: tags.map((x) => x.id) };
+  const [{ tags, sizeConditions }] = useImageSearchParams();
+  return { imagesPerPage, page, tags: tags.map((x) => x.id), sizeConditions };
 };
 
 export const useSearchImages = () => {
@@ -24,7 +24,6 @@ export const useUntaggedImagesOptions = () => {
   const page = parseInt(pageParam);
   return { imagesPerPage, page, year };
 };
-
 
 export const useDuplicatesOptions = () => {
   const { imagesPerPage } = useConfigContext();

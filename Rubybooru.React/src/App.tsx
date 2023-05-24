@@ -49,12 +49,18 @@ const DuplicateRecordSide = React.lazy(
 );
 
 function App() {
+  const [isAdvancedSearch, setIsAdvancedSearch] = React.useState(false);
   return (
     <Box sx={containerStyles}>
       <Box sx={[sidePanelStyles, headerSidePanelStyles]}>
         <Logo />
-        <Navigation />
-        <Search />
+        <Navigation
+          toggleAdvancedSearch={() => setIsAdvancedSearch(!isAdvancedSearch)}
+        />
+        <Search
+          isAdvancedSearch={isAdvancedSearch}
+          setIsAdvancedSearch={setIsAdvancedSearch}
+        />
       </Box>
       <Box sx={[sidePanelStyles, tagsSidePanelStyles]}>
         <React.Suspense fallback={<Loader />}>
