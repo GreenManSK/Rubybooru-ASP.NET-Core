@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AppProviders } from "./providers/app-providers";
+import { ScrollToTop } from "./utils/scroll-to-top";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -16,6 +17,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AppProviders>
+      <ScrollToTop />
       <App />
     </AppProviders>
   </React.StrictMode>
