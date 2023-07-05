@@ -110,7 +110,7 @@ const SizeConditionRatio = ({
   const [ratio, setRatio] = React.useState(condition.ratioValue);
 
   const onRatioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value);
+    const newValue = parseFloat(event.target.value);
     setRatio(newValue);
     condition.ratioValue = newValue;
   };
