@@ -2,6 +2,10 @@ import React from "react";
 
 type Entity = { name: string };
 
+function normalize(name: string): string {
+  return name.replaceAll(/[^\w_]/g, "");
+}
+
 export class WhispererEntity<T extends Entity> {
   public readonly entity: T;
   private readonly words: string[];
@@ -32,7 +36,7 @@ export class WhispererEntity<T extends Entity> {
   }
 
   private getWords(name: string): string[] {
-    const words = name.replaceAll(/[^\w_]/g, "").split("_");
+    const words = normalize(name).split("_");
     words.push(name);
     return words;
   }
@@ -50,6 +54,7 @@ export class Whisperer<T extends Entity> {
   }
 
   public whisper(prefix: string, limit: number): WhispererEntity<T>[] {
+    prefix = normalize(prefix);
     const matches: WhispererEntity<T>[] = [];
     for (const entity of this.entities) {
       if (entity.match(prefix)) {
