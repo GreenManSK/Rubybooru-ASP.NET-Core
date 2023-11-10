@@ -32,7 +32,7 @@ export class WhispererEntity<T extends Entity> {
   }
 
   private getWords(name: string): string[] {
-    const words = name.split("_");
+    const words = name.replaceAll(/[^\w_]/g, "").split("_");
     words.push(name);
     return words;
   }
