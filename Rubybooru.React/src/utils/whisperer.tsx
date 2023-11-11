@@ -1,6 +1,7 @@
 import React from "react";
 
 type Entity = { name: string };
+type WordData = { original: string; normalized: string };
 
 function normalize(name: string): string {
   return name.replaceAll(/[^\w_]/g, "");
@@ -8,7 +9,7 @@ function normalize(name: string): string {
 
 export class WhispererEntity<T extends Entity> {
   public readonly entity: T;
-  private readonly words: string[];
+  private readonly words: WordData[];
 
   public constructor(entity: T) {
     this.entity = entity;
@@ -17,7 +18,7 @@ export class WhispererEntity<T extends Entity> {
 
   public match(prefix: string): boolean {
     for (const word of this.words) {
-      if (word.startsWith(prefix)) {
+      if (word.normalized.startsWith(prefix)) {
         return true;
       }
     }
@@ -28,17 +29,23 @@ export class WhispererEntity<T extends Entity> {
     const words = this.words.map((word, key) => (
       <React.Fragment key={key}>
         {key !== 0 ? "_" : ""}
-        {word.startsWith(prefix) ? <strong>{word}</strong> : word}
+        {word.normalized.startsWith(prefix) ? (
+          <strong>{word.original}</strong>
+        ) : (
+          word.original
+        )}
       </React.Fragment>
     ));
     words.pop();
     return words;
   }
 
-  private getWords(name: string): string[] {
+  private getWords(name: string): WordData[] {
     const normalizedName = normalize(name);
-    const words = normalizedName.split("_");
-    words.push(normalizedName);
+    const words = name
+      .split("_")
+      .map((word) => ({ original: word, normalized: normalize(word) }));
+    words.push({ original: name, normalized: normalizedName });
     return words;
   }
 }
