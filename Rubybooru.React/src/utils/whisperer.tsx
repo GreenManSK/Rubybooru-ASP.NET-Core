@@ -36,8 +36,9 @@ export class WhispererEntity<T extends Entity> {
   }
 
   private getWords(name: string): string[] {
-    const words = normalize(name).split("_");
-    words.push(name);
+    const normalizedName = normalize(name);
+    const words = normalizedName.split("_");
+    words.push(normalizedName);
     return words;
   }
 }
