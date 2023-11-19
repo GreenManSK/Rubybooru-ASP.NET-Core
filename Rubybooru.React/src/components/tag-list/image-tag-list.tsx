@@ -109,7 +109,10 @@ const ImageTagList = () => {
         <Link
           title="Toggle edit mode"
           href="#"
-          onClick={() => setIsEditMode(!isEditMode)}
+          onClick={(e) => {
+            e.preventDefault();
+            setIsEditMode(!isEditMode);
+          }}
         >
           Toggle edit mode
         </Link>

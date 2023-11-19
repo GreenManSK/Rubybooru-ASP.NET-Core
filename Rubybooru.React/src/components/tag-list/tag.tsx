@@ -109,7 +109,10 @@ export const Tag = ({ tag, button, TagElement, onTagClick }: ITagProps) => {
           href="#"
           sx={textStyles}
           title={button.label}
-          onClick={() => button.onClick(tag)}
+          onClick={(e) => {
+            e.preventDefault();
+            button.onClick(tag);
+          }}
         >
           <button.Icon sx={iconStyles} />
         </MaterialLink>
