@@ -7,7 +7,7 @@ using Rubybooru.Console.Data;
 
 namespace Rubybooru.Console.CopyrightAdder
 {
-    public static class MapCreator
+    public static class MapCreatorV1
     {
         private const int CopyrightCategory = 3;
         private const int CharacterCategory = 4;
@@ -52,7 +52,7 @@ namespace Rubybooru.Console.CopyrightAdder
                     continue;
                 var list = new List<string>();
                 finalMap.Add(character, list);
-                var allCount = (double) filteredCopyright.Sum(c => c.Value);
+                var allCount = (double)filteredCopyright.Sum(c => c.Value);
                 var added = false;
                 foreach (var (tag, count) in filteredCopyright)
                 {

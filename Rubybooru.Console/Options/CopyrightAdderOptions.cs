@@ -30,5 +30,8 @@ namespace Rubybooru.Console.Options
 
         [Option("systemTags", Required = false, HelpText = "Add system tags based on how copyright was added")]
         public bool AddSystemTags { get; set; } = false;
+
+        [Option("builderVersion", Required = false, HelpText = "Version of map builder, used with --raw")]
+        public int BuilderVersion { get; set; } = 2;
     }
 }
