@@ -74,7 +74,7 @@ const TagLink: React.FC<PropsWithChildren<ITagLinkProps>> = ({
     };
     return (
       <MaterialLink
-        title={tag.name}
+        title={tag.normalizedName ?? tag.name}
         href="#"
         onClick={onClick}
         sx={[textStyles, tagTextStyles[tag.type]]}
@@ -84,7 +84,11 @@ const TagLink: React.FC<PropsWithChildren<ITagLinkProps>> = ({
     );
   }
   return (
-    <Link tagType={tag.type} to={getTagsToLink(tag)} title={tag.name}>
+    <Link
+      tagType={tag.type}
+      to={getTagsToLink(tag)}
+      title={tag.normalizedName ?? tag.name}
+    >
       {children}
     </Link>
   );
@@ -96,7 +100,7 @@ export const Tag = ({ tag, button, TagElement, onTagClick }: ITagProps) => {
     <Container>
       <TagLink tag={tag} onTagClick={onTagClick}>
         <LabelIcon sx={iconStyles} />
-        {tag.name}
+        {tag.normalizedName ?? tag.name}
         {tag.count && tag.count > 0 ? (
           <Typography component="span" sx={[textStyles, numberStyles]}>
             {" "}

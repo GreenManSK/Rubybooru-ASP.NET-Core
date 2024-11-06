@@ -9,6 +9,7 @@ export enum TagType {
 export interface ITag {
   id: number;
   name: string;
+  normalizedName?: string;
   type: TagType;
   userCreated: boolean;
   count: number;

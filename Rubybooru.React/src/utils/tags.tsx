@@ -6,7 +6,7 @@ export const useNormalizedTags = (tags?: ITag[]) =>
     if (!tags) return tags;
     return tags.map((tag) =>
       tag.name.indexOf("&") !== -1
-        ? { ...tag, name: normalizeTagName(tag.name) }
+        ? { ...tag, normalizedName: normalizeTagName(tag.name) }
         : tag
     );
   }, [tags]);

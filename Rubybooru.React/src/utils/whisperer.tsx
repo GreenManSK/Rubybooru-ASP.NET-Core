@@ -1,4 +1,5 @@
 import React from "react";
+import { normalizeTagName } from "./tags";
 
 type Entity = { name: string };
 type WordData = { original: string; normalized: string };
@@ -30,9 +31,9 @@ export class WhispererEntity<T extends Entity> {
       <React.Fragment key={key}>
         {key !== 0 ? "_" : ""}
         {word.normalized.startsWith(prefix) ? (
-          <strong>{word.original}</strong>
+          <strong>{normalizeTagName(word.original)}</strong>
         ) : (
-          word.original
+          normalizeTagName(word.original)
         )}
       </React.Fragment>
     ));
