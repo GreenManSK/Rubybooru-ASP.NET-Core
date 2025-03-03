@@ -250,7 +250,7 @@ namespace Rubybooru.Controllers
         {
             try
             {
-                if (withTags.IsNullOrEmpty() && sizeConditions.IsNullOrEmpty())
+                if ((withTags == null || withTags.Length == 0) && (sizeConditions == null || sizeConditions.Length == 0))
                 {
                     return _imageData.GetRandomId();
                 }

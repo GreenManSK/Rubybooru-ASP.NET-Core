@@ -265,3 +265,7 @@ IISBuild/
 
 Rubybooru/appsettings.json
 Rubybooru/appsettings.Development.json
+
+*.db
+*.db-*
+.DS_Store
