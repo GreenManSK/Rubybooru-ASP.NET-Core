@@ -1,4 +1,3 @@
-import { DuplicateRecordResolution } from "./../../../Rubybooru.Angular/src/app/data/duplicate-record-resolution";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHttpClient } from "../providers/http-client-provider";
 import { DuplicatesOptions, duplicatesOptionsToKey } from "./types";
@@ -8,7 +7,7 @@ import {
   getDuplicatesCountUrl,
   getDuplicatesUrl,
 } from "./duplicates-urls";
-import { IDuplicateRecord } from "../entities/duplicate-record";
+import { DuplicateRecordResolution, IDuplicateRecord } from "../entities/duplicate-record";
 import React from "react";
 
 export const DuplicateKeys = {
