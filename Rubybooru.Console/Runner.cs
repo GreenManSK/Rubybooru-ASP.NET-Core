@@ -84,7 +84,7 @@ namespace Rubybooru.Console
             {
                 opts
                     .UseLazyLoadingProxies()
-                    .UseMySQL(configuration.GetConnectionString("RubybooruDb"));
+                    .UseSqlite(configuration.GetConnectionString("RubybooruDb"));
             });
 
             serviceCollection.AddSingleton<HashAlgorithm, SHA256CryptoServiceProvider>();

@@ -8,7 +8,7 @@
   },
   "AllowedHosts": "*",
   "ConnectionStrings": {
-    "RubybooruDb": ""
+    "RubybooruDb": "Data Source=./rubybooru.db"
   },
   "LogQueries": false,
   "ImagesPath": "C:/Images",

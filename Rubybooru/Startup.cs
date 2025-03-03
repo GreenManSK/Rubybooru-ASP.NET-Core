@@ -56,7 +56,7 @@ namespace Rubybooru
 
                 options
                     .UseLazyLoadingProxies()
-                    .UseMySQL(_configuration.GetConnectionString("RubybooruDb"));
+                    .UseSqlite(_configuration.GetConnectionString("RubybooruDb"));
             });
 
             services.AddScoped<IImageData, SqlImageData>();
