@@ -11,8 +11,8 @@ using Rubybooru.Data;
 namespace Rubybooru.Data.Migrations
 {
     [DbContext(typeof(RubybooruDbContext))]
-    [Migration("20250304114550_AddImagePreviewTable")]
-    partial class AddImagePreviewTable
+    [Migration("20250304152632_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,19 @@ namespace Rubybooru.Data.Migrations
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true);
+
+            modelBuilder.Entity("Rubybooru.Core.BlackWhiteImage", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("BLOB");
+
+                    b.HasKey("ImageId");
+
+                    b.ToTable("BlackWhiteImages");
+                });
 
             modelBuilder.Entity("Rubybooru.Core.DuplicateRecord", b =>
                 {
@@ -162,6 +175,17 @@ namespace Rubybooru.Data.Migrations
                     b.ToTable("TagDuplicate");
                 });
 
+            modelBuilder.Entity("Rubybooru.Core.BlackWhiteImage", b =>
+                {
+                    b.HasOne("Rubybooru.Core.Image", "Image")
+                        .WithMany("BlackWhiteImages")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
+                });
+
             modelBuilder.Entity("Rubybooru.Core.DuplicateRecord", b =>
                 {
                     b.HasOne("Rubybooru.Core.Image", "ImageA")
@@ -179,6 +203,17 @@ namespace Rubybooru.Data.Migrations
                     b.Navigation("ImageA");
 
                     b.Navigation("ImageB");
+                });
+
+            modelBuilder.Entity("Rubybooru.Core.ImagePreview", b =>
+                {
+                    b.HasOne("Rubybooru.Core.Image", "Image")
+                        .WithMany("ImagePreviews")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("Rubybooru.Core.ImageTag", b =>
@@ -213,6 +248,10 @@ namespace Rubybooru.Data.Migrations
 
             modelBuilder.Entity("Rubybooru.Core.Image", b =>
                 {
+                    b.Navigation("BlackWhiteImages");
+
+                    b.Navigation("ImagePreviews");
+
                     b.Navigation("Tags");
                 });
 

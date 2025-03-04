@@ -21,7 +21,14 @@ namespace Rubybooru.Console.Runners
             var images = from i in _db.Images select i;
             foreach (var image in images)
             {
-                _previewGenerator.CreatePreview(image, options.Width, options.Height, options.KeepRatio);
+                try
+                {
+                    _previewGenerator.CreatePreview(image, options.Width, options.Height, options.KeepRatio);
+                }
+                catch
+                {
+                    System.Console.WriteLine($"Error generating preview for image {image.Id}");
+                }
             }
             return 0;
         }

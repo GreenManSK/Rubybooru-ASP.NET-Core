@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Rubybooru.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSQLiteMigration : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,24 @@ namespace Rubybooru.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BlackWhiteImages",
+                columns: table => new
+                {
+                    ImageId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "BLOB", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlackWhiteImages", x => x.ImageId);
+                    table.ForeignKey(
+                        name: "FK_BlackWhiteImages_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DuplicateRecord",
                 columns: table => new
                 {
@@ -68,6 +86,27 @@ namespace Rubybooru.Data.Migrations
                     table.ForeignKey(
                         name: "FK_DuplicateRecord_Images_ImageBId",
                         column: x => x.ImageBId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ImagePreviews",
+                columns: table => new
+                {
+                    ImageId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Width = table.Column<int>(type: "INTEGER", nullable: false),
+                    Height = table.Column<int>(type: "INTEGER", nullable: false),
+                    KeepAspectRatio = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PreviewData = table.Column<byte[]>(type: "BLOB", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImagePreviews", x => new { x.ImageId, x.Width, x.Height, x.KeepAspectRatio });
+                    table.ForeignKey(
+                        name: "FK_ImagePreviews_Images_ImageId",
+                        column: x => x.ImageId,
                         principalTable: "Images",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -143,7 +182,13 @@ namespace Rubybooru.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BlackWhiteImages");
+
+            migrationBuilder.DropTable(
                 name: "DuplicateRecord");
+
+            migrationBuilder.DropTable(
+                name: "ImagePreviews");
 
             migrationBuilder.DropTable(
                 name: "ImageTag");
