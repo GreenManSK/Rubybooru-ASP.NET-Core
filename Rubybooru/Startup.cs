@@ -64,9 +64,10 @@ namespace Rubybooru
             services.AddScoped<IImageTagData, SqlImageTagData>();
             services.AddScoped<IDuplicateRecordData, SqlDuplicateRecordData>();
             services.AddScoped<ITagDuplicateData, SqlTagDuplicateData>();
+            services.AddScoped<IImagePreviewData, SqlImagePreviewData>();
 
             services.AddSingleton<IPreviewMaker, PreviewMaker>();
-            services.AddSingleton<PreviewGenerator, PreviewGenerator>();
+            services.AddScoped<PreviewGenerator>();
 
             services.AddAutoMapper(typeof(Startup));
 
@@ -81,7 +82,7 @@ namespace Rubybooru
                 app.UseDeveloperExceptionPage();
                 app.UseCors("DevelopmentPolicy");
             }
-            
+
             app.Use(async (context, next) =>
             {
                 await next();
@@ -102,12 +103,6 @@ namespace Rubybooru
             {
                 FileProvider = new PhysicalFileProvider(_configuration.GetValue<string>("ImagesPath")),
                 RequestPath = ImageController.StaticImagesPath
-            });
-
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(_configuration.GetValue<string>("PreviewsPath")),
-                RequestPath = PreviewGenerator.StaticPreviewsPath
             });
 
             app.UseDefaultFiles(GetDefaultFileOptions());

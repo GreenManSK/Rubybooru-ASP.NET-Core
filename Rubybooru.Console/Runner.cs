@@ -89,7 +89,6 @@ namespace Rubybooru.Console
 
             serviceCollection.AddSingleton<HashAlgorithm, SHA256CryptoServiceProvider>();
             serviceCollection.AddSingleton<IPreviewMaker, PreviewMaker>();
-            serviceCollection.AddSingleton<PreviewGenerator, PreviewGenerator>();
             serviceCollection.AddSingleton<IImageInfo, ImageInfo>();
 
             serviceCollection.AddSingleton<ImagePreprocessorUtils>();
@@ -100,7 +99,9 @@ namespace Rubybooru.Console
             serviceCollection.AddScoped<IImageTagData, SqlImageTagData>();
             serviceCollection.AddScoped<IDuplicateRecordData, SqlDuplicateRecordData>();
             serviceCollection.AddScoped<ITagDuplicateData, SqlTagDuplicateData>();
+            serviceCollection.AddScoped<IImagePreviewData, SqlImagePreviewData>();
 
+            serviceCollection.AddScoped<PreviewGenerator, PreviewGenerator>();
             serviceCollection.AddScoped<TagImport>();
             serviceCollection.AddScoped<Import>();
             serviceCollection.AddScoped<GeneratePreview>();
