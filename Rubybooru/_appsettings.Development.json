@@ -11,7 +11,6 @@
   },
   "LogQueries": false,
   "ImagesPath": "C:/Images",
-  "BlackWhitePath": "C:/Bw",
   "DefaultPlaceholder": "default.jpg",
   "ClientBuildPath": "C:/Client",
   "DuplicateCheckerMaxRMS": 3,

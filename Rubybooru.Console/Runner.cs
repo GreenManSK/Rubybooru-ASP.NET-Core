@@ -102,6 +102,7 @@ namespace Rubybooru.Console
             serviceCollection.AddScoped<IDuplicateRecordData, SqlDuplicateRecordData>();
             serviceCollection.AddScoped<ITagDuplicateData, SqlTagDuplicateData>();
             serviceCollection.AddScoped<IImagePreviewData, SqlImagePreviewData>();
+            serviceCollection.AddScoped<IBlackWhiteImageData, SqlBlackWhiteImageData>();
 
             serviceCollection.AddScoped<PreviewGenerator, PreviewGenerator>();
             serviceCollection.AddScoped<TagImport>();

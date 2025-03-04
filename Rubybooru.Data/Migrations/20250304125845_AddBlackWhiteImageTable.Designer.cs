@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rubybooru.Data;
 
@@ -10,9 +11,11 @@ using Rubybooru.Data;
 namespace Rubybooru.Data.Migrations
 {
     [DbContext(typeof(RubybooruDbContext))]
-    partial class RubybooruDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304125845_AddBlackWhiteImageTable")]
+    partial class AddBlackWhiteImageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
