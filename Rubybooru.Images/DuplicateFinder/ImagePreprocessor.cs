@@ -37,16 +37,14 @@ namespace Rubybooru.Images.DuplicateFinder
             });
         }
 
-        public void Save(string path)
+        public byte[] ProcessImage()
         {
             LoadImage();
-            _image.SaveAsPng(path);
-        }
-
-        public void SaveRotated(string path)
-        {
-            LoadImage();
-            _image.Mutate(img => img.Rotate(180));
+            using (var memoryStream = new MemoryStream())
+            {
+                _image.SaveAsPng(memoryStream);
+                return memoryStream.ToArray();
+            }
         }
 
         public void Dispose()

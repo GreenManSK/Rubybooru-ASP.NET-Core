@@ -2,16 +2,17 @@ using System;
 using NumSharp;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System.IO;
 
 namespace Rubybooru.Images.DuplicateFinder
 {
     public class ImagePreprocessorUtils
     {
 
-        public int[,] GetImageArray(string path)
+        public int[,] GetImageArray(Stream stream)
         {
-            using var image = Image.Load<Rgba32>(path);
-            var array = new int[image.Width,image.Height];
+            using var image = Image.Load<Rgba32>(stream);
+            var array = new int[image.Width, image.Height];
             image.ProcessPixelRows(accessor =>
             {
                 for (var y = 0; y < accessor.Height; y++)

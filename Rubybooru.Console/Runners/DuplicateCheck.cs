@@ -20,6 +20,7 @@ namespace Rubybooru.Console.Runners
         private readonly IImageData _imageData;
         private readonly IDuplicateRecordData _duplicateRecordData;
         private readonly IConfiguration _configuration;
+        private readonly IBlackWhiteImageData _blackWhiteImageData;
         private readonly HashAlgorithm _hashAlgorithm;
 
         private readonly string _imagesPath;
@@ -35,7 +36,8 @@ namespace Rubybooru.Console.Runners
             IImageData imageData,
             IDuplicateRecordData duplicateRecordData,
             IConfiguration configuration,
-            HashAlgorithm hashAlgorithm)
+            HashAlgorithm hashAlgorithm,
+            IBlackWhiteImageData blackWhiteImageData)
         {
             _db = db;
             _imagePreprocessorFactory = imagePreprocessorFactory;
@@ -44,9 +46,9 @@ namespace Rubybooru.Console.Runners
             _duplicateRecordData = duplicateRecordData;
             _configuration = configuration;
             _hashAlgorithm = hashAlgorithm;
+            _blackWhiteImageData = blackWhiteImageData;
 
             _imagesPath = _configuration.GetValue<string>("ImagesPath");
-            _bwPath = _configuration.GetValue<string>("BlackWhitePath");
             _maxRms = _configuration.GetValue<int>("DuplicateCheckerMaxRMS");
         }
 
@@ -125,7 +127,15 @@ namespace Rubybooru.Console.Runners
             var bwCounter = 0;
             foreach (var image in images)
             {
-                result.Add(image.Id, _imageUtils.GetImageArray(GetFullBwPath(image)));
+                var bwImage = _blackWhiteImageData.Get(image.Id);
+                if (bwImage != null)
+                {
+                    using (var memoryStream = new MemoryStream(bwImage.ImageData))
+                    {
+                        var imageArray = _imageUtils.GetImageArray(memoryStream);
+                        result.Add(image.Id, imageArray);
+                    }
+                }
                 bwCounter++;
                 if (bwCounter % 500 == 0)
                 {
@@ -143,10 +153,17 @@ namespace Rubybooru.Console.Runners
                 try
                 {
                     var imagePreprocessor = _imagePreprocessorFactory.Create(GetFullPath(image));
-                    var bwPath = GetFullBwPath(image);
-                    if (!File.Exists(bwPath))
+                    var existingBwImage = _blackWhiteImageData.Get(image.Id);
+                    if (existingBwImage == null)
                     {
-                        imagePreprocessor.Save(bwPath);
+                        var imageData = imagePreprocessor.ProcessImage();
+                        var newBwImage = new BlackWhiteImage
+                        {
+                            ImageId = image.Id,
+                            ImageData = imageData
+                        };
+                        _blackWhiteImageData.Add(newBwImage);
+                        _blackWhiteImageData.Commit();
                     }
                 }
                 catch (Exception e)
@@ -160,13 +177,6 @@ namespace Rubybooru.Console.Runners
         private string GetFullPath(Image image)
         {
             return Path.Combine(_imagesPath, image.GetSafePath(), image.Name);
-        }
-
-        private string GetFullBwPath(Image image, bool rotated = false)
-        {
-            var hash = image.Id;
-            var rotatedSuffix = rotated ? "_r" : "";
-            return Path.Combine(_bwPath, $"{hash}{rotatedSuffix}.png");
         }
     }
 }
