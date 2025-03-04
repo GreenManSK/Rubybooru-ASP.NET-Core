@@ -17,5 +17,14 @@
   "DuplicateCheckerMaxRMS": 3,
   "IqdbCheckIntervalInDays": 28,
   "IqdbRequestDelayInMs": 750,
-  "IqdbMinSimilarity": 80
+  "IqdbMinSimilarity": 80,
+  "AllowedPreviewOptions": {
+    "Options": [
+      {
+        "Width": 350,
+        "Height": 180,
+        "KeepRatio": true
+      }
+    ]
+  }
 }

@@ -12,6 +12,7 @@ using Rubybooru.Data.Sql;
 using Rubybooru.Helpers;
 using Rubybooru.Images;
 using Rubybooru.Images.DuplicateFinder;
+using Rubybooru.Configuration;
 
 namespace Rubybooru.Console
 {
@@ -86,6 +87,7 @@ namespace Rubybooru.Console
                     .UseLazyLoadingProxies()
                     .UseSqlite(configuration.GetConnectionString("RubybooruDb"));
             });
+            serviceCollection.Configure<AllowedPreviewOptions>(configuration.GetSection("AllowedPreviewOptions"));
 
             serviceCollection.AddSingleton<HashAlgorithm, SHA256CryptoServiceProvider>();
             serviceCollection.AddSingleton<IPreviewMaker, PreviewMaker>();
