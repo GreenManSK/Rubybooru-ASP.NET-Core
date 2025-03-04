@@ -183,7 +183,7 @@ namespace Rubybooru.Data.Sql
 
         public int GetRandomId()
         {
-            var image = _db.Images.FromSqlRaw("SELECT * FROM Images ORDER BY RAND() LIMIT 1").FirstOrDefault();
+            var image = _db.Images.FromSqlRaw("SELECT * FROM Images ORDER BY RANDOM() LIMIT 1").FirstOrDefault();
             return image?.Id ?? 0;
         }
 
