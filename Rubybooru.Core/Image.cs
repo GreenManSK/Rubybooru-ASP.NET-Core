@@ -17,6 +17,8 @@ namespace Rubybooru.Core
         public DateTime? IqdbCheckDateTime { get; set; }
 
         public virtual List<ImageTag> Tags { get; set; } = new List<ImageTag>();
+        public virtual List<ImagePreview> ImagePreviews { get; set; } = new List<ImagePreview>();
+        public virtual List<BlackWhiteImage> BlackWhiteImages { get; set; } = new List<BlackWhiteImage>();
 
         public string GetSafePath()
         {

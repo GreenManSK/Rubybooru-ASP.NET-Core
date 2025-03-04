@@ -22,6 +22,18 @@ namespace Rubybooru.Data
             modelBuilder.Entity<ImageTag>().HasKey(i => new { i.ImageId, i.TagId });
             modelBuilder.Entity<ImagePreview>().HasKey(i => new { i.ImageId, i.Width, i.Height, i.KeepAspectRatio });
             modelBuilder.Entity<BlackWhiteImage>().HasKey(b => b.ImageId);
+            modelBuilder.Entity<ImagePreview>()
+                .HasOne(ip => ip.Image)
+                .WithMany(i => i.ImagePreviews)
+                .HasForeignKey(ip => ip.ImageId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<BlackWhiteImage>()
+                .HasOne(bw => bw.Image)
+                .WithMany(i => i.BlackWhiteImages)
+                .HasForeignKey(bw => bw.ImageId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
             base.OnModelCreating(modelBuilder);
         }
     }
