@@ -86,17 +86,20 @@ namespace Rubybooru.Controllers
         private ISizeCondition[] ParseSizeConditions(string[] conditions)
         {
             var parsedConditions = new List<ISizeCondition>();
-            try
+            if (conditions != null)
             {
-                foreach (var condition in conditions)
+                try
                 {
-                    parsedConditions.Add(JsonConvert.DeserializeObject<BasicSizeCondition>(condition));
+                    foreach (var condition in conditions)
+                    {
+                        parsedConditions.Add(JsonConvert.DeserializeObject<BasicSizeCondition>(condition));
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error while parsing size conditions {conditions}", conditions);
-                return null;
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error while parsing size conditions {conditions}", conditions);
+                    return null;
+                }
             }
 
             return parsedConditions.ToArray();
@@ -254,7 +257,7 @@ namespace Rubybooru.Controllers
                 {
                     return _imageData.GetRandomId();
                 }
-                
+
                 var parsedSizeConditions = ParseSizeConditions(sizeConditions);
                 if (parsedSizeConditions == null)
                 {
