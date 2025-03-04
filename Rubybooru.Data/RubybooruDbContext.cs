@@ -14,10 +14,12 @@ namespace Rubybooru.Data
         public DbSet<ImageTag> ImageTag { get; set; }
         public DbSet<DuplicateRecord> DuplicateRecord { get; set; }
         public DbSet<TagDuplicate> TagDuplicate { get; set; }
+        public DbSet<ImagePreview> ImagePreviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ImageTag>().HasKey(i => new {i.ImageId, i.TagId});
+            modelBuilder.Entity<ImageTag>().HasKey(i => new { i.ImageId, i.TagId });
+            modelBuilder.Entity<ImagePreview>().HasKey(i => new { i.ImageId, i.Width, i.Height, i.KeepAspectRatio });
             base.OnModelCreating(modelBuilder);
         }
     }

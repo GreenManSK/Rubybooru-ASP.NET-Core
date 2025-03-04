@@ -237,8 +237,12 @@ namespace Rubybooru.Controllers
                     return NotFound();
                 }
 
-                var previewPath = _previewGenerator.CreatePreview(image, width, height, keepAspectRatio);
-                return Redirect(previewPath);
+                var previewData = _previewGenerator.CreatePreview(image, width, height, keepAspectRatio);
+                if (previewData == null)
+                {
+                    return NotFound();
+                }
+                return File(previewData, "image/jpeg");
             }
             catch (Exception e)
             {
