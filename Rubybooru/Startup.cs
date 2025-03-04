@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Rubybooru.Configuration;
 using Rubybooru.Controllers;
 using Rubybooru.Data;
 using Rubybooru.Data.Interfaces;
@@ -72,6 +73,8 @@ namespace Rubybooru
             services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
+
+            services.Configure<AllowedPreviewOptions>(_configuration.GetSection("AllowedPreviewOptions"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
