@@ -21,11 +21,14 @@ namespace Rubybooru.IqdbApi.Api
         private const string FieldUrl = "url";
         private const string FieldIgnoreColors = "forcegray";
 
+        private const int RequestTimeoutInSeconds = 5 * 60;
+
         private readonly HttpClient httpClient;
 
         public IqdbApi()
         {
-            httpClient = new HttpClient {BaseAddress = Url};
+            httpClient = new HttpClient { BaseAddress = Url };
+            httpClient.Timeout = TimeSpan.FromSeconds(RequestTimeoutInSeconds);
         }
 
         public void Dispose()
@@ -51,7 +54,7 @@ namespace Rubybooru.IqdbApi.Api
 
         public async Task<List<Match>> SearchUrl(string url, Options options)
         {
-            var content = new MultipartFormDataContent {{new StringContent(url), FieldUrl}};
+            var content = new MultipartFormDataContent { { new StringContent(url), FieldUrl } };
             return await Search(content, options);
         }
 
